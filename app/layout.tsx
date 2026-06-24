@@ -20,7 +20,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={nunito.variable}>
-      <body>{children}</body>
+      <body>
+        <a href="#main-content" className="skip-nav">Skip to main content</a>
+        <main id="main-content">{children}</main>
+      </body>
     </html>
   );
 }

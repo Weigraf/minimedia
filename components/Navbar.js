@@ -132,7 +132,7 @@ export default function Navbar({ profile }) {
   }
 
   return (
-    <nav style={{
+    <nav aria-label="Main navigation" style={{
       background: 'var(--green-forest)',
       padding: '0 1.5rem',
       height: '60px',
