@@ -263,7 +263,10 @@ export default function ClassroomPage() {
               {classroom.description && <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginTop: '2px' }}>{classroom.description}</p>}
             </div>
           </div>
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            <a href={`/classrooms/${id}/reports`} className="btn btn-secondary" style={{ fontSize: '13px' }}>
+              📋 Reports
+            </a>
             {(profile.role === 'admin' || isClassroomAdmin) && (
               <>
                 <a href={`/classrooms/${id}/files/upload`} className="btn btn-secondary">

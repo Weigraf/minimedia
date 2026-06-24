@@ -170,9 +170,17 @@ export default function Navbar({ profile }) {
           <span className={`badge badge-${profile.role}`}>{profile.role}</span>
 
           {profile.role === 'admin' && (
-            <a href="/admin/approvals" style={{ fontSize: '13px', color: '#FFE49A', fontWeight: 600, textDecoration: 'none' }}>
-              Approvals
-            </a>
+            <>
+              <a href="/admin/approvals" style={{ fontSize: '13px', color: '#FFE49A', fontWeight: 600, textDecoration: 'none' }}>
+                Approvals
+              </a>
+              <a href="/admin/children" style={{ fontSize: '13px', color: '#FFE49A', fontWeight: 600, textDecoration: 'none' }}>
+                Children
+              </a>
+              <a href="/subscribe" style={{ fontSize: '13px', color: '#FFE49A', fontWeight: 600, textDecoration: 'none' }}>
+                ✦ Premium
+              </a>
+            </>
           )}
 
           {pushSupported && (
