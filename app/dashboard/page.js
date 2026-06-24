@@ -2,6 +2,8 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import Navbar from '@/components/Navbar'
+import { SunIcon, LeafIcon, MushroomIcon, CaterpillarIcon } from '@/components/Icons'
 
 export default function Dashboard() {
   const [profile, setProfile] = useState(null)
@@ -12,27 +14,20 @@ export default function Dashboard() {
   useEffect(() => {
     const supabase = createClient()
 
-    async function loadProfile(session) {
+    async function load() {
+      const { data: { session } } = await supabase.auth.getSession()
       if (!session) { router.push('/login'); return }
 
       const { data: profile } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', session.user.id)
-        .single()
+        .from('profiles').select('*').eq('id', session.user.id).single()
 
       if (!profile || !profile.approved) {
-        await supabase.auth.signOut()
-        router.push('/login')
-        return
+        await supabase.auth.signOut(); router.push('/login'); return
       }
 
       let classroomData = []
       if (profile.role === 'admin') {
-        const { data } = await supabase
-          .from('classrooms')
-          .select('*')
-          .order('created_at')
+        const { data } = await supabase.from('classrooms').select('*').order('created_at')
         classroomData = data || []
       } else {
         const { data } = await supabase
@@ -47,74 +42,70 @@ export default function Dashboard() {
       setLoading(false)
     }
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      loadProfile(session)
-    })
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => { loadProfile(session) }
-    )
-
-    return () => subscription.unsubscribe()
+    load()
   }, [])
 
-  async function handleSignOut() {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-    router.push('/login')
-  }
-
-  if (loading) return <p style={{ padding: '2rem', fontFamily: 'sans-serif' }}>Loading...</p>
+  if (loading) return (
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)', gap: '12px' }}>
+      <CaterpillarIcon size={48} />
+      <p style={{ color: 'var(--text-muted)' }}>Loading your classrooms...</p>
+    </div>
+  )
 
   return (
-    <main style={{ maxWidth: '700px', margin: '2rem auto', padding: '2rem', fontFamily: 'sans-serif' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <div>
-          <h1 style={{ margin: 0 }}>Welcome, {profile.full_name}</h1>
-          <p style={{ margin: '4px 0 0', color: '#666', textTransform: 'capitalize' }}>{profile.role}</p>
+    <>
+      <Navbar profile={profile} />
+      <div className="page">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <SunIcon size={36} />
+            <div>
+              <h1 style={{ fontSize: '24px', fontWeight: 700 }}>Welcome back, {profile.full_name.split(' ')[0]}</h1>
+              <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginTop: '2px' }}>Here are your classrooms</p>
+            </div>
+          </div>
+          {profile.role === 'admin' && (
+            <a href="/admin/classrooms/new" className="btn btn-primary">+ New classroom</a>
+          )}
         </div>
-        <button onClick={handleSignOut}
-          style={{ padding: '8px 16px', border: '1px solid #ccc', borderRadius: '6px', cursor: 'pointer', background: 'white' }}>
-          Sign out
-        </button>
-      </div>
 
-      {profile.role === 'admin' && (
-        <div style={{ display: 'flex', gap: '12px', marginBottom: '1.5rem' }}>
-          <a href="/admin/classrooms/new"
-            style={{ padding: '10px 20px', background: '#4F46E5', color: 'white', borderRadius: '6px', textDecoration: 'none', fontWeight: 500 }}>
-            + New Classroom
-          </a>
-          <a href="/admin/approvals"
-            style={{ padding: '10px 20px', background: 'white', color: '#4F46E5', border: '1px solid #4F46E5', borderRadius: '6px', textDecoration: 'none', fontWeight: 500 }}>
-            Pending Approvals
-          </a>
-        </div>
-      )}
+        {profile.role === 'parent' && (
+          <div className="flash-info" style={{ marginBottom: '1.5rem' }}>
+            Not seeing your classroom? <a href="/classrooms" style={{ fontWeight: 600 }}>Browse and request to join →</a>
+          </div>
+        )}
 
-      {profile.role === 'parent' && (
-        <div style={{ marginBottom: '1.5rem' }}>
-          <a href="/classrooms"
-            style={{ padding: '10px 20px', background: '#4F46E5', color: 'white', borderRadius: '6px', textDecoration: 'none', fontWeight: 500 }}>
-            Browse Classrooms
-          </a>
-        </div>
-      )}
-
-      <div style={{ border: '1px solid #e5e7eb', borderRadius: '8px', padding: '1.5rem' }}>
-        <h2 style={{ margin: '0 0 1rem' }}>Your Classrooms</h2>
         {classrooms.length === 0 ? (
-          <p style={{ color: '#666' }}>No classrooms yet.</p>
+          <div className="card">
+            <div className="empty-state">
+              <MushroomIcon size={52} />
+              <p style={{ fontWeight: 600, marginTop: '12px', marginBottom: '6px' }}>No classrooms yet</p>
+              <p style={{ fontSize: '14px' }}>
+                {profile.role === 'admin' ? 'Create your first classroom to get started.' : 'Ask your admin to add you to a classroom.'}
+              </p>
+            </div>
+          </div>
         ) : (
-          classrooms.map(c => (
-            <a key={c.id} href={`/classrooms/${c.id}`}
-              style={{ display: 'block', padding: '12px', border: '1px solid #e5e7eb', borderRadius: '6px', marginBottom: '8px', textDecoration: 'none', color: 'inherit' }}>
-              <strong>{c.name}</strong>
-              {c.description && <p style={{ margin: '4px 0 0', color: '#666', fontSize: '14px' }}>{c.description}</p>}
-            </a>
-          ))
+          <div style={{ display: 'grid', gap: '12px' }}>
+            {classrooms.map(c => (
+              <a key={c.id} href={`/classrooms/${c.id}`} className="card" style={{ display: 'block', textDecoration: 'none', transition: 'border-color 0.15s' }}
+                onMouseOver={e => e.currentTarget.style.borderColor = 'var(--green-sprout)'}
+                onMouseOut={e => e.currentTarget.style.borderColor = 'var(--border)'}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <LeafIcon size={32} />
+                    <div>
+                      <p style={{ fontWeight: 700, fontSize: '16px', color: 'var(--green-forest)' }}>{c.name}</p>
+                      {c.description && <p style={{ fontSize: '14px', color: 'var(--text-muted)', marginTop: '4px' }}>{c.description}</p>}
+                    </div>
+                  </div>
+                  <span style={{ fontSize: '20px', color: 'var(--green-sprout)' }}>→</span>
+                </div>
+              </a>
+            ))}
+          </div>
         )}
       </div>
-    </main>
+    </>
   )
 }

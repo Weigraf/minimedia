@@ -1,61 +1,73 @@
 'use client'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase'
+import { SproutIcon } from '@/components/Icons'
 
 export default function SignUp() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
   const [message, setMessage] = useState('')
+  const [success, setSuccess] = useState(false)
 
   async function handleSignUp(e) {
     e.preventDefault()
     const supabase = createClient()
-
-    const { data, error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email,
       password,
       options: { data: { full_name: name } }
     })
-
     if (error) { setMessage(error.message); return }
-
-    // Create their profile (unapproved by default)
-    await supabase.from('profiles').insert({
-      id: data.user.id,
-      full_name: name,
-      role: 'parent',
-      approved: false
-    })
-
-    setMessage('Account created! Please wait for admin approval before logging in.')
+    setSuccess(true)
   }
 
   return (
-    <main style={{ maxWidth: '400px', margin: '4rem auto', padding: '2rem', fontFamily: 'sans-serif' }}>
-      <h1>Create Account</h1>
-      <form onSubmit={handleSignUp}>
-        <div style={{ marginBottom: '1rem' }}>
-          <label>Full name</label><br />
-          <input value={name} onChange={e => setName(e.target.value)} required
-            style={{ width: '100%', padding: '8px', marginTop: '4px' }} />
-        </div>
-        <div style={{ marginBottom: '1rem' }}>
-          <label>Email</label><br />
-          <input type="email" value={email} onChange={e => setEmail(e.target.value)} required
-            style={{ width: '100%', padding: '8px', marginTop: '4px' }} />
-        </div>
-        <div style={{ marginBottom: '1rem' }}>
-          <label>Password</label><br />
-          <input type="password" value={password} onChange={e => setPassword(e.target.value)} required
-            style={{ width: '100%', padding: '8px', marginTop: '4px' }} />
-        </div>
-        <button type="submit" style={{ width: '100%', padding: '10px', background: '#4F46E5', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
-          Request Access
-        </button>
-      </form>
-      {message && <p style={{ marginTop: '1rem', color: '#666' }}>{message}</p>}
-      <p style={{ marginTop: '1rem' }}><a href="/login">Already have an account? Log in</a></p>
-    </main>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)', padding: '1rem' }}>
+      <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
+        <SproutIcon size={56} />
+        <h1 style={{ fontSize: '28px', fontWeight: 700, color: 'var(--green-forest)', marginTop: '12px' }}>MiniMedia</h1>
+        <p style={{ color: 'var(--text-muted)', fontSize: '15px' }}>Request access to your classroom</p>
+      </div>
+
+      <div className="card" style={{ width: '100%', maxWidth: '420px' }}>
+        {success ? (
+          <div style={{ textAlign: 'center', padding: '1rem 0' }}>
+            <SproutIcon size={48} />
+            <h2 style={{ fontSize: '18px', fontWeight: 700, margin: '12px 0 8px' }}>Check your email</h2>
+            <p style={{ color: 'var(--text-muted)', fontSize: '14px', lineHeight: 1.6 }}>
+              Confirm your email address, then wait for an admin to approve your account before logging in.
+            </p>
+            <a href="/login" className="btn btn-secondary" style={{ display: 'inline-flex', marginTop: '1.25rem' }}>
+              Back to sign in
+            </a>
+          </div>
+        ) : (
+          <form onSubmit={handleSignUp}>
+            <div className="form-group">
+              <label>Full name</label>
+              <input value={name} onChange={e => setName(e.target.value)} required placeholder="Jane Smith" />
+            </div>
+            <div className="form-group">
+              <label>Email</label>
+              <input type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="you@example.com" />
+            </div>
+            <div className="form-group">
+              <label>Password</label>
+              <input type="password" value={password} onChange={e => setPassword(e.target.value)} required placeholder="••••••••" />
+            </div>
+            {message && <div className="flash-error">{message}</div>}
+            <button type="submit" className="btn btn-primary btn-full" style={{ marginTop: '0.5rem' }}>
+              Request access
+            </button>
+          </form>
+        )}
+        {!success && (
+          <p style={{ textAlign: 'center', marginTop: '1.25rem', fontSize: '14px', color: 'var(--text-muted)' }}>
+            Already have an account? <a href="/login">Sign in</a>
+          </p>
+        )}
+      </div>
+    </div>
   )
 }
