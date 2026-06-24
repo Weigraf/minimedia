@@ -111,14 +111,18 @@ export default function ChildrenAdmin() {
         <div className="card" style={{ marginBottom: '1.5rem' }}>
           <div className="section-title">Add a child</div>
           <form onSubmit={addChild} style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+            <label htmlFor="child-name" className="visually-hidden">Child's name</label>
             <input
+              id="child-name"
               value={name}
               onChange={e => setName(e.target.value)}
               placeholder="Child's name"
               style={{ flex: 1, minWidth: '160px' }}
               required
             />
+            <label htmlFor="child-classroom" className="visually-hidden">Classroom</label>
             <select
+              id="child-classroom"
               value={classroomId}
               onChange={e => setClassroomId(e.target.value)}
               style={{ flex: 1, minWidth: '140px', borderRadius: '50px' }}
@@ -129,7 +133,7 @@ export default function ChildrenAdmin() {
               {saving ? 'Adding…' : 'Add'}
             </button>
           </form>
-          {error && <div className="flash-error" style={{ marginTop: '0.75rem' }}>{error}</div>}
+          {error && <div className="flash-error" role="alert" style={{ marginTop: '0.75rem' }}>{error}</div>}
         </div>
 
         {/* Children list */}
@@ -170,16 +174,19 @@ export default function ChildrenAdmin() {
                       display: 'flex', alignItems: 'center', gap: '6px',
                     }}>
                       {f.profiles?.full_name}
-                      <button onClick={() => removeFamily(child.id, f.profile_id)} style={{
-                        background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)',
-                        padding: 0, fontSize: '14px', lineHeight: 1,
-                      }}>×</button>
+                      <button
+                        onClick={() => removeFamily(child.id, f.profile_id)}
+                        aria-label={`Remove ${f.profiles?.full_name}`}
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', padding: 0, fontSize: '14px', lineHeight: 1 }}
+                      >×</button>
                     </span>
                   ))}
                 </div>
 
                 {/* Assign dropdown */}
+                <label htmlFor={`assign-${child.id}`} className="visually-hidden">Assign a parent to {child.name}</label>
                 <select
+                  id={`assign-${child.id}`}
                   defaultValue=""
                   onChange={e => { if (e.target.value) assignParent(child.id, e.target.value); e.target.value = '' }}
                   style={{ borderRadius: '50px', fontSize: '13px', width: 'auto', padding: '6px 14px' }}

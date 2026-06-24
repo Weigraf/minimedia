@@ -464,7 +464,7 @@ export default function ClassroomPage() {
                     {p.image_url && (
                       <img
                         src={p.image_url}
-                        alt="Post image"
+                        alt={`Photo shared by ${p.profiles?.full_name || 'a member'}`}
                         style={{ width: '100%', maxHeight: '480px', objectFit: 'cover', borderRadius: '10px', display: 'block' }}
                       />
                     )}

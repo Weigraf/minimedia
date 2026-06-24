@@ -186,7 +186,7 @@ export default function Navbar({ profile }) {
           {pushSupported && (
             <button
               onClick={handleTogglePush}
-              title={pushEnabled ? 'Disable notifications' : 'Enable notifications'}
+              aria-label={pushEnabled ? 'Disable notifications' : 'Enable notifications'}
               style={{
                 background: 'none',
                 border: 'none',

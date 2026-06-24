@@ -51,18 +51,18 @@ export default function SignUp() {
         ) : (
           <form onSubmit={handleSignUp}>
             <div className="form-group">
-              <label>Full name</label>
-              <input value={name} onChange={e => setName(e.target.value)} required placeholder="Jane Smith" />
+              <label htmlFor="signup-name">Full name</label>
+              <input id="signup-name" value={name} onChange={e => setName(e.target.value)} required placeholder="Jane Smith" />
             </div>
             <div className="form-group">
-              <label>Email</label>
-              <input type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="you@example.com" />
+              <label htmlFor="signup-email">Email</label>
+              <input id="signup-email" type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="you@example.com" />
             </div>
             <div className="form-group">
-              <label>Password</label>
-              <input type="password" value={password} onChange={e => setPassword(e.target.value)} required placeholder="••••••••" />
+              <label htmlFor="signup-password">Password</label>
+              <input id="signup-password" type="password" value={password} onChange={e => setPassword(e.target.value)} required placeholder="••••••••" aria-describedby={message ? 'signup-error' : undefined} />
             </div>
-            {message && <div className="flash-error">{message}</div>}
+            {message && <div id="signup-error" className="flash-error" role="alert">{message}</div>}
             <button type="submit" className="btn btn-primary btn-full" style={{ marginTop: '0.5rem' }}>
               Request access
             </button>

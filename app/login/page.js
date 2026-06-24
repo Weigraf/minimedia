@@ -40,14 +40,14 @@ export default function Login() {
       <div className="card" style={{ width: '100%', maxWidth: '420px' }}>
         <form onSubmit={handleLogin}>
           <div className="form-group">
-            <label>Email</label>
-            <input type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="you@example.com" />
+            <label htmlFor="login-email">Email</label>
+            <input id="login-email" type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="you@example.com" aria-describedby={message ? 'login-error' : undefined} />
           </div>
           <div className="form-group">
-            <label>Password</label>
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} required placeholder="••••••••" />
+            <label htmlFor="login-password">Password</label>
+            <input id="login-password" type="password" value={password} onChange={e => setPassword(e.target.value)} required placeholder="••••••••" aria-describedby={message ? 'login-error' : undefined} />
           </div>
-          {message && <div className="flash-error">{message}</div>}
+          {message && <div id="login-error" className="flash-error" role="alert">{message}</div>}
           <button type="submit" className="btn btn-primary btn-full" style={{ marginTop: '0.5rem' }}>
             Sign in
           </button>
