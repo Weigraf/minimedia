@@ -9,7 +9,7 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-  title: "MiniMedia",
+  title: "TumbleTree",
   description: "Private classroom communication for parents and staff",
 };
 

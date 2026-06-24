@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MiniMedia</string>
+    <string name="title_activity_main">MiniMedia</string>
+    <string name="package_name">com.minimedia.app</string>
+    <string name="custom_url_scheme">com.minimedia.app</string>
+</resources>

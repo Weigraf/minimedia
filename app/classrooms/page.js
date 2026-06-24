@@ -34,6 +34,16 @@ export default function Classrooms() {
     if (error) { setMessage('Error: ' + error.message); return }
     setMemberships(prev => [...prev, { classroom_id: classroomId, approved: false }])
     setMessage('Request sent! Waiting for admin approval.')
+    // Notify admins in background
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        fetch('/api/notify/access-request', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
+          body: JSON.stringify({ classroomId }),
+        }).catch(() => {})
+      }
+    })
   }
 
   function getMembershipStatus(classroomId) {

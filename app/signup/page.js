@@ -20,13 +20,19 @@ export default function SignUp() {
     })
     if (error) { setMessage(error.message); return }
     setSuccess(true)
+    // Notify admin in background
+    fetch('/api/notify/new-signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email }),
+    }).catch(() => {})
   }
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)', padding: '1rem' }}>
       <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
         <SproutIcon size={56} />
-        <h1 style={{ fontSize: '28px', fontWeight: 700, color: 'var(--green-forest)', marginTop: '12px' }}>MiniMedia</h1>
+        <h1 style={{ fontSize: '28px', fontWeight: 700, color: 'var(--green-forest)', marginTop: '12px' }}>TumbleTree</h1>
         <p style={{ color: 'var(--text-muted)', fontSize: '15px' }}>Request access to your classroom</p>
       </div>
 
