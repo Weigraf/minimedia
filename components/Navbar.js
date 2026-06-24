@@ -162,7 +162,7 @@ export default function Navbar({ profile }) {
                 {profile.full_name?.charAt(0)}
               </span>
             )}
-            <span style={{ fontSize: '13px', color: '#97C459', fontWeight: 500 }}>
+            <span style={{ fontSize: '13px', color: '#FFD97D', fontWeight: 500 }}>
               {profile.full_name}
             </span>
           </a>
@@ -170,7 +170,7 @@ export default function Navbar({ profile }) {
           <span className={`badge badge-${profile.role}`}>{profile.role}</span>
 
           {profile.role === 'admin' && (
-            <a href="/admin/approvals" style={{ fontSize: '13px', color: '#C0DD97', fontWeight: 600, textDecoration: 'none' }}>
+            <a href="/admin/approvals" style={{ fontSize: '13px', color: '#FFE49A', fontWeight: 600, textDecoration: 'none' }}>
               Approvals
             </a>
           )}
@@ -195,7 +195,7 @@ export default function Navbar({ profile }) {
 
           <button onClick={handleSignOut} style={{
             background: 'rgba(255,255,255,0.1)',
-            color: '#EAF3BE',
+            color: '#FFF4E0',
             border: 'none',
             borderRadius: '50px',
             padding: '6px 14px',

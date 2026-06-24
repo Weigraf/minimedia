@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
-import { RaindropIcon } from '@/components/Icons'
+import { SunIcon } from '@/components/Icons'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -32,7 +32,7 @@ export default function Login() {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)', padding: '1rem' }}>
       <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
-        <RaindropIcon size={56} />
+        <SunIcon size={56} />
         <h1 style={{ fontSize: '28px', fontWeight: 700, color: 'var(--green-forest)', marginTop: '12px' }}>TumbleTree</h1>
         <p style={{ color: 'var(--text-muted)', fontSize: '15px' }}>Sign in to your classroom</p>
       </div>
