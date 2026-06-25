@@ -29,30 +29,31 @@ function TwinkleStar({ size = 26 }) {
 function navItems(role, isClassroomAdmin, unreadCount = 0) {
   const items = []
 
-  if (role === 'admin') {
-    items.push({ label: 'New Classroom',       href: '/admin/classrooms/new', Icon: SproutIcon })
-    items.push({ label: 'Approvals',            href: '/admin/approvals',      Icon: AcornIcon })
-    items.push({ label: 'Users',               href: '/admin/users',           Icon: RaindropIcon })
-  }
-
-  items.push({ label: 'My Classrooms', href: '/dashboard', Icon: LeafIcon })
-
+  // ── Parent ────────────────────────────────────────────────────────────────
   if (role === 'parent' && !isClassroomAdmin) {
-    items.push({ label: 'My Students', href: '/my-students', Icon: CaterpillarIcon })
+    items.push({ label: 'My Classrooms', href: '/dashboard',    Icon: LeafIcon })
+    items.push({ label: 'My Students',   href: '/my-students',  Icon: CaterpillarIcon })
   }
 
+  // ── Teacher (classroom admin) ─────────────────────────────────────────────
   if (isClassroomAdmin) {
-    items.push({ label: 'Approvals',         href: '/admin/approvals', Icon: AcornIcon })
-    items.push({ label: 'My Classrooms',     href: '/classrooms',      Icon: SnailIcon })
-    items.push({ label: 'Students',          href: '/admin/students',  Icon: CaterpillarIcon })
-    items.push({ label: 'Messages',          href: '/messages',        Icon: MessageIcon, badge: unreadCount })
+    items.push({ label: 'My Classrooms', href: '/dashboard',        Icon: LeafIcon })
+    items.push({ label: 'Messages',      href: '/messages',         Icon: MessageIcon, badge: unreadCount })
+    items.push({ label: 'Students',      href: '/admin/students',   Icon: CaterpillarIcon })
+    items.push({ label: 'Approvals',     href: '/admin/approvals',  Icon: AcornIcon })
   }
 
+  // ── Site admin ────────────────────────────────────────────────────────────
   if (role === 'admin') {
-    items.push({ label: 'Browse Classrooms', href: '/classrooms',       Icon: SnailIcon })
-    items.push({ label: 'Students',          href: '/admin/students',   Icon: CaterpillarIcon })
-    items.push({ label: 'Contact Inbox',     href: '/admin/contact',    Icon: MushroomIcon })
-    items.push({ label: 'Premium',           href: '/subscribe',        Icon: TwinkleStar })
+    items.push({ label: 'My Classrooms',     href: '/dashboard',            Icon: LeafIcon })
+    items.push({ label: 'Classrooms',        href: '/classrooms',           Icon: SnailIcon })
+    items.push({ label: 'Students',          href: '/admin/students',       Icon: CaterpillarIcon })
+    items.push({ label: 'Users',             href: '/admin/users',          Icon: RaindropIcon })
+    items.push({ label: 'Approvals',         href: '/admin/approvals',      Icon: AcornIcon })
+    items.push({ label: 'Contact Inbox',     href: '/admin/contact',        Icon: MushroomIcon })
+    items.push({ divider: true })
+    items.push({ label: 'New Classroom',     href: '/admin/classrooms/new', Icon: SproutIcon })
+    items.push({ label: 'Premium',           href: '/subscribe',            Icon: TwinkleStar })
   }
 
   items.push({ divider: true })
