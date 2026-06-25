@@ -11,6 +11,21 @@ function urlBase64ToUint8Array(base64String) {
   return Uint8Array.from([...rawData].map(c => c.charCodeAt(0)))
 }
 
+function TwinkleStar({ size = 26 }) {
+  return (
+    <span style={{
+      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+      width: size, height: size,
+      fontSize: size * 0.78 + 'px',
+      color: '#FFB733',
+      animation: 'twinkle 2.4s ease-in-out infinite',
+      lineHeight: 1,
+    }}>
+      ✦
+    </span>
+  )
+}
+
 function navItems(role) {
   const items = [
     { label: 'My Classrooms',      href: '/dashboard',            Icon: LeafIcon },
@@ -25,7 +40,7 @@ function navItems(role) {
     items.push(
       { label: 'Children',         href: '/admin/children',         Icon: CaterpillarIcon },
       { label: 'New Classroom',    href: '/admin/classrooms/new',   Icon: SproutIcon },
-      { label: '✦ Premium',        href: '/subscribe',              Icon: SunIcon },
+      { label: 'Premium',           href: '/subscribe',              Icon: TwinkleStar },
     )
   }
   return items
