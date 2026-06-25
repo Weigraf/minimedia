@@ -43,8 +43,11 @@ export default function Dashboard() {
         await supabase.auth.signOut(); router.push('/login'); return
       }
 
+      const viewAs = (() => { try { return JSON.parse(localStorage.getItem('tt-view-as') || 'null') } catch { return null } })()
+      const simulatingParent = profile.role === 'admin' && viewAs
+
       let classroomData = []
-      if (profile.role === 'admin') {
+      if (profile.role === 'admin' && !simulatingParent) {
         const { data } = await supabase.from('classrooms').select('*').order('created_at')
         classroomData = data || []
       } else {

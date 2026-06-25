@@ -32,7 +32,7 @@ function navItems(role, isClassroomAdmin, unreadCount = 0) {
   // ── Parent ────────────────────────────────────────────────────────────────
   if (role === 'parent' && !isClassroomAdmin) {
     items.push({ label: 'My Classrooms', href: '/dashboard',    Icon: LeafIcon })
-    items.push({ label: 'My Students',   href: '/my-students',  Icon: CaterpillarIcon })
+    items.push({ label: 'My Children',   href: '/my-children',  Icon: CaterpillarIcon })
   }
 
   // ── Teacher (classroom admin) ─────────────────────────────────────────────

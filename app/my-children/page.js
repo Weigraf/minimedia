@@ -104,9 +104,9 @@ export default function MyChildren() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '1.75rem' }}>
           <CaterpillarIcon size={44} />
           <div>
-            <h1 style={{ fontSize: '1.375rem', fontWeight: 800, color: 'var(--green-forest)' }}>My Students</h1>
+            <h1 style={{ fontSize: '1.375rem', fontWeight: 800, color: 'var(--green-forest)' }}>My Children</h1>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-              Profiles managed by the school for each of your students.
+              Profiles managed by the school for each of your children.
             </p>
           </div>
         </div>
@@ -117,7 +117,7 @@ export default function MyChildren() {
           <div className="card" style={{ textAlign: 'center', padding: '3rem 1.5rem' }}>
             <CaterpillarIcon size={56} />
             <p style={{ fontWeight: 700, fontSize: '1rem', marginTop: '1rem', color: 'var(--text-primary)' }}>
-              No students linked yet
+              No children linked yet
             </p>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginTop: '4px' }}>
               Your teacher will set up your child's profile and send you an invite.
