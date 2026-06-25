@@ -32,8 +32,8 @@
   --danger-light:  #FAECE7;
 
   /* Layout — all contrast-checked */
-  --bg:            #FEFAF5;   /* warm cream — soft, not stark  */
-  --surface:       #FFFFFF;
+  --bg:            #F5EDE0;   /* warm parchment — softer than pure cream */
+  --surface:       #FDF8F2;
   --border:        #826048;   /* 4.93:1 on white — UI inputs  */
   --card-border:   #D8C8E8;   /* pale lavender — decorative   */
   --text-primary:  #2A1F0E;   /* 14.2:1 ✓ — warm dark brown   */
@@ -71,8 +71,8 @@
 }
 
 [data-theme="light"] {
-  --bg:            #FEFAF5;
-  --surface:       #FFFFFF;
+  --bg:            #F5EDE0;
+  --surface:       #FDF8F2;
   --border:        #826048;
   --card-border:   #D8C8E8;
   --text-primary:  #2A1F0E;
@@ -211,7 +211,7 @@ button:disabled, .btn:disabled { opacity: 0.45; cursor: not-allowed; }
   box-shadow: 0 2px 12px rgba(100, 60, 160, 0.07);
 }
 
-.page    { max-width: 720px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+.page    { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
 .page-sm { max-width: 460px; margin: 0 auto; padding: 3rem 1rem; }
 
 .form-group { margin-bottom: 1rem; }

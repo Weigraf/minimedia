@@ -121,6 +121,16 @@ export function EveningScene({ width = 88, height = 60 }) {
   )
 }
 
+export function MessageIcon({ size = 48 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none">
+      <path d="M8 12 C8 9 10 7 13 7 L51 7 C54 7 56 9 56 12 L56 38 C56 41 54 43 51 43 L30 43 L18 57 L18 43 L13 43 C10 43 8 41 8 38 Z" fill="#A888CC"/>
+      <rect x="16" y="18" width="32" height="3.5" rx="1.75" fill="white" opacity="0.75"/>
+      <rect x="16" y="27" width="22" height="3.5" rx="1.75" fill="white" opacity="0.75"/>
+    </svg>
+  )
+}
+
 export function MoonIcon({ size = 48 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" fill="none">

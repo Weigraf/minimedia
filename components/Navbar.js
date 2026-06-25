@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
-import { OwlIcon, SproutIcon, LeafIcon, SnailIcon, MushroomIcon, RaindropIcon, AcornIcon, CaterpillarIcon, SunIcon, MoonIcon } from '@/components/Icons'
+import { OwlIcon, SproutIcon, LeafIcon, SnailIcon, RaindropIcon, AcornIcon, CaterpillarIcon, MessageIcon, SunIcon, MoonIcon } from '@/components/Icons'
 
 function urlBase64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
@@ -27,22 +27,34 @@ function TwinkleStar({ size = 26 }) {
 }
 
 function navItems(role) {
-  const items = [
-    { label: 'My Classrooms',      href: '/dashboard',            Icon: LeafIcon },
-    { label: 'Browse Classrooms',  href: '/classrooms',           Icon: SnailIcon },
-    { label: 'File Uploads',       href: '/classrooms',           Icon: MushroomIcon, note: 'via a classroom' },
-    { label: 'Profile & Settings', href: '/profile',              Icon: RaindropIcon },
-  ]
-  if (role === 'admin' || role === 'classroom_admin') {
-    items.push({ label: 'Approvals',     href: '/admin/approvals',       Icon: AcornIcon })
-  }
+  const items = []
+
   if (role === 'admin') {
-    items.push(
-      { label: 'Children',         href: '/admin/children',         Icon: CaterpillarIcon },
-      { label: 'New Classroom',    href: '/admin/classrooms/new',   Icon: SproutIcon },
-      { label: 'Premium',           href: '/subscribe',              Icon: TwinkleStar },
-    )
+    items.push({ label: 'New Classroom',       href: '/admin/classrooms/new', Icon: SproutIcon })
+    items.push({ label: 'Classroom Approvals', href: '/admin/approvals',      Icon: AcornIcon })
   }
+
+  items.push({ label: 'My Classrooms', href: '/dashboard', Icon: LeafIcon })
+
+  if (role === 'parent') {
+    items.push({ label: 'My Children', href: '/my-children', Icon: CaterpillarIcon })
+  }
+
+  if (role === 'classroom_admin') {
+    items.push({ label: 'Teacher Approvals', href: '/admin/approvals',      Icon: AcornIcon })
+    items.push({ label: 'Browse Classrooms', href: '/classrooms',           Icon: SnailIcon })
+    items.push({ label: 'Messages',          href: '/messages',             Icon: MessageIcon })
+  }
+
+  if (role === 'admin') {
+    items.push({ label: 'Browse Classrooms', href: '/classrooms',       Icon: SnailIcon })
+    items.push({ label: 'Children',          href: '/admin/children',   Icon: CaterpillarIcon })
+    items.push({ label: 'Premium',           href: '/subscribe',        Icon: TwinkleStar })
+  }
+
+  items.push({ divider: true })
+  items.push({ label: 'Profile & Settings', href: '/profile', Icon: RaindropIcon })
+
   return items
 }
 
@@ -233,35 +245,32 @@ export default function Navbar({ profile }) {
 
         {/* Nav items */}
         <nav aria-label="Site navigation" style={{ flex: 1, overflowY: 'auto', padding: '0.5rem 0' }}>
-          {items.map((item, i) => (
-            <a
-              key={i}
-              href={item.href}
-              onClick={() => setMenuOpen(false)}
-              style={{
-                display: 'flex', alignItems: 'center', gap: '12px',
-                padding: '13px 1.25rem',
-                textDecoration: 'none',
-                color: 'var(--text-primary)',
-                fontSize: '0.9375rem', fontWeight: 600,
-                borderBottom: '1px solid var(--card-border)',
-              }}
-              onMouseEnter={e => e.currentTarget.style.background = 'var(--lavender-pale)'}
-              onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-            >
-              <span style={{ flexShrink: 0, display: 'flex' }}>
-                <item.Icon size={26} />
-              </span>
-              <span style={{ flex: 1 }}>
-                {item.label}
-                {item.note && (
-                  <span style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 400 }}>
-                    {item.note}
-                  </span>
-                )}
-              </span>
-            </a>
-          ))}
+          {items.map((item, i) => {
+            if (item.divider) return (
+              <div key={i} style={{ height: '1px', background: 'var(--card-border)', margin: '0.5rem 1.25rem' }} />
+            )
+            return (
+              <a
+                key={i}
+                href={item.href}
+                onClick={() => setMenuOpen(false)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '12px',
+                  padding: '13px 1.25rem',
+                  textDecoration: 'none',
+                  color: 'var(--text-primary)',
+                  fontSize: '0.9375rem', fontWeight: 600,
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = 'var(--lavender-pale)'}
+                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+              >
+                <span style={{ flexShrink: 0, display: 'flex' }}>
+                  <item.Icon size={26} />
+                </span>
+                <span style={{ flex: 1 }}>{item.label}</span>
+              </a>
+            )
+          })}
         </nav>
 
         {/* Drawer footer */}
@@ -373,16 +382,19 @@ export default function Navbar({ profile }) {
                 onClick={toggleTheme}
                 aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
                 style={{
-                  background: 'rgba(255,255,255,0.45)',
+                  background: theme === 'dark' ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.6)',
                   border: '1.5px solid #A888CC',
                   borderRadius: '50px',
                   cursor: 'pointer',
-                  padding: '4px 8px',
-                  display: 'flex', alignItems: 'center',
+                  padding: '5px 10px',
+                  display: 'flex', alignItems: 'center', gap: '5px',
                   flexShrink: 0,
                 }}
               >
-                {theme === 'dark' ? <SunIcon size={20} /> : <MoonIcon size={20} />}
+                {theme === 'dark' ? <SunIcon size={18} /> : <MoonIcon size={18} />}
+                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: theme === 'dark' ? '#F0ECF8' : '#2A1F0E', lineHeight: 1 }}>
+                  {theme === 'dark' ? 'Light' : 'Dark'}
+                </span>
               </button>
             )}
 
