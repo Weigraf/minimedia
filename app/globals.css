@@ -81,6 +81,13 @@
 }
 
 /* ── Visually hidden (accessible labels for screen readers) ──── */
+@keyframes owl-wink {
+  0%, 84%, 100% { transform: scaleY(1); }
+  87%           { transform: scaleY(0.06); }
+  88%           { transform: scaleY(0.06); }
+  93%           { transform: scaleY(1); }
+}
+
 @keyframes twinkle {
   0%, 100% { opacity: 1;   transform: scale(1);    }
   15%       { opacity: 0.3; transform: scale(0.7);  }

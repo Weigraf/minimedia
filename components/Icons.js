@@ -1,3 +1,126 @@
+export function SunriseScene({ width = 88, height = 60 }) {
+  return (
+    <svg width={width} height={height} viewBox="0 0 88 60" fill="none">
+      <defs>
+        <linearGradient id="sr-sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#D8CFF0"/>
+          <stop offset="58%" stopColor="#FFD4A8"/>
+          <stop offset="100%" stopColor="#FFB060"/>
+        </linearGradient>
+        <clipPath id="sr-frame"><rect width="88" height="60" rx="12"/></clipPath>
+      </defs>
+      <g clipPath="url(#sr-frame)">
+        <rect width="88" height="60" fill="url(#sr-sky)"/>
+        {/* Glow */}
+        <circle cx="44" cy="54" r="26" fill="#FFE580" opacity="0.45"/>
+        {/* Sun half-risen */}
+        <circle cx="44" cy="58" r="16" fill="#FFB733"/>
+        {/* Rays */}
+        <line x1="44" y1="30" x2="44" y2="36" stroke="#FFB733" strokeWidth="2.5" strokeLinecap="round"/>
+        <line x1="27" y1="36" x2="31" y2="40" stroke="#FFB733" strokeWidth="2" strokeLinecap="round"/>
+        <line x1="61" y1="36" x2="57" y2="40" stroke="#FFB733" strokeWidth="2" strokeLinecap="round"/>
+        <line x1="20" y1="48" x2="26" y2="48" stroke="#FFB733" strokeWidth="2" strokeLinecap="round"/>
+        <line x1="68" y1="48" x2="62" y2="48" stroke="#FFB733" strokeWidth="2" strokeLinecap="round"/>
+        {/* Ground */}
+        <rect x="0" y="50" width="88" height="10" fill="#4D8A18"/>
+        {/* Hills */}
+        <ellipse cx="14" cy="52" rx="22" ry="10" fill="#3B6D11"/>
+        <ellipse cx="76" cy="54" rx="18" ry="9" fill="#3B6D11"/>
+        {/* Trees */}
+        <rect x="3" y="36" width="3" height="16" rx="1.5" fill="#27500A"/>
+        <ellipse cx="4.5" cy="34" rx="7" ry="6" fill="#3B6D11"/>
+        <rect x="82" y="38" width="3" height="14" rx="1.5" fill="#27500A"/>
+        <ellipse cx="83.5" cy="36" rx="6" ry="5" fill="#3B6D11"/>
+      </g>
+    </svg>
+  )
+}
+
+export function AfternoonScene({ width = 88, height = 60 }) {
+  return (
+    <svg width={width} height={height} viewBox="0 0 88 60" fill="none">
+      <defs>
+        <clipPath id="af-frame"><rect width="88" height="60" rx="12"/></clipPath>
+      </defs>
+      <g clipPath="url(#af-frame)">
+        {/* Sky */}
+        <rect width="88" height="60" fill="#C4E0F4"/>
+        {/* Sun */}
+        <circle cx="70" cy="13" r="11" fill="#FFB733"/>
+        {/* Rays */}
+        <line x1="70" y1="0"  x2="70" y2="4"  stroke="#FFB733" strokeWidth="2" strokeLinecap="round"/>
+        <line x1="83" y1="2"  x2="81" y2="6"  stroke="#FFB733" strokeWidth="2" strokeLinecap="round"/>
+        <line x1="88" y1="13" x2="84" y2="13" stroke="#FFB733" strokeWidth="2" strokeLinecap="round"/>
+        <line x1="83" y1="24" x2="81" y2="20" stroke="#FFB733" strokeWidth="2" strokeLinecap="round"/>
+        <line x1="70" y1="26" x2="70" y2="22" stroke="#FFB733" strokeWidth="2" strokeLinecap="round"/>
+        <line x1="57" y1="24" x2="59" y2="20" stroke="#FFB733" strokeWidth="2" strokeLinecap="round"/>
+        <line x1="52" y1="13" x2="56" y2="13" stroke="#FFB733" strokeWidth="2" strokeLinecap="round"/>
+        {/* Cloud */}
+        <circle cx="18" cy="17" r="7"  fill="white" opacity="0.92"/>
+        <circle cx="26" cy="13" r="9"  fill="white" opacity="0.92"/>
+        <circle cx="34" cy="17" r="7"  fill="white" opacity="0.92"/>
+        {/* Ground */}
+        <rect x="0" y="46" width="88" height="14" fill="#6AAD20"/>
+        <rect x="0" y="46" width="88" height="3"  fill="#4D8A18"/>
+        {/* Swing frame */}
+        <rect x="8"  y="22" width="36" height="4" rx="2" fill="#BA7517"/>
+        <rect x="8"  y="22" width="4"  height="28" rx="2" fill="#BA7517"/>
+        <rect x="40" y="22" width="4"  height="28" rx="2" fill="#BA7517"/>
+        {/* Left swing – static */}
+        <line x1="16" y1="26" x2="16" y2="40" stroke="#7A4A10" strokeWidth="1.5"/>
+        <line x1="20" y1="26" x2="20" y2="40" stroke="#7A4A10" strokeWidth="1.5"/>
+        <rect x="14" y="40" width="8" height="3" rx="1.5" fill="#C48530"/>
+        {/* Right swing – in motion */}
+        <line x1="30" y1="26" x2="26" y2="40" stroke="#7A4A10" strokeWidth="1.5"/>
+        <line x1="34" y1="26" x2="30" y2="40" stroke="#7A4A10" strokeWidth="1.5"/>
+        <rect x="24" y="40" width="8" height="3" rx="1.5" fill="#C48530"/>
+        {/* Slide */}
+        <rect x="58" y="24" width="4"  height="24" rx="2" fill="#BA7517"/>
+        <rect x="54" y="24" width="12" height="5"  rx="2" fill="#BA7517"/>
+        <path d="M66 29 L78 46" stroke="#FAC775" strokeWidth="5" strokeLinecap="round"/>
+        <rect x="76" y="44" width="7" height="3" rx="1.5" fill="#FAC775"/>
+      </g>
+    </svg>
+  )
+}
+
+export function EveningScene({ width = 88, height = 60 }) {
+  return (
+    <svg width={width} height={height} viewBox="0 0 88 60" fill="none">
+      <defs>
+        <linearGradient id="ev-sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stopColor="#5A4090"/>
+          <stop offset="52%"  stopColor="#C84028"/>
+          <stop offset="100%" stopColor="#FFB733"/>
+        </linearGradient>
+        <clipPath id="ev-frame"><rect width="88" height="60" rx="12"/></clipPath>
+      </defs>
+      <g clipPath="url(#ev-frame)">
+        <rect width="88" height="60" fill="url(#ev-sky)"/>
+        {/* Horizon glow */}
+        <ellipse cx="44" cy="56" rx="40" ry="14" fill="#FFD060" opacity="0.4"/>
+        {/* Setting sun */}
+        <circle cx="44" cy="56" r="14" fill="#FF8030"/>
+        {/* Stars */}
+        <circle cx="12" cy="8"  r="1.5" fill="white" opacity="0.85"/>
+        <circle cx="27" cy="5"  r="1"   fill="white" opacity="0.75"/>
+        <circle cx="44" cy="10" r="1"   fill="white" opacity="0.65"/>
+        <circle cx="63" cy="6"  r="1.5" fill="white" opacity="0.80"/>
+        <circle cx="78" cy="12" r="1"   fill="white" opacity="0.70"/>
+        {/* Ground */}
+        <rect x="0" y="50" width="88" height="10" fill="#1D4A08"/>
+        {/* Tree silhouettes */}
+        <rect x="4"  y="28" width="4" height="24" rx="2" fill="#1D4A08"/>
+        <ellipse cx="6"    cy="26" rx="10" ry="9" fill="#1D4A08"/>
+        <rect x="72" y="32" width="4" height="20" rx="2" fill="#1D4A08"/>
+        <ellipse cx="74"   cy="30" rx="9"  ry="8" fill="#1D4A08"/>
+        <rect x="80" y="36" width="3" height="16" rx="1.5" fill="#1D4A08"/>
+        <ellipse cx="81.5" cy="34" rx="7"  ry="6" fill="#1D4A08"/>
+      </g>
+    </svg>
+  )
+}
+
 export function MoonIcon({ size = 48 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" fill="none">
@@ -24,18 +147,18 @@ export function OwlIcon({ size = 48 }) {
       {/* Ear tufts */}
       <ellipse cx="19" cy="7" rx="5" ry="9" fill="#B07020" transform="rotate(-14 19 7)"/>
       <ellipse cx="45" cy="7" rx="5" ry="9" fill="#B07020" transform="rotate(14 45 7)"/>
-      {/* Eye surrounds — forest green ties to brand */}
+      {/* Left eye (static) */}
       <circle cx="22" cy="25" r="10" fill="#3B6D11"/>
-      <circle cx="42" cy="25" r="10" fill="#3B6D11"/>
-      {/* Irises — golden honey */}
       <circle cx="22" cy="25" r="7.5" fill="#FAC775"/>
-      <circle cx="42" cy="25" r="7.5" fill="#FAC775"/>
-      {/* Pupils */}
       <circle cx="22" cy="25" r="4" fill="#1A0E05"/>
-      <circle cx="42" cy="25" r="4" fill="#1A0E05"/>
-      {/* Eye highlights */}
       <circle cx="20.5" cy="23.5" r="1.5" fill="white"/>
-      <circle cx="40.5" cy="23.5" r="1.5" fill="white"/>
+      {/* Right eye (winking) */}
+      <g style={{ transformOrigin: '42px 25px', animation: 'owl-wink 6s ease-in-out infinite' }}>
+        <circle cx="42" cy="25" r="10" fill="#3B6D11"/>
+        <circle cx="42" cy="25" r="7.5" fill="#FAC775"/>
+        <circle cx="42" cy="25" r="4" fill="#1A0E05"/>
+        <circle cx="40.5" cy="23.5" r="1.5" fill="white"/>
+      </g>
       {/* Beak */}
       <path d="M28 33 L32 40 L36 33Z" fill="#E07820"/>
       {/* Belly feather hint */}

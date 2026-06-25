@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import Navbar from '@/components/Navbar'
-import { OwlIcon, SproutIcon, MushroomIcon, CaterpillarIcon, LeafIcon, AcornIcon, SnailIcon } from '@/components/Icons'
+import { SunriseScene, AfternoonScene, EveningScene, SproutIcon, MushroomIcon, CaterpillarIcon, LeafIcon, AcornIcon, SnailIcon } from '@/components/Icons'
 
 const PALETTES = [
   { bg: '#FFF3C4', border: '#F0C040', text: '#7A4000' },
@@ -14,11 +14,11 @@ const PALETTES = [
 
 const FALLBACK_ICONS = [AcornIcon, LeafIcon, SnailIcon, SproutIcon]
 
-function greeting() {
+function greetingInfo() {
   const h = new Date().getHours()
-  if (h < 12) return 'Good morning'
-  if (h < 17) return 'Good afternoon'
-  return 'Good evening'
+  if (h < 12) return { text: 'Good morning',   Scene: SunriseScene   }
+  if (h < 17) return { text: 'Good afternoon', Scene: AfternoonScene }
+  return         { text: 'Good evening',   Scene: EveningScene   }
 }
 
 export default function Dashboard() {
@@ -69,6 +69,7 @@ export default function Dashboard() {
   )
 
   const firstName = profile.full_name.split(' ')[0]
+  const { text: greetingText, Scene: GreetingScene } = greetingInfo()
 
   return (
     <>
@@ -88,10 +89,10 @@ export default function Dashboard() {
           gap: '1rem',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <OwlIcon size={52} />
+            <GreetingScene width={88} height={60} />
             <div>
               <h1 style={{ fontSize: '1.375rem', fontWeight: 800, color: 'var(--green-forest)', lineHeight: 1.2 }}>
-                {greeting()}, {firstName}! 🌿
+                {greetingText}, {firstName}! 🌿
               </h1>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginTop: '4px' }}>
                 {classrooms.length === 0
