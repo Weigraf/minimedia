@@ -250,7 +250,7 @@ export default function Navbar({ profile }) {
   const isAdmin = profile?.role === 'admin'
   const effectiveRole = (viewAs && isAdmin) ? viewAs.role : profile?.role
   const effectiveIsCA = (viewAs && isAdmin) ? viewAs.isClassroomAdmin : isClassroomAdmin
-  const effectiveIsSA = (viewAs && isAdmin) ? false : isSchoolAdmin
+  const effectiveIsSA = (viewAs && isAdmin) ? (viewAs.isSchoolAdmin || false) : isSchoolAdmin
   const items = profile ? navItems(effectiveRole, effectiveIsCA, effectiveIsSA, viewAs ? 0 : unreadCount) : []
   const firstName = profile?.full_name?.split(' ')[0] ?? ''
 
@@ -356,14 +356,16 @@ export default function Navbar({ profile }) {
               onChange={e => {
                 const v = e.target.value
                 if (!v) clearViewAs()
-                else if (v === 'parent') setViewAs({ key: 'parent', role: 'parent', isClassroomAdmin: false, label: 'Parent' })
-                else if (v === 'teacher') setViewAs({ key: 'teacher', role: 'parent', isClassroomAdmin: true, label: 'Teacher' })
+                else if (v === 'parent') setViewAs({ key: 'parent', role: 'parent', isClassroomAdmin: false, isSchoolAdmin: false, label: 'Parent' })
+                else if (v === 'teacher') setViewAs({ key: 'teacher', role: 'parent', isClassroomAdmin: true, isSchoolAdmin: false, label: 'Teacher' })
+                else if (v === 'school_admin') setViewAs({ key: 'school_admin', role: 'parent', isClassroomAdmin: false, isSchoolAdmin: true, label: 'School Admin' })
               }}
               style={{ width: '100%', borderRadius: '50px', fontSize: '0.8125rem', padding: '6px 12px', fontFamily: 'var(--font)', fontWeight: 600 }}
             >
               <option value="">My View (Admin)</option>
               <option value="parent">Parent</option>
               <option value="teacher">Teacher</option>
+              <option value="school_admin">School Admin</option>
             </select>
           </div>
         )}
