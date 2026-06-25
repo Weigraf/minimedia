@@ -51,11 +51,21 @@ export default function Dashboard() {
         const { data } = await supabase.from('classrooms').select('*').order('created_at')
         classroomData = data || []
       } else {
-        const { data } = await supabase
-          .from('memberships')
-          .select('classroom_id, approved, classrooms(*)')
-          .eq('profile_id', session.user.id)
-        classroomData = (data || []).filter(m => m.approved).map(m => m.classrooms)
+        // Check if school admin first — they see their school's classrooms
+        const { data: schoolMem } = await supabase
+          .from('school_memberships').select('school_id')
+          .eq('profile_id', session.user.id).eq('role', 'school_admin').maybeSingle()
+
+        if (schoolMem) {
+          const { data } = await supabase.from('classrooms').select('*').eq('school_id', schoolMem.school_id).order('name')
+          classroomData = data || []
+        } else {
+          const { data } = await supabase
+            .from('memberships')
+            .select('classroom_id, approved, classrooms(*)')
+            .eq('profile_id', session.user.id)
+          classroomData = (data || []).filter(m => m.approved).map(m => m.classrooms)
+        }
       }
 
       const { data: unread } = await supabase

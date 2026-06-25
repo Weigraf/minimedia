@@ -30,13 +30,21 @@ export default function ChildrenAdmin() {
       let myClassroomIds = []
 
       if (!adminFlag) {
+        // Classroom admin memberships
         const { data: adminMems } = await supabase
-          .from('memberships')
-          .select('classroom_id')
-          .eq('profile_id', user.id)
-          .eq('role', 'classroom_admin')
-          .eq('approved', true)
+          .from('memberships').select('classroom_id')
+          .eq('profile_id', user.id).eq('role', 'classroom_admin').eq('approved', true)
         myClassroomIds = (adminMems || []).map(m => m.classroom_id)
+
+        // School admin — sees all classrooms in their school
+        const { data: schoolMem } = await supabase
+          .from('school_memberships').select('school_id')
+          .eq('profile_id', user.id).eq('role', 'school_admin').maybeSingle()
+        if (schoolMem) {
+          const { data: schoolCls } = await supabase.from('classrooms').select('id').eq('school_id', schoolMem.school_id)
+          myClassroomIds = [...new Set([...myClassroomIds, ...(schoolCls || []).map(c => c.id)])]
+        }
+
         if (myClassroomIds.length === 0) { router.push('/dashboard'); return }
       }
 

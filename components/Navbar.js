@@ -26,17 +26,26 @@ function TwinkleStar({ size = 26 }) {
   )
 }
 
-function navItems(role, isClassroomAdmin, unreadCount = 0) {
+function navItems(role, isClassroomAdmin, isSchoolAdmin, unreadCount = 0) {
   const items = []
 
   // ── Parent ────────────────────────────────────────────────────────────────
-  if (role === 'parent' && !isClassroomAdmin) {
+  if (role === 'parent' && !isClassroomAdmin && !isSchoolAdmin) {
     items.push({ label: 'My Classrooms', href: '/dashboard',    Icon: LeafIcon })
     items.push({ label: 'My Children',   href: '/my-children',  Icon: CaterpillarIcon })
   }
 
+  // ── School Admin ──────────────────────────────────────────────────────────
+  if (isSchoolAdmin) {
+    items.push({ label: 'My Classrooms', href: '/dashboard',        Icon: LeafIcon })
+    items.push({ label: 'My Teachers',   href: '/school',           Icon: SproutIcon })
+    items.push({ label: 'Messages',      href: '/messages',         Icon: MessageIcon, badge: unreadCount })
+    items.push({ label: 'Students',      href: '/admin/students',   Icon: CaterpillarIcon })
+    items.push({ label: 'Approvals',     href: '/admin/approvals',  Icon: AcornIcon })
+  }
+
   // ── Teacher (classroom admin) ─────────────────────────────────────────────
-  if (isClassroomAdmin) {
+  if (isClassroomAdmin && !isSchoolAdmin) {
     items.push({ label: 'My Classrooms', href: '/dashboard',        Icon: LeafIcon })
     items.push({ label: 'Messages',      href: '/messages',         Icon: MessageIcon, badge: unreadCount })
     items.push({ label: 'Students',      href: '/admin/students',   Icon: CaterpillarIcon })
@@ -47,12 +56,13 @@ function navItems(role, isClassroomAdmin, unreadCount = 0) {
   if (role === 'admin') {
     items.push({ label: 'My Classrooms',     href: '/dashboard',            Icon: LeafIcon })
     items.push({ label: 'Classrooms',        href: '/classrooms',           Icon: SnailIcon })
+    items.push({ label: 'Schools',           href: '/admin/schools',        Icon: SproutIcon })
     items.push({ label: 'Students',          href: '/admin/students',       Icon: CaterpillarIcon })
     items.push({ label: 'Users',             href: '/admin/users',          Icon: RaindropIcon })
     items.push({ label: 'Approvals',         href: '/admin/approvals',      Icon: AcornIcon })
     items.push({ label: 'Contact Inbox',     href: '/admin/contact',        Icon: MushroomIcon })
     items.push({ divider: true })
-    items.push({ label: 'New Classroom',     href: '/admin/classrooms/new', Icon: SproutIcon })
+    items.push({ label: 'New Classroom',     href: '/admin/classrooms/new', Icon: LeafIcon })
     items.push({ label: 'Premium',           href: '/subscribe',            Icon: TwinkleStar })
   }
 
@@ -66,6 +76,7 @@ export default function Navbar({ profile }) {
   const [pushEnabled, setPushEnabled] = useState(false)
   const [pushSupported, setPushSupported] = useState(false)
   const [isClassroomAdmin, setIsClassroomAdmin] = useState(false)
+  const [isSchoolAdmin, setIsSchoolAdmin] = useState(false)
   const [unreadCount, setUnreadCount] = useState(0)
   const [menuOpen, setMenuOpen] = useState(() => {
     if (typeof window === 'undefined') return true
@@ -86,6 +97,9 @@ export default function Navbar({ profile }) {
     supabase.from('memberships')
       .select('id').eq('profile_id', profile.id).eq('role', 'classroom_admin').eq('approved', true).limit(1)
       .then(({ data }) => { if (data?.length) setIsClassroomAdmin(true) })
+    supabase.from('school_memberships')
+      .select('id').eq('profile_id', profile.id).eq('role', 'school_admin').limit(1)
+      .then(({ data }) => { if (data?.length) setIsSchoolAdmin(true) })
   }, [profile])
 
   useEffect(() => {
@@ -236,7 +250,8 @@ export default function Navbar({ profile }) {
   const isAdmin = profile?.role === 'admin'
   const effectiveRole = (viewAs && isAdmin) ? viewAs.role : profile?.role
   const effectiveIsCA = (viewAs && isAdmin) ? viewAs.isClassroomAdmin : isClassroomAdmin
-  const items = profile ? navItems(effectiveRole, effectiveIsCA, viewAs ? 0 : unreadCount) : []
+  const effectiveIsSA = (viewAs && isAdmin) ? false : isSchoolAdmin
+  const items = profile ? navItems(effectiveRole, effectiveIsCA, effectiveIsSA, viewAs ? 0 : unreadCount) : []
   const firstName = profile?.full_name?.split(' ')[0] ?? ''
 
   return (
