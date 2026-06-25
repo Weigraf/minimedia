@@ -2,9 +2,10 @@ import { Resend } from 'resend'
 import { createAdminClient } from '@/lib/supabase-admin'
 import { sendPush } from '@/lib/webpush'
 import { sendFCMPush } from '@/lib/firebase-admin'
+import { esc } from '@/lib/html-escape'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
-const APP_URL = 'https://minimedia-blue.vercel.app'
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.tumble-tree.com'
 
 export async function POST(request) {
   const authHeader = request.headers.get('Authorization')
@@ -62,21 +63,21 @@ export async function POST(request) {
   await resend.emails.send({
     from: process.env.NOTIFY_FROM_EMAIL,
     to: recipients.map(u => u.email),
-    subject: `Access request for ${classroom.name}`,
+    subject: `Access request for ${esc(classroom.name)}`,
     html: `
       <div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:24px">
         <h2 style="color:#27500A;margin-bottom:4px">New access request</h2>
         <p style="color:#555;margin-top:0;font-size:14px">
-          <strong>${requesterName}</strong> has requested to join
-          <strong>${classroom.name}</strong>.
+          <strong>${esc(requesterName)}</strong> has requested to join
+          <strong>${esc(classroom.name)}</strong>.
         </p>
-        <p style="color:#555;font-size:14px">Their email: <strong>${user.email}</strong></p>
+        <p style="color:#555;font-size:14px">Their email: <strong>${esc(user.email)}</strong></p>
         <a href="${approvalsUrl}"
            style="display:inline-block;background:#3B6D11;color:#fff;padding:10px 20px;border-radius:20px;text-decoration:none;font-weight:600;font-size:14px">
           Review in approvals →
         </a>
         <p style="color:#aaa;font-size:12px;margin-top:24px">
-          You're receiving this because you're an admin of ${classroom.name} on TumbleTree.
+          You're receiving this because you're an admin of ${esc(classroom.name)} on TumbleTree.
         </p>
       </div>
     `,

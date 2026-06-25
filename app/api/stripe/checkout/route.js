@@ -1,7 +1,7 @@
 import { getStripe } from '@/lib/stripe'
 import { createAdminClient } from '@/lib/supabase-admin'
 
-const APP_URL = 'https://minimedia-blue.vercel.app'
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.tumble-tree.com'
 
 export async function POST(request) {
   const authHeader = request.headers.get('Authorization')

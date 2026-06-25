@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase'
+import { useRouter } from 'next/navigation'
 import Navbar from '@/components/Navbar'
 import { AcornIcon } from '@/components/Icons'
 
@@ -14,13 +15,15 @@ export default function ChildrenAdmin() {
   const [classroomId, setClassroomId] = useState('')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
+  const router = useRouter()
 
   useEffect(() => {
     async function load() {
       const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return
+      if (!user) { router.push('/login'); return }
       const { data: p } = await supabase.from('profiles').select('*').eq('id', user.id).single()
+      if (!p || p.role !== 'admin') { router.push('/dashboard'); return }
       setProfile(p)
       const [{ data: cls }, { data: ch }, { data: profs }, { data: settings }] = await Promise.all([
         supabase.from('classrooms').select('id, name').order('name'),

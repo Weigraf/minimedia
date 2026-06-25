@@ -145,7 +145,10 @@ export async function POST(req) {
     .select()
     .single()
 
-  if (insertErr) return NextResponse.json({ error: insertErr.message }, { status: 500 })
+  if (insertErr) {
+    console.error('[messages] insert error:', insertErr.message)
+    return NextResponse.json({ error: 'Failed to send message.' }, { status: 500 })
+  }
 
   return NextResponse.json({ message })
 }
@@ -174,7 +177,10 @@ export async function GET(req) {
     .eq('classroom_id', classroomId)
     .order('created_at', { ascending: true })
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) {
+    console.error('[messages] select error:', error.message)
+    return NextResponse.json({ error: 'Failed to load messages.' }, { status: 500 })
+  }
 
   return NextResponse.json({ messages })
 }

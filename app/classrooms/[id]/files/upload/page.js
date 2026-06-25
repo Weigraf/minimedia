@@ -7,11 +7,11 @@ import { AcornIcon, CaterpillarIcon } from '@/components/Icons'
 
 export default function UploadFile() {
   const [profile, setProfile] = useState(null)
-  const [isClassroomAdmin, setIsClassroomAdmin] = useState(false)
   const [file, setFile] = useState(null)
   const [fileName, setFileName] = useState('')
   const [uploading, setUploading] = useState(false)
   const [message, setMessage] = useState('')
+  const [token, setToken] = useState(null)
   const router = useRouter()
   const params = useParams()
   const id = params?.id
@@ -36,14 +36,12 @@ export default function UploadFile() {
         .eq('profile_id', session.user.id)
         .single()
 
-      const isClassAdmin = membership?.role === 'classroom_admin'
-      setIsClassroomAdmin(isClassAdmin)
-
-      if (profile.role !== 'admin' && !isClassAdmin) {
+      if (profile.role !== 'admin' && membership?.role !== 'classroom_admin') {
         router.push('/dashboard'); return
       }
 
       setProfile(profile)
+      setToken(session.access_token)
     }
 
     load()
@@ -55,31 +53,23 @@ export default function UploadFile() {
     setUploading(true)
     setMessage('')
 
-    const supabase = createClient()
-    const fileExt = file.name.split('.').pop()
-    const filePath = `${id}/${Date.now()}.${fileExt}`
+    const fd = new FormData()
+    fd.append('classroom_id', id)
+    fd.append('file', file)
+    if (fileName.trim()) fd.append('display_name', fileName.trim())
 
-    const { error: uploadError } = await supabase.storage
-      .from('classroom-files')
-      .upload(filePath, file)
-
-    if (uploadError) { setMessage('Upload error: ' + uploadError.message); setUploading(false); return }
-
-    const { data: signedData, error: signedError } = await supabase.storage
-      .from('classroom-files')
-      .createSignedUrl(filePath, 60 * 60 * 24 * 365)
-
-    if (signedError) { setMessage('URL error: ' + signedError.message); setUploading(false); return }
-
-    const { error: dbError } = await supabase.from('files').insert({
-      classroom_id: id,
-      uploaded_by: profile.id,
-      name: fileName || file.name,
-      file_url: signedData.signedUrl,
-      file_type: fileExt
+    const res = await fetch('/api/files/upload', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: fd,
     })
 
-    if (dbError) { setMessage('Database error: ' + dbError.message); setUploading(false); return }
+    const data = await res.json()
+    if (!res.ok) {
+      setMessage(data.error || 'Upload failed')
+      setUploading(false)
+      return
+    }
 
     setMessage('File uploaded!')
     setTimeout(() => router.push(`/classrooms/${id}`), 800)
@@ -113,17 +103,17 @@ export default function UploadFile() {
               <label>Select file</label>
               <input
                 type="file"
-                accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx"
-                onChange={e => setFile(e.target.files[0])}
+                accept=".pdf,.jpg,.jpeg,.png,.gif,.webp,.doc,.docx,.xls,.xlsx"
+                onChange={e => setFile(e.target.files[0] ?? null)}
                 required
                 style={{ borderRadius: '12px', padding: '10px' }}
               />
               <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '6px' }}>
-                Accepted: PDF, images, Word docs, Excel sheets
+                Accepted: PDF, images (JPG, PNG, GIF, WebP), Word docs, Excel sheets · Max 20 MB
               </p>
             </div>
             {message && (
-              <div className={message.startsWith('Upload') || message.startsWith('Database') || message.startsWith('URL') ? 'flash-error' : 'flash-info'}>
+              <div className={message === 'File uploaded!' ? 'flash-info' : 'flash-error'}>
                 {message}
               </div>
             )}

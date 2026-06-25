@@ -2,9 +2,10 @@ import { Resend } from 'resend'
 import { createAdminClient } from '@/lib/supabase-admin'
 import { sendPush } from '@/lib/webpush'
 import { sendFCMPush } from '@/lib/firebase-admin'
+import { esc } from '@/lib/html-escape'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
-const APP_URL = 'https://minimedia-blue.vercel.app'
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.tumble-tree.com'
 
 export async function POST(request) {
   const authHeader = request.headers.get('Authorization')
@@ -48,30 +49,29 @@ export async function POST(request) {
 
   if (!recipients.length) return Response.json({ ok: true, sent: 0 })
 
-  const excerpt = post.content
+  const rawExcerpt = post.content
     ? post.content.length > 200 ? post.content.slice(0, 200) + '…' : post.content
     : '(image post)'
 
   const classroomUrl = `${APP_URL}/classrooms/${post.classroom_id}`
 
-  // Email all recipients
   await resend.emails.send({
     from: process.env.NOTIFY_FROM_EMAIL,
     to: recipients.map(u => u.email),
-    subject: `New post in ${classroom.name}`,
+    subject: `New post in ${esc(classroom.name)}`,
     html: `
       <div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:24px">
-        <h2 style="color:#27500A;margin-bottom:4px">${classroom.name}</h2>
-        <p style="color:#555;margin-top:0;font-size:14px">New update from ${post.profiles?.full_name}</p>
+        <h2 style="color:#27500A;margin-bottom:4px">${esc(classroom.name)}</h2>
+        <p style="color:#555;margin-top:0;font-size:14px">New update from ${esc(post.profiles?.full_name)}</p>
         <div style="background:#EAF3DE;border-radius:10px;padding:16px;margin:16px 0;font-size:15px;line-height:1.6;color:#222">
-          ${excerpt}
+          ${esc(rawExcerpt)}
         </div>
         <a href="${classroomUrl}"
            style="display:inline-block;background:#3B6D11;color:#fff;padding:10px 20px;border-radius:20px;text-decoration:none;font-weight:600;font-size:14px">
           View in classroom →
         </a>
         <p style="color:#aaa;font-size:12px;margin-top:24px">
-          You're receiving this because you're a member of ${classroom.name} on TumbleTree.
+          You're receiving this because you're a member of ${esc(classroom.name)} on TumbleTree.
         </p>
       </div>
     `,
@@ -86,7 +86,7 @@ export async function POST(request) {
   if (pushSubs?.length) {
     const payload = {
       title: `New post in ${classroom.name}`,
-      body: `${post.profiles?.full_name}: ${excerpt}`,
+      body: `${post.profiles?.full_name}: ${rawExcerpt}`,
       url: classroomUrl,
     }
     const expiredIds = []
@@ -108,7 +108,7 @@ export async function POST(request) {
   let fcmSent = 0
   if (deviceTokenRows?.length) {
     const tokens = deviceTokenRows.map(r => r.token)
-    const fcmPayload = { title: `New post in ${classroom.name}`, body: `${post.profiles?.full_name}: ${excerpt}`, url: classroomUrl }
+    const fcmPayload = { title: `New post in ${classroom.name}`, body: `${post.profiles?.full_name}: ${rawExcerpt}`, url: classroomUrl }
     const { sent, expired } = await sendFCMPush(tokens, fcmPayload)
     fcmSent = sent
     if (expired.length) {

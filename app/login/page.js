@@ -14,7 +14,7 @@ export default function Login() {
     e.preventDefault()
     const supabase = createClient()
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) { setMessage(error.message); return }
+    if (error) { setMessage('Invalid email or password.'); return }
 
     const { data: profile, error: profileError } = await supabase
       .from('profiles').select('approved, role').eq('id', data.user.id).single()

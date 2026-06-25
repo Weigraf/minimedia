@@ -65,7 +65,7 @@ export async function POST(request) {
     .insert({ name, email, subject, message })
 
   if (error) {
-    console.error('contact_inquiries insert error:', error.message)
+    console.error('[contact] insert error:', error.message)
     return NextResponse.json({ error: 'Failed to submit — please try again.' }, { status: 500 })
   }
 

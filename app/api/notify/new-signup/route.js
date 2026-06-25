@@ -1,11 +1,20 @@
 import { Resend } from 'resend'
+import { esc } from '@/lib/html-escape'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
-const APP_URL = 'https://minimedia-blue.vercel.app'
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.tumble-tree.com'
 
 export async function POST(request) {
   const { name, email } = await request.json()
   if (!name || !email) return Response.json({ error: 'Missing fields' }, { status: 400 })
+
+  // Validate format and length before sending to admin email
+  if (typeof name !== 'string' || name.length > 200) {
+    return Response.json({ error: 'Invalid name' }, { status: 400 })
+  }
+  if (typeof email !== 'string' || email.length > 320 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return Response.json({ error: 'Invalid email' }, { status: 400 })
+  }
 
   const adminEmail = process.env.NOTIFY_ADMIN_EMAIL
   if (!adminEmail) return Response.json({ ok: true, sent: 0 })
@@ -18,7 +27,7 @@ export async function POST(request) {
       <div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:24px">
         <h2 style="color:#27500A;margin-bottom:4px">New account request</h2>
         <p style="color:#555;margin-top:0;font-size:14px">
-          <strong>${name}</strong> (<strong>${email}</strong>) has requested access to TumbleTree
+          <strong>${esc(name)}</strong> (<strong>${esc(email)}</strong>) has requested access to TumbleTree
           and is waiting for your approval.
         </p>
         <a href="${APP_URL}/admin/approvals"
