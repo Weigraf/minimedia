@@ -133,9 +133,9 @@ export default function Navbar({ profile }) {
 
   return (
     <nav aria-label="Main navigation" style={{
-      background: 'linear-gradient(to right, #C2E4F6, #D8EEFF, #C2E4F6)',
-      borderBottom: '2.5px solid #7BBDE8',
-      boxShadow: '0 3px 14px rgba(46,139,200,0.14)',
+      background: 'linear-gradient(to right, #BDD5E8, #CDDFF2, #BDD5E8)',
+      borderBottom: '2.5px solid #88AECB',
+      boxShadow: '0 3px 14px rgba(46,139,200,0.10)',
       padding: '0 1.5rem',
       height: '62px',
       display: 'flex',
