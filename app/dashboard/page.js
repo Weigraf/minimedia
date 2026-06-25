@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import Navbar from '@/components/Navbar'
-import { SunriseScene, AfternoonScene, EveningScene, SproutIcon, MushroomIcon, CaterpillarIcon, LeafIcon, AcornIcon, SnailIcon } from '@/components/Icons'
+import { SunriseScene, AfternoonScene, EveningScene, SproutIcon, MushroomIcon, CaterpillarIcon, LeafIcon, AcornIcon, SnailIcon, MessageIcon } from '@/components/Icons'
 
 const PALETTES = [
   { bg: '#FFF3C4', border: '#F0C040', text: '#7A4000' },
@@ -151,11 +151,8 @@ function ClassroomCard({ classroom, palette, FallbackIcon }) {
   const [hovered, setHovered] = useState(false)
 
   return (
-    <a
-      href={`/classrooms/${classroom.id}`}
+    <div
       style={{
-        display: 'block',
-        textDecoration: 'none',
         background: 'var(--surface)',
         border: `2px solid ${hovered ? palette.border : 'var(--border)'}`,
         borderRadius: '18px',
@@ -198,22 +195,42 @@ function ClassroomCard({ classroom, palette, FallbackIcon }) {
           )}
         </div>
 
-        {/* Arrow chip */}
-        <div style={{
-          flexShrink: 0,
-          background: hovered ? palette.bg : 'transparent',
-          border: `1.5px solid ${hovered ? palette.border : 'var(--border)'}`,
-          borderRadius: '50px',
-          padding: '4px 12px',
-          fontSize: '0.8125rem',
-          fontWeight: 700,
-          color: hovered ? palette.text : 'var(--text-muted)',
-          transition: 'all 0.15s',
-        }}>
-          Open →
+        {/* Actions */}
+        <div style={{ display: 'flex', gap: '8px', flexShrink: 0, alignItems: 'center' }}>
+          <a
+            href={`/classrooms/${classroom.id}/messages`}
+            style={{
+              display: 'flex', alignItems: 'center', gap: '4px',
+              background: hovered ? palette.bg : 'transparent',
+              border: `1.5px solid ${hovered ? palette.border : 'var(--border)'}`,
+              borderRadius: '50px',
+              padding: '4px 10px',
+              fontSize: '0.8125rem', fontWeight: 700,
+              color: hovered ? palette.text : 'var(--text-muted)',
+              textDecoration: 'none',
+              transition: 'all 0.15s',
+            }}
+          >
+            <MessageIcon size={14} /> Messages
+          </a>
+          <a
+            href={`/classrooms/${classroom.id}`}
+            style={{
+              background: hovered ? palette.bg : 'transparent',
+              border: `1.5px solid ${hovered ? palette.border : 'var(--border)'}`,
+              borderRadius: '50px',
+              padding: '4px 12px',
+              fontSize: '0.8125rem', fontWeight: 700,
+              color: hovered ? palette.text : 'var(--text-muted)',
+              textDecoration: 'none',
+              transition: 'all 0.15s',
+            }}
+          >
+            Open →
+          </a>
         </div>
 
       </div>
-    </a>
+    </div>
   )
 }
