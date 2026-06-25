@@ -26,7 +26,7 @@ function TwinkleStar({ size = 26 }) {
   )
 }
 
-function navItems(role) {
+function navItems(role, isClassroomAdmin) {
   const items = []
 
   if (role === 'admin') {
@@ -36,14 +36,14 @@ function navItems(role) {
 
   items.push({ label: 'My Classrooms', href: '/dashboard', Icon: LeafIcon })
 
-  if (role === 'parent') {
+  if (role === 'parent' && !isClassroomAdmin) {
     items.push({ label: 'My Children', href: '/my-children', Icon: CaterpillarIcon })
   }
 
-  if (role === 'classroom_admin') {
-    items.push({ label: 'Teacher Approvals', href: '/admin/approvals',      Icon: AcornIcon })
-    items.push({ label: 'Browse Classrooms', href: '/classrooms',           Icon: SnailIcon })
-    items.push({ label: 'Messages',          href: '/messages',             Icon: MessageIcon })
+  if (isClassroomAdmin) {
+    items.push({ label: 'Approvals',         href: '/admin/approvals', Icon: AcornIcon })
+    items.push({ label: 'My Classrooms',     href: '/classrooms',      Icon: SnailIcon })
+    items.push({ label: 'Messages',          href: '/messages',        Icon: MessageIcon })
   }
 
   if (role === 'admin') {
@@ -62,6 +62,7 @@ function navItems(role) {
 export default function Navbar({ profile }) {
   const [pushEnabled, setPushEnabled] = useState(false)
   const [pushSupported, setPushSupported] = useState(false)
+  const [isClassroomAdmin, setIsClassroomAdmin] = useState(false)
   const [menuOpen, setMenuOpen] = useState(() => {
     if (typeof window === 'undefined') return true
     return localStorage.getItem('tt-sidebar') !== 'closed'
@@ -73,6 +74,14 @@ export default function Navbar({ profile }) {
     document.body.style.transition = 'margin-left 0.25s cubic-bezier(0.4,0,0.2,1)'
     document.body.style.marginLeft = menuOpen ? '270px' : '0'
   }, [menuOpen])
+
+  useEffect(() => {
+    if (!profile || profile.role !== 'parent') return
+    const supabase = createClient()
+    supabase.from('memberships')
+      .select('id').eq('profile_id', profile.id).eq('role', 'classroom_admin').eq('approved', true).limit(1)
+      .then(({ data }) => { if (data?.length) setIsClassroomAdmin(true) })
+  }, [profile])
 
   useEffect(() => {
     const saved = localStorage.getItem('tt-theme')
@@ -195,7 +204,7 @@ export default function Navbar({ profile }) {
     router.push('/login')
   }
 
-  const items = profile ? navItems(profile.role) : []
+  const items = profile ? navItems(profile.role, isClassroomAdmin) : []
   const firstName = profile?.full_name?.split(' ')[0] ?? ''
 
   return (

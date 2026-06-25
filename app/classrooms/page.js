@@ -24,8 +24,17 @@ export default function BrowseClassrooms() {
 
       if (!p || !p.approved) { router.push('/login'); return }
 
-      // Parents have no access to this page
-      if (p.role === 'parent') { router.push('/dashboard'); return }
+      // Check if user admins any classrooms (classroom_admin is a membership-level role)
+      const { data: adminMems } = await supabase
+        .from('memberships')
+        .select('classroom_id, classrooms(*)')
+        .eq('profile_id', session.user.id)
+        .eq('role', 'classroom_admin')
+        .eq('approved', true)
+      const isClassroomAdmin = (adminMems?.length ?? 0) > 0
+
+      // Pure parents (no classroom admin memberships) go to dashboard
+      if (p.role === 'parent' && !isClassroomAdmin) { router.push('/dashboard'); return }
 
       setProfile(p)
 
@@ -34,13 +43,8 @@ export default function BrowseClassrooms() {
         const { data } = await supabase.from('classrooms').select('*').order('name')
         classroomData = data || []
       } else {
-        // classroom_admin: only classrooms they administer
-        const { data } = await supabase
-          .from('memberships')
-          .select('classroom_id, approved, role, classrooms(*)')
-          .eq('profile_id', session.user.id)
-          .eq('role', 'classroom_admin')
-        classroomData = (data || []).filter(m => m.approved).map(m => m.classrooms)
+        // classroom_admin via membership: only classrooms they administer
+        classroomData = (adminMems || []).map(m => m.classrooms).filter(Boolean)
       }
 
       const { data: mems } = await supabase
