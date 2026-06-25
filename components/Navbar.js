@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
-import { OwlIcon, SproutIcon, LeafIcon, SnailIcon, RaindropIcon, AcornIcon, CaterpillarIcon, MessageIcon, SunIcon, MoonIcon } from '@/components/Icons'
+import { OwlIcon, SproutIcon, LeafIcon, SnailIcon, RaindropIcon, AcornIcon, CaterpillarIcon, MessageIcon, MushroomIcon, SunIcon, MoonIcon } from '@/components/Icons'
 
 function urlBase64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
@@ -49,6 +49,7 @@ function navItems(role) {
   if (role === 'admin') {
     items.push({ label: 'Browse Classrooms', href: '/classrooms',       Icon: SnailIcon })
     items.push({ label: 'Children',          href: '/admin/children',   Icon: CaterpillarIcon })
+    items.push({ label: 'Contact Inbox',     href: '/admin/contact',    Icon: MushroomIcon })
     items.push({ label: 'Premium',           href: '/subscribe',        Icon: TwinkleStar })
   }
 
