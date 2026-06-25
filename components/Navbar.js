@@ -11,9 +11,30 @@ function urlBase64ToUint8Array(base64String) {
   return Uint8Array.from([...rawData].map(c => c.charCodeAt(0)))
 }
 
+function navItems(role) {
+  const items = [
+    { label: 'My Classrooms',     href: '/dashboard',              emoji: '🏡' },
+    { label: 'Browse Classrooms', href: '/classrooms',             emoji: '🔍' },
+    { label: 'File Uploads',      href: '/classrooms',             emoji: '📁', note: 'via a classroom' },
+    { label: 'Profile & Settings',href: '/profile',                emoji: '🌿' },
+  ]
+  if (role === 'admin' || role === 'classroom_admin') {
+    items.push({ label: 'Approvals', href: '/admin/approvals', emoji: '✅' })
+  }
+  if (role === 'admin') {
+    items.push(
+      { label: 'Children',        href: '/admin/children',         emoji: '🌱' },
+      { label: 'New Classroom',   href: '/admin/classrooms/new',   emoji: '🏫' },
+      { label: '✦ Premium',       href: '/subscribe',              emoji: '✨' },
+    )
+  }
+  return items
+}
+
 export default function Navbar({ profile }) {
   const [pushEnabled, setPushEnabled] = useState(false)
   const [pushSupported, setPushSupported] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -24,21 +45,13 @@ export default function Navbar({ profile }) {
       const { data: { session } } = await supabase.auth.getSession()
       if (!session) return
 
-      // Native Capacitor push
       try {
         const { Capacitor } = await import('@capacitor/core')
         if (Capacitor.isNativePlatform()) {
           const { PushNotifications } = await import('@capacitor/push-notifications')
           setPushSupported(true)
-
-          // Check if already registered
-          const { data } = await supabase
-            .from('device_tokens')
-            .select('id')
-            .eq('profile_id', profile.id)
-            .limit(1)
+          const { data } = await supabase.from('device_tokens').select('id').eq('profile_id', profile.id).limit(1)
           if (data?.length) setPushEnabled(true)
-
           PushNotifications.addListener('registration', async ({ value: fcmToken }) => {
             const platform = Capacitor.getPlatform()
             await fetch('/api/push/register-device', {
@@ -53,16 +66,10 @@ export default function Navbar({ profile }) {
         }
       } catch {}
 
-      // Web push fallback
       if (!('serviceWorker' in navigator) || !('PushManager' in window)) return
       setPushSupported(true)
       navigator.serviceWorker.register('/sw.js').catch(() => {})
-
-      const { data } = await supabase
-        .from('push_subscriptions')
-        .select('id')
-        .eq('profile_id', profile.id)
-        .limit(1)
+      const { data } = await supabase.from('push_subscriptions').select('id').eq('profile_id', profile.id).limit(1)
       if (data?.length) setPushEnabled(true)
     }
 
@@ -75,7 +82,6 @@ export default function Navbar({ profile }) {
     const { data: { session } } = await supabase.auth.getSession()
     if (!session) return
 
-    // Native Capacitor path
     try {
       const { Capacitor } = await import('@capacitor/core')
       if (Capacitor.isNativePlatform()) {
@@ -91,7 +97,6 @@ export default function Navbar({ profile }) {
       }
     } catch {}
 
-    // Web push path
     if (pushEnabled) {
       const reg = await navigator.serviceWorker.ready
       const sub = await reg.pushManager.getSubscription()
@@ -110,13 +115,11 @@ export default function Navbar({ profile }) {
 
     const permission = await Notification.requestPermission()
     if (permission !== 'granted') return
-
     const reg = await navigator.serviceWorker.ready
     const sub = await reg.pushManager.subscribe({
       userVisibleOnly: true,
       applicationServerKey: urlBase64ToUint8Array(process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY),
     })
-
     const res = await fetch('/api/push/subscribe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
@@ -131,93 +134,221 @@ export default function Navbar({ profile }) {
     router.push('/login')
   }
 
-  return (
-    <nav aria-label="Main navigation" style={{
-      background: 'linear-gradient(to right, #C8B8E0, #D8C8EC, #C8B8E0)',
-      borderBottom: '2.5px solid #A888CC',
-      boxShadow: '0 3px 14px rgba(100,60,160,0.12)',
-      padding: '0 1.5rem',
-      height: '62px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      position: 'sticky',
-      top: 0,
-      zIndex: 100,
-    }}>
-      <a href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
-        <SproutIcon size={30} />
-        <span style={{ fontSize: '1.1875rem', fontWeight: 800, color: '#2A1F0E', letterSpacing: '-0.3px' }}>TumbleTree</span>
-      </a>
+  const items = profile ? navItems(profile.role) : []
+  const firstName = profile?.full_name?.split(' ')[0] ?? ''
 
-      {profile && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <a href="/profile" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
+  return (
+    <>
+      {/* ── Overlay ───────────────────────────────────────────────── */}
+      {menuOpen && (
+        <div
+          aria-hidden="true"
+          onClick={() => setMenuOpen(false)}
+          style={{
+            position: 'fixed', inset: 0,
+            background: 'rgba(42,31,14,0.28)',
+            backdropFilter: 'blur(2px)',
+            zIndex: 200,
+          }}
+        />
+      )}
+
+      {/* ── Slide-out drawer ──────────────────────────────────────── */}
+      <div
+        id="nav-drawer"
+        role="dialog"
+        aria-label="Navigation menu"
+        aria-modal="true"
+        aria-hidden={!menuOpen}
+        style={{
+          position: 'fixed', top: 0, left: 0, bottom: 0,
+          width: '270px',
+          background: 'var(--surface)',
+          zIndex: 201,
+          transform: menuOpen ? 'translateX(0)' : 'translateX(-100%)',
+          transition: 'transform 0.25s cubic-bezier(0.4,0,0.2,1)',
+          boxShadow: '6px 0 28px rgba(100,60,160,0.16)',
+          display: 'flex', flexDirection: 'column',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Drawer header */}
+        <div style={{
+          background: 'linear-gradient(135deg, #C8B8E0, #D8C8EC)',
+          borderBottom: '2px solid #A888CC',
+          padding: '0 1.25rem',
+          height: '62px',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          flexShrink: 0,
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <SproutIcon size={26} />
+            <span style={{ fontWeight: 800, fontSize: '1rem', color: '#2A1F0E' }}>TumbleTree</span>
+          </div>
+          <button
+            onClick={() => setMenuOpen(false)}
+            aria-label="Close navigation menu"
+            style={{
+              background: 'rgba(255,255,255,0.5)', border: '1.5px solid #A888CC',
+              borderRadius: '8px', cursor: 'pointer',
+              fontSize: '1.125rem', color: '#2A1F0E',
+              padding: '2px 8px', lineHeight: 1.4,
+              fontFamily: 'var(--font)', fontWeight: 700,
+            }}
+          >
+            ×
+          </button>
+        </div>
+
+        {/* Nav items */}
+        <nav aria-label="Site navigation" style={{ flex: 1, overflowY: 'auto', padding: '0.5rem 0' }}>
+          {items.map((item, i) => (
+            <a
+              key={i}
+              href={item.href}
+              onClick={() => setMenuOpen(false)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '12px',
+                padding: '13px 1.25rem',
+                textDecoration: 'none',
+                color: 'var(--text-primary)',
+                fontSize: '0.9375rem', fontWeight: 600,
+                borderBottom: '1px solid var(--card-border)',
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = 'var(--lavender-pale)'}
+              onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+            >
+              <span style={{ fontSize: '1.25rem', lineHeight: 1, flexShrink: 0 }}>{item.emoji}</span>
+              <span style={{ flex: 1 }}>
+                {item.label}
+                {item.note && (
+                  <span style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 400 }}>
+                    {item.note}
+                  </span>
+                )}
+              </span>
+            </a>
+          ))}
+        </nav>
+
+        {/* Drawer footer */}
+        {profile && (
+          <div style={{
+            padding: '1rem 1.25rem',
+            borderTop: '2px solid var(--card-border)',
+            background: 'var(--lavender-pale)',
+            display: 'flex', alignItems: 'center', gap: '10px',
+            flexShrink: 0,
+          }}>
             {profile.avatar_url ? (
-              <img
-                src={profile.avatar_url}
-                alt=""
-                style={{ width: '30px', height: '30px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #A888CC' }}
-              />
+              <img src={profile.avatar_url} alt="" style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #A888CC', flexShrink: 0 }} />
             ) : (
-              <span style={{ display: 'inline-flex', width: '30px', height: '30px', borderRadius: '50%', background: '#FFFFFF', border: '2px solid #A888CC', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700, color: '#2A1F0E' }}>
+              <span style={{ display: 'inline-flex', width: '36px', height: '36px', borderRadius: '50%', background: '#fff', border: '2px solid #A888CC', alignItems: 'center', justifyContent: 'center', fontSize: '0.875rem', fontWeight: 700, color: '#2A1F0E', flexShrink: 0 }}>
                 {profile.full_name?.charAt(0)}
               </span>
             )}
-            <span style={{ fontSize: '0.8125rem', color: '#8B5500', fontWeight: 600 }}>
-              {profile.full_name}
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontWeight: 700, fontSize: '0.875rem', color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                {profile.full_name}
+              </div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{profile.role}</div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* ── Top navbar ────────────────────────────────────────────── */}
+      <nav aria-label="Main navigation" style={{
+        background: 'linear-gradient(to right, #C8B8E0, #D8C8EC, #C8B8E0)',
+        borderBottom: '2.5px solid #A888CC',
+        boxShadow: '0 3px 14px rgba(100,60,160,0.12)',
+        padding: '0 1rem',
+        height: '62px',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        position: 'sticky', top: 0, zIndex: 100,
+        gap: '8px',
+      }}>
+
+        {/* Left — hamburger */}
+        <button
+          onClick={() => setMenuOpen(true)}
+          aria-label="Open navigation menu"
+          aria-expanded={menuOpen}
+          aria-controls="nav-drawer"
+          style={{
+            background: 'rgba(255,255,255,0.55)',
+            border: '1.5px solid #A888CC',
+            borderRadius: '10px',
+            cursor: 'pointer',
+            padding: '8px 9px',
+            display: 'flex', flexDirection: 'column', gap: '4px',
+            alignItems: 'center', flexShrink: 0,
+          }}
+        >
+          <span style={{ display: 'block', width: '18px', height: '2px', background: '#2A1F0E', borderRadius: '2px' }} />
+          <span style={{ display: 'block', width: '18px', height: '2px', background: '#2A1F0E', borderRadius: '2px' }} />
+          <span style={{ display: 'block', width: '18px', height: '2px', background: '#2A1F0E', borderRadius: '2px' }} />
+        </button>
+
+        {/* Center — logo (absolutely centered) */}
+        <a
+          href="/dashboard"
+          style={{
+            position: 'absolute', left: '50%', transform: 'translateX(-50%)',
+            display: 'flex', alignItems: 'center', gap: '7px', textDecoration: 'none',
+            pointerEvents: 'auto',
+          }}
+        >
+          <SproutIcon size={28} />
+          <span style={{ fontSize: '1.125rem', fontWeight: 800, color: '#2A1F0E', letterSpacing: '-0.3px', whiteSpace: 'nowrap' }}>
+            TumbleTree
+          </span>
+        </a>
+
+        {/* Right — bell · avatar/name · role · sign out */}
+        {profile && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0, marginLeft: 'auto' }}>
+            {pushSupported && (
+              <button
+                onClick={handleTogglePush}
+                aria-label={pushEnabled ? 'Disable notifications' : 'Enable notifications'}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.125rem', lineHeight: 1, opacity: pushEnabled ? 1 : 0.4, padding: '2px' }}
+              >
+                🔔
+              </button>
+            )}
+
+            <a href="/profile" style={{ display: 'flex', alignItems: 'center', gap: '6px', textDecoration: 'none', flexShrink: 0 }}>
+              {profile.avatar_url ? (
+                <img src={profile.avatar_url} alt="" style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #A888CC' }} />
+              ) : (
+                <span style={{ display: 'inline-flex', width: '28px', height: '28px', borderRadius: '50%', background: '#fff', border: '2px solid #A888CC', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700, color: '#2A1F0E' }}>
+                  {profile.full_name?.charAt(0)}
+                </span>
+              )}
+              <span style={{ fontSize: '0.8125rem', color: '#8B5500', fontWeight: 600, maxWidth: '72px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {firstName}
+              </span>
+            </a>
+
+            <span className={`badge badge-${profile.role}`} style={{ flexShrink: 0 }}>
+              {profile.role === 'classroom_admin' ? 'C.Admin' : profile.role}
             </span>
-          </a>
 
-          <span className={`badge badge-${profile.role}`}>{profile.role}</span>
-
-          {profile.role === 'admin' && (
-            <>
-              <a href="/admin/approvals" style={{ fontSize: '0.8125rem', color: '#27500A', fontWeight: 700, textDecoration: 'none' }}>
-                Approvals
-              </a>
-              <a href="/admin/children" style={{ fontSize: '0.8125rem', color: '#27500A', fontWeight: 700, textDecoration: 'none' }}>
-                Children
-              </a>
-              <a href="/subscribe" style={{ fontSize: '0.8125rem', color: '#3A1870', fontWeight: 700, textDecoration: 'none' }}>
-                ✦ Premium
-              </a>
-            </>
-          )}
-
-          {pushSupported && (
             <button
-              onClick={handleTogglePush}
-              aria-label={pushEnabled ? 'Disable notifications' : 'Enable notifications'}
+              onClick={handleSignOut}
               style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '1.125rem',
-                lineHeight: 1,
-                opacity: pushEnabled ? 1 : 0.4,
-                padding: '2px 4px',
+                background: '#FFE566', color: '#2A1F0E',
+                border: '1.5px solid #F0C030', borderRadius: '50px',
+                padding: '5px 12px', fontSize: '0.8125rem', fontWeight: 700,
+                cursor: 'pointer', fontFamily: 'var(--font)', flexShrink: 0,
               }}
             >
-              🔔
+              Sign out
             </button>
-          )}
-
-          <button onClick={handleSignOut} style={{
-            background: '#FFE566',
-            color: '#2A1F0E',
-            border: '1.5px solid #F0C030',
-            borderRadius: '50px',
-            padding: '5px 14px',
-            fontSize: '0.8125rem',
-            fontWeight: 700,
-            cursor: 'pointer',
-            fontFamily: 'var(--font)',
-          }}>
-            Sign out
-          </button>
-        </div>
-      )}
-    </nav>
+          </div>
+        )}
+      </nav>
+    </>
   )
 }
