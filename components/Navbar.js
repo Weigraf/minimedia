@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
-import { SproutIcon } from '@/components/Icons'
+import { SproutIcon, LeafIcon, SnailIcon, MushroomIcon, RaindropIcon, AcornIcon, CaterpillarIcon, SunIcon } from '@/components/Icons'
 
 function urlBase64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
@@ -13,19 +13,19 @@ function urlBase64ToUint8Array(base64String) {
 
 function navItems(role) {
   const items = [
-    { label: 'My Classrooms',     href: '/dashboard',              emoji: '🏡' },
-    { label: 'Browse Classrooms', href: '/classrooms',             emoji: '🔍' },
-    { label: 'File Uploads',      href: '/classrooms',             emoji: '📁', note: 'via a classroom' },
-    { label: 'Profile & Settings',href: '/profile',                emoji: '🌿' },
+    { label: 'My Classrooms',      href: '/dashboard',            Icon: LeafIcon },
+    { label: 'Browse Classrooms',  href: '/classrooms',           Icon: SnailIcon },
+    { label: 'File Uploads',       href: '/classrooms',           Icon: MushroomIcon, note: 'via a classroom' },
+    { label: 'Profile & Settings', href: '/profile',              Icon: RaindropIcon },
   ]
   if (role === 'admin' || role === 'classroom_admin') {
-    items.push({ label: 'Approvals', href: '/admin/approvals', emoji: '✅' })
+    items.push({ label: 'Approvals',     href: '/admin/approvals',       Icon: AcornIcon })
   }
   if (role === 'admin') {
     items.push(
-      { label: 'Children',        href: '/admin/children',         emoji: '🌱' },
-      { label: 'New Classroom',   href: '/admin/classrooms/new',   emoji: '🏫' },
-      { label: '✦ Premium',       href: '/subscribe',              emoji: '✨' },
+      { label: 'Children',         href: '/admin/children',         Icon: CaterpillarIcon },
+      { label: 'New Classroom',    href: '/admin/classrooms/new',   Icon: SproutIcon },
+      { label: '✦ Premium',        href: '/subscribe',              Icon: SunIcon },
     )
   }
   return items
@@ -218,7 +218,9 @@ export default function Navbar({ profile }) {
               onMouseEnter={e => e.currentTarget.style.background = 'var(--lavender-pale)'}
               onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
             >
-              <span style={{ fontSize: '1.25rem', lineHeight: 1, flexShrink: 0 }}>{item.emoji}</span>
+              <span style={{ flexShrink: 0, display: 'flex' }}>
+                <item.Icon size={26} />
+              </span>
               <span style={{ flex: 1 }}>
                 {item.label}
                 {item.note && (
