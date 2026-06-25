@@ -31,7 +31,7 @@ function navItems(role) {
 
   if (role === 'admin') {
     items.push({ label: 'New Classroom',       href: '/admin/classrooms/new', Icon: SproutIcon })
-    items.push({ label: 'Classroom Approvals', href: '/admin/approvals',      Icon: AcornIcon })
+    items.push({ label: 'Approvals',            href: '/admin/approvals',      Icon: AcornIcon })
   }
 
   items.push({ label: 'My Classrooms', href: '/dashboard', Icon: LeafIcon })
