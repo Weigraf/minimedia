@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter, useParams } from 'next/navigation'
 import Navbar from '@/components/Navbar'
-import { LeafIcon, CaterpillarIcon } from '@/components/Icons'
+import { LeafIcon, CaterpillarIcon, MessageIcon } from '@/components/Icons'
 
 export default function ClassroomSettings() {
   const [profile, setProfile] = useState(null)
@@ -175,8 +175,13 @@ export default function ClassroomSettings() {
     <>
       <Navbar profile={profile} />
       <div className="page">
-        <a href={`/classrooms/${id}`} style={{ color: 'var(--green-leaf)', fontSize: '14px', fontWeight: 600 }}>← Back to classroom</a>
-        <h1 style={{ fontSize: '22px', fontWeight: 700, margin: '1rem 0 1.5rem' }}>Classroom Settings</h1>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '8px' }}>
+          <a href={`/classrooms/${id}`} style={{ color: 'var(--green-leaf)', fontSize: '14px', fontWeight: 600 }}>← Back to classroom</a>
+          <a href={`/classrooms/${id}/messages`} className="btn btn-secondary" style={{ fontSize: '13px' }}>
+            <MessageIcon size={16} /> Messages
+          </a>
+        </div>
+        <h1 style={{ fontSize: '22px', fontWeight: 700, margin: '0 0 1.5rem' }}>Classroom Settings</h1>
 
         {message && (
           <div className={message.startsWith('Error') ? 'flash-error' : 'flash-info'} style={{ marginBottom: '1rem' }}>
