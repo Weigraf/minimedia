@@ -26,7 +26,7 @@ function TwinkleStar({ size = 26 }) {
   )
 }
 
-function navItems(role, isClassroomAdmin) {
+function navItems(role, isClassroomAdmin, unreadCount = 0) {
   const items = []
 
   if (role === 'admin') {
@@ -45,7 +45,7 @@ function navItems(role, isClassroomAdmin) {
     items.push({ label: 'Approvals',         href: '/admin/approvals', Icon: AcornIcon })
     items.push({ label: 'My Classrooms',     href: '/classrooms',      Icon: SnailIcon })
     items.push({ label: 'Children',          href: '/admin/children',  Icon: CaterpillarIcon })
-    items.push({ label: 'Messages',          href: '/messages',        Icon: MessageIcon })
+    items.push({ label: 'Messages',          href: '/messages',        Icon: MessageIcon, badge: unreadCount })
   }
 
   if (role === 'admin') {
@@ -65,6 +65,7 @@ export default function Navbar({ profile }) {
   const [pushEnabled, setPushEnabled] = useState(false)
   const [pushSupported, setPushSupported] = useState(false)
   const [isClassroomAdmin, setIsClassroomAdmin] = useState(false)
+  const [unreadCount, setUnreadCount] = useState(0)
   const [menuOpen, setMenuOpen] = useState(() => {
     if (typeof window === 'undefined') return true
     return localStorage.getItem('tt-sidebar') !== 'closed'
@@ -83,6 +84,16 @@ export default function Navbar({ profile }) {
     supabase.from('memberships')
       .select('id').eq('profile_id', profile.id).eq('role', 'classroom_admin').eq('approved', true).limit(1)
       .then(({ data }) => { if (data?.length) setIsClassroomAdmin(true) })
+  }, [profile])
+
+  useEffect(() => {
+    if (!profile) return
+    const supabase = createClient()
+    supabase.from('messages')
+      .select('id', { count: 'exact', head: true })
+      .eq('recipient_id', profile.id)
+      .is('read_at', null)
+      .then(({ count }) => { if (count) setUnreadCount(count) })
   }, [profile])
 
   useEffect(() => {
@@ -206,7 +217,7 @@ export default function Navbar({ profile }) {
     router.push('/login')
   }
 
-  const items = profile ? navItems(profile.role, isClassroomAdmin) : []
+  const items = profile ? navItems(profile.role, isClassroomAdmin, unreadCount) : []
   const firstName = profile?.full_name?.split(' ')[0] ?? ''
 
   return (
@@ -281,6 +292,15 @@ export default function Navbar({ profile }) {
                   <item.Icon size={26} />
                 </span>
                 <span style={{ flex: 1 }}>{item.label}</span>
+                {item.badge > 0 && (
+                  <span style={{
+                    background: '#C93B6A', color: '#fff', borderRadius: '50px',
+                    fontSize: '0.6875rem', fontWeight: 800,
+                    padding: '1px 7px', lineHeight: '16px', minWidth: '18px', textAlign: 'center',
+                  }}>
+                    {item.badge}
+                  </span>
+                )}
               </a>
             )
           })}

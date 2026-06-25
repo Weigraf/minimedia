@@ -10,6 +10,7 @@ export default function ClassroomMessages() {
   const [classroom, setClassroom] = useState(null)
   const [messages, setMessages] = useState([])
   const [members, setMembers] = useState([])
+  const [teachers, setTeachers] = useState([])
   const [body, setBody] = useState('')
   const [recipientId, setRecipientId] = useState('')
   const [file, setFile] = useState(null)
@@ -39,24 +40,34 @@ export default function ClassroomMessages() {
         router.push('/dashboard'); return
       }
 
-      const teacher = p.role === 'admin' || p.role === 'classroom_admin'
+      // classroom_admin is a membership-level role, not a profile role
+      const teacher = p.role === 'admin' || membership?.role === 'classroom_admin'
       setProfile(p)
       setIsTeacher(teacher)
 
       const { data: cls } = await supabase.from('classrooms').select('*').eq('id', id).single()
       setClassroom(cls)
 
-      // Load parent members for teacher compose UI
+      // Load classroom members for compose UI — include membership role to detect teachers
+      const { data: mems } = await supabase
+        .from('memberships')
+        .select('profile_id, role, profiles(id, full_name, role)')
+        .eq('classroom_id', id)
+        .eq('approved', true)
+
       if (teacher) {
-        const { data: mems } = await supabase
-          .from('memberships')
-          .select('profile_id, profiles(id, full_name)')
-          .eq('classroom_id', id)
-          .eq('approved', true)
         const parents = (mems || [])
           .map(m => m.profiles)
           .filter(pr => pr && pr.id !== session.user.id)
         setMembers(parents)
+      } else {
+        // Teachers are membership role='classroom_admin' OR profile role='admin'
+        const teacherList = (mems || [])
+          .filter(m => m.role === 'classroom_admin' || m.profiles?.role === 'admin')
+          .map(m => m.profiles)
+          .filter(Boolean)
+        setTeachers(teacherList)
+        if (teacherList.length > 0) setRecipientId(teacherList[0].id)
       }
 
       await fetchMessages(session.access_token)
@@ -110,7 +121,7 @@ export default function ClassroomMessages() {
 
     setBody('')
     setFile(null)
-    setRecipientId('')
+    setRecipientId(isTeacher ? '' : (teachers[0]?.id || ''))
     if (fileRef.current) fileRef.current.value = ''
     setSending(false)
     await fetchMessages(session.access_token)
@@ -145,15 +156,17 @@ export default function ClassroomMessages() {
           </div>
         </div>
 
-        {/* Compose — teachers only */}
-        {isTeacher && (
-          <div className="card" style={{ marginBottom: '1.5rem' }}>
-            <div className="section-title" style={{ marginBottom: '0.75rem' }}>Send a message</div>
-            <form onSubmit={handleSend}>
-              <div className="form-group">
-                <label htmlFor="msg-recipient" style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>
-                  To
-                </label>
+        {/* Compose — teachers send to parents; parents reply to teachers */}
+        <div className="card" style={{ marginBottom: '1.5rem' }}>
+          <div className="section-title" style={{ marginBottom: '0.75rem' }}>
+            {isTeacher ? 'Send a message' : 'Reply to teacher'}
+          </div>
+          <form onSubmit={handleSend}>
+            <div className="form-group">
+              <label htmlFor="msg-recipient" style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>
+                To
+              </label>
+              {isTeacher ? (
                 <select
                   id="msg-recipient"
                   value={recipientId}
@@ -165,58 +178,71 @@ export default function ClassroomMessages() {
                     <option key={m.id} value={m.id}>{m.full_name}</option>
                   ))}
                 </select>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="msg-body" style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>
-                  Message
-                </label>
-                <textarea
-                  id="msg-body"
-                  value={body}
-                  onChange={e => setBody(e.target.value)}
-                  placeholder="Write your message…"
-                  rows={3}
-                />
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
-                <label style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--lavender-deep)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <input
-                    ref={fileRef}
-                    type="file"
-                    accept=".jpg,.jpeg,.png,.gif,.webp,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
-                    onChange={e => setFile(e.target.files?.[0] ?? null)}
-                    style={{ display: 'none' }}
-                  />
-                  📎 {file ? file.name : 'Attach file'}
-                </label>
-                {file && (
-                  <button type="button" onClick={() => { setFile(null); fileRef.current.value = '' }}
-                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', fontSize: '0.8125rem', padding: 0 }}>
-                    Remove
-                  </button>
-                )}
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  disabled={sending || (!body.trim() && !file)}
-                  style={{ marginLeft: 'auto' }}
+              ) : (
+                <select
+                  id="msg-recipient"
+                  value={recipientId}
+                  onChange={e => setRecipientId(e.target.value)}
+                  style={{ borderRadius: '50px' }}
+                  required
                 >
-                  {sending ? 'Sending…' : 'Send'}
+                  {teachers.length === 0 && <option value="">No teachers found</option>}
+                  {teachers.map(t => (
+                    <option key={t.id} value={t.id}>{t.full_name}</option>
+                  ))}
+                </select>
+              )}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="msg-body" style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>
+                Message
+              </label>
+              <textarea
+                id="msg-body"
+                value={body}
+                onChange={e => setBody(e.target.value)}
+                placeholder="Write your message…"
+                rows={3}
+              />
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+              <label style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--lavender-deep)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <input
+                  ref={fileRef}
+                  type="file"
+                  accept=".jpg,.jpeg,.png,.gif,.webp,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
+                  onChange={e => setFile(e.target.files?.[0] ?? null)}
+                  style={{ display: 'none' }}
+                />
+                📎 {file ? file.name : 'Attach file'}
+              </label>
+              {file && (
+                <button type="button" onClick={() => { setFile(null); fileRef.current.value = '' }}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', fontSize: '0.8125rem', padding: 0 }}>
+                  Remove
                 </button>
-              </div>
-              {error && <div className="flash-error" role="alert" style={{ marginTop: '0.75rem' }}>{error}</div>}
-            </form>
-          </div>
-        )}
+              )}
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={sending || (!body.trim() && !file) || (!isTeacher && !recipientId)}
+                style={{ marginLeft: 'auto' }}
+              >
+                {sending ? 'Sending…' : 'Send'}
+              </button>
+            </div>
+            {error && <div className="flash-error" role="alert" style={{ marginTop: '0.75rem' }}>{error}</div>}
+          </form>
+        </div>
 
         {/* Message thread */}
         {messages.length === 0 ? (
           <div className="card" style={{ textAlign: 'center', padding: '2.5rem 1.5rem' }}>
             <MessageIcon size={48} />
             <p style={{ color: 'var(--text-muted)', marginTop: '0.75rem' }}>
-              {isTeacher ? 'No messages yet. Send one above.' : 'No messages from your teacher yet.'}
+              {isTeacher ? 'No messages yet. Send one above.' : 'No messages yet. Send one above or wait for a message from your teacher.'}
             </p>
           </div>
         ) : (

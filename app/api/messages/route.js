@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { createAdminClient } from '@/lib/supabase-admin'
 import { NextResponse } from 'next/server'
 
 // Whitelisted MIME types — nothing executable
@@ -47,6 +48,14 @@ const MAX_BYTES = 10 * 1024 * 1024 // 10 MB
     sender_id = auth.uid() AND
     EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin','classroom_admin'))
   );
+  -- Run this after adding parent reply support:
+  CREATE POLICY "Parents reply to teachers" ON messages FOR INSERT WITH CHECK (
+    sender_id = auth.uid() AND
+    EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'parent') AND
+    EXISTS (SELECT 1 FROM memberships WHERE profile_id = auth.uid() AND classroom_id = messages.classroom_id AND approved = true) AND
+    recipient_id IS NOT NULL AND
+    EXISTS (SELECT 1 FROM profiles WHERE id = recipient_id AND role IN ('admin','classroom_admin'))
+  );
   CREATE POLICY "Mark read" ON messages FOR UPDATE USING (
     recipient_id = auth.uid()
   ) WITH CHECK (recipient_id = auth.uid());
@@ -72,11 +81,9 @@ export async function POST(req) {
   if (authErr || !user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const { data: sender } = await supabase
-    .from('profiles').select('role').eq('id', user.id).single()
+    .from('profiles').select('role, approved').eq('id', user.id).single()
 
-  if (!sender || !['admin', 'classroom_admin'].includes(sender.role)) {
-    return NextResponse.json({ error: 'Only teachers can send messages' }, { status: 403 })
-  }
+  if (!sender || !sender.approved) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const formData = await req.formData()
   const classroomId = formData.get('classroom_id')
@@ -87,17 +94,39 @@ export async function POST(req) {
   if (!classroomId) return NextResponse.json({ error: 'classroom_id required' }, { status: 400 })
   if (!body && !file) return NextResponse.json({ error: 'Message body or file required' }, { status: 400 })
 
-  // Verify sender is a member of this classroom
+  // Verify sender is a member of this classroom (admins are exempt)
   const { data: membership } = await supabase
     .from('memberships')
-    .select('id')
+    .select('id, role')
     .eq('classroom_id', classroomId)
     .eq('profile_id', user.id)
     .eq('approved', true)
-    .single()
+    .maybeSingle()
 
-  if (!membership && sender.role !== 'admin') {
+  const isAdmin = sender.role === 'admin'
+  if (!isAdmin && !membership) {
     return NextResponse.json({ error: 'Not a member of this classroom' }, { status: 403 })
+  }
+
+  // classroom_admin is a membership-level role, not a profile role
+  const isTeacher = isAdmin || membership?.role === 'classroom_admin'
+
+  // Parents must address a specific teacher; they cannot broadcast
+  if (!isTeacher) {
+    if (!recipientId) {
+      return NextResponse.json({ error: 'Please select a teacher to send your message to' }, { status: 400 })
+    }
+    // Verify recipient is a teacher in this classroom
+    const { data: recipientMem } = await supabase
+      .from('memberships')
+      .select('role, profiles(role)')
+      .eq('classroom_id', classroomId)
+      .eq('profile_id', recipientId)
+      .maybeSingle()
+    const recipientIsTeacher = recipientMem?.role === 'classroom_admin' || recipientMem?.profiles?.role === 'admin'
+    if (!recipientIsTeacher) {
+      return NextResponse.json({ error: 'Can only send messages to a teacher' }, { status: 403 })
+    }
   }
 
   let fileUrl = null
@@ -139,7 +168,9 @@ export async function POST(req) {
     fileSize = file.size
   }
 
-  const { data: message, error: insertErr } = await supabase
+  // Use admin client for insert — application layer above already validated all permissions
+  const admin = createAdminClient()
+  const { data: message, error: insertErr } = await admin
     .from('messages')
     .insert({ classroom_id: classroomId, sender_id: user.id, recipient_id: recipientId, body: body || null, file_url: fileUrl, file_name: fileName, file_size: fileSize })
     .select()
