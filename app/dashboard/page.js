@@ -24,6 +24,7 @@ function greetingInfo() {
 export default function Dashboard() {
   const [profile, setProfile] = useState(null)
   const [classrooms, setClassrooms] = useState([])
+  const [unreadCounts, setUnreadCounts] = useState({})
   const [loading, setLoading] = useState(true)
   const router = useRouter()
 
@@ -53,8 +54,22 @@ export default function Dashboard() {
         classroomData = (data || []).filter(m => m.approved).map(m => m.classrooms)
       }
 
+      const { data: unread } = await supabase
+        .from('messages')
+        .select('classroom_id')
+        .eq('recipient_id', session.user.id)
+        .is('read_at', null)
+
+      const counts = {}
+      if (unread) {
+        unread.forEach(m => {
+          counts[m.classroom_id] = (counts[m.classroom_id] || 0) + 1
+        })
+      }
+
       setProfile(profile)
       setClassrooms(classroomData)
+      setUnreadCounts(counts)
       setLoading(false)
     }
 
@@ -137,6 +152,7 @@ export default function Dashboard() {
                   classroom={c}
                   palette={palette}
                   FallbackIcon={FallbackIcon}
+                  unreadCount={unreadCounts[c.id] || 0}
                 />
               )
             })}
@@ -147,7 +163,7 @@ export default function Dashboard() {
   )
 }
 
-function ClassroomCard({ classroom, palette, FallbackIcon }) {
+function ClassroomCard({ classroom, palette, FallbackIcon, unreadCount }) {
   const [hovered, setHovered] = useState(false)
 
   return (
@@ -212,6 +228,21 @@ function ClassroomCard({ classroom, palette, FallbackIcon }) {
             }}
           >
             <MessageIcon size={14} /> Messages
+            {unreadCount > 0 && (
+              <span style={{
+                background: '#C93B6A',
+                color: '#fff',
+                borderRadius: '50px',
+                fontSize: '0.6875rem',
+                fontWeight: 800,
+                padding: '1px 6px',
+                lineHeight: '16px',
+                minWidth: '18px',
+                textAlign: 'center',
+              }}>
+                {unreadCount}
+              </span>
+            )}
           </a>
           <a
             href={`/classrooms/${classroom.id}`}
