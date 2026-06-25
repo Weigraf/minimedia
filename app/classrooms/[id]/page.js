@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter, useParams } from 'next/navigation'
 import Navbar from '@/components/Navbar'
-import { AcornIcon, MushroomIcon, CaterpillarIcon, LeafIcon } from '@/components/Icons'
+import { AcornIcon, MushroomIcon, CaterpillarIcon, LeafIcon, MessageIcon } from '@/components/Icons'
 
 export default function ClassroomPage() {
   const [profile, setProfile] = useState(null)
@@ -264,6 +264,9 @@ export default function ClassroomPage() {
             </div>
           </div>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            <a href={`/classrooms/${id}/messages`} className="btn btn-secondary" style={{ fontSize: '13px' }}>
+              <MessageIcon size={16} /> Messages
+            </a>
             <a href={`/classrooms/${id}/reports`} className="btn btn-secondary" style={{ fontSize: '13px' }}>
               📋 Reports
             </a>
