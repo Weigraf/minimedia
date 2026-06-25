@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
-import { SproutIcon, LeafIcon, SnailIcon, MushroomIcon, RaindropIcon, AcornIcon, CaterpillarIcon, SunIcon } from '@/components/Icons'
+import { OwlIcon, SproutIcon, LeafIcon, SnailIcon, MushroomIcon, RaindropIcon, AcornIcon, CaterpillarIcon, SunIcon, MoonIcon } from '@/components/Icons'
 
 function urlBase64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
@@ -35,7 +35,23 @@ export default function Navbar({ profile }) {
   const [pushEnabled, setPushEnabled] = useState(false)
   const [pushSupported, setPushSupported] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [theme, setTheme] = useState(null)
   const router = useRouter()
+
+  useEffect(() => {
+    const saved = localStorage.getItem('tt-theme')
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const initial = saved ?? (prefersDark ? 'dark' : 'light')
+    setTheme(initial)
+    if (saved) document.documentElement.dataset.theme = saved
+  }, [])
+
+  function toggleTheme() {
+    const next = theme === 'dark' ? 'light' : 'dark'
+    setTheme(next)
+    document.documentElement.dataset.theme = next
+    localStorage.setItem('tt-theme', next)
+  }
 
   useEffect(() => {
     if (!profile || typeof window === 'undefined') return
@@ -182,7 +198,7 @@ export default function Navbar({ profile }) {
           flexShrink: 0,
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <SproutIcon size={26} />
+            <OwlIcon size={28} />
             <span style={{ fontWeight: 800, fontSize: '1rem', color: '#2A1F0E' }}>TumbleTree</span>
           </div>
           <button
@@ -301,7 +317,7 @@ export default function Navbar({ profile }) {
             pointerEvents: 'auto',
           }}
         >
-          <SproutIcon size={28} />
+          <OwlIcon size={32} />
           <span style={{ fontSize: '1.125rem', fontWeight: 800, color: '#2A1F0E', letterSpacing: '-0.3px', whiteSpace: 'nowrap' }}>
             TumbleTree
           </span>
@@ -336,6 +352,24 @@ export default function Navbar({ profile }) {
             <span className={`badge badge-${profile.role}`} style={{ flexShrink: 0 }}>
               {profile.role === 'classroom_admin' ? 'C.Admin' : profile.role}
             </span>
+
+            {theme && (
+              <button
+                onClick={toggleTheme}
+                aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+                style={{
+                  background: 'rgba(255,255,255,0.45)',
+                  border: '1.5px solid #A888CC',
+                  borderRadius: '50px',
+                  cursor: 'pointer',
+                  padding: '4px 8px',
+                  display: 'flex', alignItems: 'center',
+                  flexShrink: 0,
+                }}
+              >
+                {theme === 'dark' ? <SunIcon size={20} /> : <MoonIcon size={20} />}
+              </button>
+            )}
 
             <button
               onClick={handleSignOut}

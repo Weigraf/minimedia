@@ -49,15 +49,35 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --bg:            #1A1520;  /* deep lavender night           */
+  :root:not([data-theme="light"]) {
+    --bg:            #1A1520;
     --surface:       #231E2E;
-    --border:        #9070C0;  /* soft lavender border ✓        */
+    --border:        #9070C0;
     --card-border:   #352840;
-    --text-primary:  #F0ECF8;  /* 15.2:1 ✓                     */
-    --text-secondary:#C0A8E0;  /* 5.8:1 ✓                      */
-    --text-muted:    #9078B8;  /* 4.5:1 ✓                      */
+    --text-primary:  #F0ECF8;
+    --text-secondary:#C0A8E0;
+    --text-muted:    #9078B8;
   }
+}
+
+[data-theme="dark"] {
+  --bg:            #1A1520;
+  --surface:       #231E2E;
+  --border:        #9070C0;
+  --card-border:   #352840;
+  --text-primary:  #F0ECF8;
+  --text-secondary:#C0A8E0;
+  --text-muted:    #9078B8;
+}
+
+[data-theme="light"] {
+  --bg:            #FEFAF5;
+  --surface:       #FFFFFF;
+  --border:        #826048;
+  --card-border:   #D8C8E8;
+  --text-primary:  #2A1F0E;
+  --text-secondary:#5A4030;
+  --text-muted:    #826048;
 }
 
 /* ── Visually hidden (accessible labels for screen readers) ──── */
