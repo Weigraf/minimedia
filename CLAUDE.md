@@ -5,7 +5,7 @@ A private preschool social media platform for parents and admins to communicate,
 ## Tech stack
 - Next.js 16 (App Router, JavaScript)
 - Supabase (database, auth, storage)
-- Deployed on Vercel at https://minimedia-blue.vercel.app
+- Deployed on Vercel at https://www.tumble-tree.com (also https://minimedia-blue.vercel.app)
 
 ## Roles
 - `admin` — global admin, manages all classrooms and users
