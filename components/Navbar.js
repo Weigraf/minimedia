@@ -391,26 +391,48 @@ export default function Navbar({ profile }) {
         gap: '8px',
       }}>
 
-        {/* Left — hamburger */}
-        <button
-          onClick={openSidebar}
-          aria-label="Open navigation menu"
-          aria-expanded={menuOpen}
-          aria-controls="nav-drawer"
-          style={{
-            background: 'rgba(255,255,255,0.55)',
-            border: '1.5px solid #A888CC',
-            borderRadius: '10px',
-            cursor: 'pointer',
-            padding: '8px 9px',
-            display: 'flex', flexDirection: 'column', gap: '4px',
-            alignItems: 'center', flexShrink: 0,
-          }}
-        >
-          <span style={{ display: 'block', width: '18px', height: '2px', background: '#2A1F0E', borderRadius: '2px' }} />
-          <span style={{ display: 'block', width: '18px', height: '2px', background: '#2A1F0E', borderRadius: '2px' }} />
-          <span style={{ display: 'block', width: '18px', height: '2px', background: '#2A1F0E', borderRadius: '2px' }} />
-        </button>
+        {/* Left — hamburger + theme toggle */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+          <button
+            onClick={openSidebar}
+            aria-label="Open navigation menu"
+            aria-expanded={menuOpen}
+            aria-controls="nav-drawer"
+            style={{
+              background: 'rgba(255,255,255,0.55)',
+              border: '1.5px solid #A888CC',
+              borderRadius: '10px',
+              cursor: 'pointer',
+              padding: '8px 9px',
+              display: 'flex', flexDirection: 'column', gap: '4px',
+              alignItems: 'center', flexShrink: 0,
+            }}
+          >
+            <span style={{ display: 'block', width: '18px', height: '2px', background: '#2A1F0E', borderRadius: '2px' }} />
+            <span style={{ display: 'block', width: '18px', height: '2px', background: '#2A1F0E', borderRadius: '2px' }} />
+            <span style={{ display: 'block', width: '18px', height: '2px', background: '#2A1F0E', borderRadius: '2px' }} />
+          </button>
+          {theme && (
+            <button
+              onClick={toggleTheme}
+              aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              style={{
+                background: theme === 'dark' ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.6)',
+                border: '1.5px solid #A888CC',
+                borderRadius: '50px',
+                cursor: 'pointer',
+                padding: '5px 10px',
+                display: 'flex', alignItems: 'center', gap: '5px',
+                flexShrink: 0,
+              }}
+            >
+              {theme === 'dark' ? <SunIcon size={18} /> : <MoonIcon size={18} />}
+              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: theme === 'dark' ? '#F0ECF8' : '#2A1F0E', lineHeight: 1 }}>
+                {theme === 'dark' ? 'Light' : 'Dark'}
+              </span>
+            </button>
+          )}
+        </div>
 
         {/* Center — logo (absolutely centered) */}
         <a
@@ -456,27 +478,6 @@ export default function Navbar({ profile }) {
             <span className={`badge badge-${viewAs ? viewAs.role : profile.role}`} style={{ flexShrink: 0 }}>
               {viewAs ? viewAs.label : (profile.role === 'classroom_admin' ? 'C.Admin' : profile.role)}
             </span>
-
-            {theme && (
-              <button
-                onClick={toggleTheme}
-                aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-                style={{
-                  background: theme === 'dark' ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.6)',
-                  border: '1.5px solid #A888CC',
-                  borderRadius: '50px',
-                  cursor: 'pointer',
-                  padding: '5px 10px',
-                  display: 'flex', alignItems: 'center', gap: '5px',
-                  flexShrink: 0,
-                }}
-              >
-                {theme === 'dark' ? <SunIcon size={18} /> : <MoonIcon size={18} />}
-                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: theme === 'dark' ? '#F0ECF8' : '#2A1F0E', lineHeight: 1 }}>
-                  {theme === 'dark' ? 'Light' : 'Dark'}
-                </span>
-              </button>
-            )}
 
             <button
               onClick={handleSignOut}
