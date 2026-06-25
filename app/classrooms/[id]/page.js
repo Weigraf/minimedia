@@ -263,6 +263,9 @@ export default function ClassroomPage() {
             <a href={`/classrooms/${id}/messages`} className="btn btn-secondary" style={{ fontSize: '13px' }}>
               <MessageIcon size={16} /> Messages
             </a>
+            <a href={`/classrooms/${id}/directory`} className="btn btn-secondary" style={{ fontSize: '13px' }}>
+              <LeafIcon size={16} /> Directory
+            </a>
             <a href={`/classrooms/${id}/reports`} className="btn btn-secondary" style={{ fontSize: '13px' }}>
               📋 Reports
             </a>
