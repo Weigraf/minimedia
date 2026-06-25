@@ -1,10 +1,14 @@
 import { Resend } from 'resend'
 import { esc } from '@/lib/html-escape'
+import { signupLimiter, getClientIP, checkLimit } from '@/lib/rate-limit'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.tumble-tree.com'
 
 export async function POST(request) {
+  const limited = await checkLimit(signupLimiter, getClientIP(request))
+  if (limited) return limited
+
   const { name, email } = await request.json()
   if (!name || !email) return Response.json({ error: 'Missing fields' }, { status: 400 })
 

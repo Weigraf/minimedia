@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { createAdminClient } from '@/lib/supabase-admin'
 import { NextResponse } from 'next/server'
+import { contactLimiter, getClientIP, checkLimit } from '@/lib/rate-limit'
 
 /*
   Run this SQL in Supabase before using the contact form:
@@ -35,6 +36,9 @@ async function requireAdmin(request) {
 
 // Public: submit a contact inquiry
 export async function POST(request) {
+  const limited = await checkLimit(contactLimiter, getClientIP(request))
+  if (limited) return limited
+
   let body
   try {
     body = await request.json()
