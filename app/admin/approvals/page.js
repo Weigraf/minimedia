@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import Navbar from '@/components/Navbar'
-import { SnailIcon, CaterpillarIcon } from '@/components/Icons'
+import { SnailIcon } from '@/components/Icons'
+import PageLoader from '@/components/PageLoader'
 
 export default function Approvals() {
   const [profile, setProfile] = useState(null)
@@ -51,12 +52,7 @@ export default function Approvals() {
     loadData()
   }
 
-  if (loading) return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)', gap: '12px' }}>
-      <CaterpillarIcon size={48} />
-      <p style={{ color: 'var(--text-muted)' }}>Loading approvals...</p>
-    </div>
-  )
+  if (loading) return <PageLoader message="Loading approvals…" />
 
   return (
     <>

@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import Navbar from '@/components/Navbar'
 import { SproutIcon, CaterpillarIcon } from '@/components/Icons'
+import PageLoader from '@/components/PageLoader'
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState(null)
@@ -125,12 +126,7 @@ export default function ProfilePage() {
   e.target.value = ''
 }
 
-  if (!profile) return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)', gap: '12px' }}>
-      <CaterpillarIcon size={48} />
-      <p style={{ color: 'var(--text-muted)' }}>Loading...</p>
-    </div>
-  )
+  if (!profile) return <PageLoader />
 
   return (
     <>

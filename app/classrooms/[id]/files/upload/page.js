@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter, useParams } from 'next/navigation'
 import Navbar from '@/components/Navbar'
-import { AcornIcon, CaterpillarIcon } from '@/components/Icons'
+import { AcornIcon } from '@/components/Icons'
+import PageLoader from '@/components/PageLoader'
 
 export default function UploadFile() {
   const [profile, setProfile] = useState(null)
@@ -75,12 +76,7 @@ export default function UploadFile() {
     setTimeout(() => router.push(`/classrooms/${id}`), 800)
   }
 
-  if (!profile) return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)', gap: '12px' }}>
-      <CaterpillarIcon size={48} />
-      <p style={{ color: 'var(--text-muted)' }}>Loading...</p>
-    </div>
-  )
+  if (!profile) return <PageLoader />
 
   return (
     <>

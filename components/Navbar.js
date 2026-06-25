@@ -62,7 +62,7 @@ function navItems(role) {
 export default function Navbar({ profile }) {
   const [pushEnabled, setPushEnabled] = useState(false)
   const [pushSupported, setPushSupported] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(true)
   const [theme, setTheme] = useState(null)
   const router = useRouter()
 

@@ -3,7 +3,8 @@ import { useEffect, useState, useRef } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter, useParams } from 'next/navigation'
 import Navbar from '@/components/Navbar'
-import { LeafIcon, CaterpillarIcon, MessageIcon } from '@/components/Icons'
+import { LeafIcon, MessageIcon } from '@/components/Icons'
+import PageLoader from '@/components/PageLoader'
 
 export default function ClassroomSettings() {
   const [profile, setProfile] = useState(null)
@@ -164,12 +165,7 @@ export default function ClassroomSettings() {
     setMessage('Role updated!')
   }
 
-  if (!profile || !classroom) return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)', gap: '12px' }}>
-      <CaterpillarIcon size={48} />
-      <p style={{ color: 'var(--text-muted)' }}>Loading settings...</p>
-    </div>
-  )
+  if (!profile || !classroom) return <PageLoader message="Loading settings…" />
 
   return (
     <>

@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter, useParams } from 'next/navigation'
 import Navbar from '@/components/Navbar'
-import { AcornIcon, MushroomIcon, CaterpillarIcon, LeafIcon } from '@/components/Icons'
+import { AcornIcon, MushroomIcon, LeafIcon } from '@/components/Icons'
+import PageLoader from '@/components/PageLoader'
 
 export default function ClassroomPage() {
   const [profile, setProfile] = useState(null)
@@ -87,12 +88,7 @@ export default function ClassroomPage() {
     setPosting(false)
   }
 
-  if (loading) return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)', gap: '12px' }}>
-      <CaterpillarIcon size={48} />
-      <p style={{ color: 'var(--text-muted)' }}>Loading classroom...</p>
-    </div>
-  )
+  if (loading) return <PageLoader message="Loading classroom…" />
 
   return (
     <>

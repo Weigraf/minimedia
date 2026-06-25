@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import Navbar from '@/components/Navbar'
-import { SunriseScene, AfternoonScene, EveningScene, SproutIcon, MushroomIcon, CaterpillarIcon, LeafIcon, AcornIcon, SnailIcon, MessageIcon } from '@/components/Icons'
+import { SunriseScene, AfternoonScene, EveningScene, SproutIcon, MushroomIcon, LeafIcon, AcornIcon, SnailIcon, MessageIcon } from '@/components/Icons'
+import PageLoader from '@/components/PageLoader'
 
 const PALETTES = [
   { bg: '#FFF3C4', border: '#F0C040', text: '#7A4000' },
@@ -76,12 +77,7 @@ export default function Dashboard() {
     load()
   }, [])
 
-  if (loading) return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)', gap: '16px' }}>
-      <CaterpillarIcon size={64} />
-      <p style={{ color: 'var(--text-muted)', fontWeight: 600 }}>Loading your classrooms…</p>
-    </div>
-  )
+  if (loading) return <PageLoader message="Loading your classrooms…" />
 
   const firstName = profile.full_name.split(' ')[0]
   const { text: greetingText, Scene: GreetingScene } = greetingInfo()
