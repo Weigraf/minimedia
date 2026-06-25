@@ -62,9 +62,17 @@ function navItems(role) {
 export default function Navbar({ profile }) {
   const [pushEnabled, setPushEnabled] = useState(false)
   const [pushSupported, setPushSupported] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(true)
+  const [menuOpen, setMenuOpen] = useState(() => {
+    if (typeof window === 'undefined') return true
+    return localStorage.getItem('tt-sidebar') !== 'closed'
+  })
   const [theme, setTheme] = useState(null)
   const router = useRouter()
+
+  useEffect(() => {
+    document.body.style.transition = 'margin-left 0.25s cubic-bezier(0.4,0,0.2,1)'
+    document.body.style.marginLeft = menuOpen ? '270px' : '0'
+  }, [menuOpen])
 
   useEffect(() => {
     const saved = localStorage.getItem('tt-theme')
@@ -172,6 +180,15 @@ export default function Navbar({ profile }) {
     if (res.ok) setPushEnabled(true)
   }
 
+  function openSidebar() {
+    setMenuOpen(true)
+    localStorage.setItem('tt-sidebar', 'open')
+  }
+  function closeSidebar() {
+    setMenuOpen(false)
+    localStorage.setItem('tt-sidebar', 'closed')
+  }
+
   async function handleSignOut() {
     const supabase = createClient()
     await supabase.auth.signOut()
@@ -183,35 +200,20 @@ export default function Navbar({ profile }) {
 
   return (
     <>
-      {/* ── Overlay ───────────────────────────────────────────────── */}
-      {menuOpen && (
-        <div
-          aria-hidden="true"
-          onClick={() => setMenuOpen(false)}
-          style={{
-            position: 'fixed', inset: 0,
-            background: 'rgba(42,31,14,0.28)',
-            backdropFilter: 'blur(2px)',
-            zIndex: 200,
-          }}
-        />
-      )}
-
-      {/* ── Slide-out drawer ──────────────────────────────────────── */}
+      {/* ── Persistent sidebar ───────────────────────────────────── */}
       <div
         id="nav-drawer"
-        role="dialog"
+        role="navigation"
         aria-label="Navigation menu"
-        aria-modal="true"
         aria-hidden={!menuOpen}
         style={{
           position: 'fixed', top: 0, left: 0, bottom: 0,
           width: '270px',
           background: 'var(--surface)',
-          zIndex: 201,
+          zIndex: 50,
           transform: menuOpen ? 'translateX(0)' : 'translateX(-100%)',
           transition: 'transform 0.25s cubic-bezier(0.4,0,0.2,1)',
-          boxShadow: '6px 0 28px rgba(100,60,160,0.16)',
+          borderRight: '2px solid #A888CC',
           display: 'flex', flexDirection: 'column',
           overflow: 'hidden',
         }}
@@ -230,7 +232,7 @@ export default function Navbar({ profile }) {
             <span style={{ fontWeight: 800, fontSize: '1rem', color: '#2A1F0E' }}>TumbleTree</span>
           </div>
           <button
-            onClick={() => setMenuOpen(false)}
+            onClick={closeSidebar}
             aria-label="Close navigation menu"
             style={{
               background: 'rgba(255,255,255,0.5)', border: '1.5px solid #A888CC',
@@ -254,7 +256,6 @@ export default function Navbar({ profile }) {
               <a
                 key={i}
                 href={item.href}
-                onClick={() => setMenuOpen(false)}
                 style={{
                   display: 'flex', alignItems: 'center', gap: '12px',
                   padding: '13px 1.25rem',
@@ -314,7 +315,7 @@ export default function Navbar({ profile }) {
 
         {/* Left — hamburger */}
         <button
-          onClick={() => setMenuOpen(true)}
+          onClick={openSidebar}
           aria-label="Open navigation menu"
           aria-expanded={menuOpen}
           aria-controls="nav-drawer"
