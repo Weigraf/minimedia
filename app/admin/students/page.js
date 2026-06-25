@@ -76,7 +76,7 @@ export default function ChildrenAdmin() {
     setSaving(false)
   }
 
-  if (!profile) return <PageLoader message="Loading children…" />
+  if (!profile) return <PageLoader message="Loading students…" />
 
   const grouped = classrooms.map(c => ({
     ...c,
@@ -90,23 +90,23 @@ export default function ChildrenAdmin() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '1.25rem' }}>
           <CaterpillarIcon size={44} />
           <div>
-            <h1 style={{ fontSize: '1.375rem', fontWeight: 800, color: 'var(--green-forest)' }}>Children</h1>
+            <h1 style={{ fontSize: '1.375rem', fontWeight: 800, color: 'var(--green-forest)' }}>Students</h1>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-              {isAdmin ? 'All children across the school.' : 'Children in your classroom.'}
+              {isAdmin ? 'All students across the school.' : 'Students in your classroom.'}
             </p>
           </div>
         </div>
 
         {/* Add child */}
         <div className="card" style={{ marginBottom: '1.75rem' }}>
-          <div className="section-title">Add a child</div>
+          <div className="section-title">Add a student</div>
           <form onSubmit={addChild} style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginTop: '0.75rem' }}>
-            <label htmlFor="child-name" className="visually-hidden">Child's name</label>
+            <label htmlFor="child-name" className="visually-hidden">Student's name</label>
             <input
               id="child-name"
               value={name}
               onChange={e => setName(e.target.value)}
-              placeholder="Child's name"
+              placeholder="Student's name"
               style={{ flex: 1, minWidth: '160px' }}
               required
             />
@@ -120,7 +120,7 @@ export default function ChildrenAdmin() {
               {classrooms.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
             </select>
             <button type="submit" className="btn btn-primary" disabled={saving}>
-              {saving ? 'Adding…' : 'Add child'}
+              {saving ? 'Adding…' : 'Add student'}
             </button>
           </form>
           {error && <div className="flash-error" role="alert" style={{ marginTop: '0.75rem' }}>{error}</div>}
@@ -137,7 +137,7 @@ export default function ChildrenAdmin() {
 
             {group.kids.length === 0 ? (
               <div className="card" style={{ textAlign: 'center', padding: '1.5rem', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-                No children in this classroom yet.
+                No students in this classroom yet.
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -169,7 +169,7 @@ export default function ChildrenAdmin() {
                         )}
                       </div>
                     </div>
-                    <a href={`/admin/children/${child.id}`} className="btn btn-secondary" style={{ fontSize: '0.8125rem', padding: '7px 14px', flexShrink: 0 }}>
+                    <a href={`/admin/students/${child.id}`} className="btn btn-secondary" style={{ fontSize: '0.8125rem', padding: '7px 14px', flexShrink: 0 }}>
                       Manage →
                     </a>
                   </div>
@@ -182,8 +182,8 @@ export default function ChildrenAdmin() {
         {children.length === 0 && classrooms.length > 0 && (
           <div className="card" style={{ textAlign: 'center', padding: '3rem 1.5rem' }}>
             <CaterpillarIcon size={52} />
-            <p style={{ fontWeight: 700, marginTop: '1rem', color: 'var(--text-primary)' }}>No children yet</p>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginTop: '4px' }}>Use the form above to add a child.</p>
+            <p style={{ fontWeight: 700, marginTop: '1rem', color: 'var(--text-primary)' }}>No students yet</p>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginTop: '4px' }}>Use the form above to add a student.</p>
           </div>
         )}
       </div>

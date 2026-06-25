@@ -38,19 +38,19 @@ function navItems(role, isClassroomAdmin, unreadCount = 0) {
   items.push({ label: 'My Classrooms', href: '/dashboard', Icon: LeafIcon })
 
   if (role === 'parent' && !isClassroomAdmin) {
-    items.push({ label: 'My Children', href: '/my-children', Icon: CaterpillarIcon })
+    items.push({ label: 'My Students', href: '/my-students', Icon: CaterpillarIcon })
   }
 
   if (isClassroomAdmin) {
     items.push({ label: 'Approvals',         href: '/admin/approvals', Icon: AcornIcon })
     items.push({ label: 'My Classrooms',     href: '/classrooms',      Icon: SnailIcon })
-    items.push({ label: 'Children',          href: '/admin/children',  Icon: CaterpillarIcon })
+    items.push({ label: 'Students',          href: '/admin/students',  Icon: CaterpillarIcon })
     items.push({ label: 'Messages',          href: '/messages',        Icon: MessageIcon, badge: unreadCount })
   }
 
   if (role === 'admin') {
     items.push({ label: 'Browse Classrooms', href: '/classrooms',       Icon: SnailIcon })
-    items.push({ label: 'Children',          href: '/admin/children',   Icon: CaterpillarIcon })
+    items.push({ label: 'Students',          href: '/admin/students',   Icon: CaterpillarIcon })
     items.push({ label: 'Contact Inbox',     href: '/admin/contact',    Icon: MushroomIcon })
     items.push({ label: 'Premium',           href: '/subscribe',        Icon: TwinkleStar })
   }

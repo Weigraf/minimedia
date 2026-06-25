@@ -53,8 +53,8 @@ const features = [
   },
   {
     Icon: CaterpillarIcon,
-    title: "Children's Profiles",
-    body: 'Teachers build a profile for each child that parents can view — including progress notes and classroom milestones.',
+    title: "Student Profiles",
+    body: 'Teachers build a profile for each student that parents can view — including progress notes and classroom milestones.',
     color: '#8B1A40',
     bg: '#FCE8F0',
     border: '#E07098',

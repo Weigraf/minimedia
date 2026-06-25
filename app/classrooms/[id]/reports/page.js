@@ -125,9 +125,9 @@ export default function ReportsPage() {
         {children.length === 0 && !loading ? (
           <div className="empty-state">
             {isAdmin ? (
-              <>No children in this classroom. <a href="/admin/children">Add children →</a></>
+              <>No students in this classroom. <a href="/admin/students">Add students →</a></>
             ) : (
-              'No children assigned to your account yet.'
+              'No students assigned to your account yet.'
             )}
           </div>
         ) : (

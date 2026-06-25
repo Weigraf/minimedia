@@ -54,7 +54,7 @@ export default function ChildDetail() {
         .select('*, classrooms(id, name), family_members(profile_id, profiles(full_name, avatar_url))')
         .eq('id', childId)
         .single()
-      if (!c) { router.push('/admin/children'); return }
+      if (!c) { router.push('/admin/students'); return }
 
       setChild(c)
       setForm({ name: c.name, medications: c.medications || '', allergies: c.allergies || '' })
@@ -160,7 +160,7 @@ export default function ChildDetail() {
     <>
       <Navbar profile={profile} />
       <div className="page-sm">
-        <a href="/admin/children" style={{ color: 'var(--green-leaf)', fontSize: '14px', fontWeight: 600 }}>← All children</a>
+        <a href="/admin/students" style={{ color: 'var(--green-leaf)', fontSize: '14px', fontWeight: 600 }}>← All students</a>
 
         {msg && (
           <div className="flash-info" role="status" style={{ marginTop: '1rem' }}>{msg}</div>
