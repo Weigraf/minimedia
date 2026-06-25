@@ -266,9 +266,6 @@ export default function ClassroomPage() {
             <a href={`/classrooms/${id}/directory`} className="btn btn-secondary" style={{ fontSize: '13px' }}>
               <LeafIcon size={16} /> Directory
             </a>
-            <a href={`/classrooms/${id}/reports`} className="btn btn-secondary" style={{ fontSize: '13px' }}>
-              📋 Reports
-            </a>
             {(profile.role === 'admin' || isClassroomAdmin) && (
               <>
                 <a href={`/classrooms/${id}/files/upload`} className="btn btn-secondary">
