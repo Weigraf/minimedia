@@ -32,6 +32,7 @@ function navItems(role, isClassroomAdmin) {
   if (role === 'admin') {
     items.push({ label: 'New Classroom',       href: '/admin/classrooms/new', Icon: SproutIcon })
     items.push({ label: 'Approvals',            href: '/admin/approvals',      Icon: AcornIcon })
+    items.push({ label: 'Users',               href: '/admin/users',           Icon: RaindropIcon })
   }
 
   items.push({ label: 'My Classrooms', href: '/dashboard', Icon: LeafIcon })
@@ -43,6 +44,7 @@ function navItems(role, isClassroomAdmin) {
   if (isClassroomAdmin) {
     items.push({ label: 'Approvals',         href: '/admin/approvals', Icon: AcornIcon })
     items.push({ label: 'My Classrooms',     href: '/classrooms',      Icon: SnailIcon })
+    items.push({ label: 'Children',          href: '/admin/children',  Icon: CaterpillarIcon })
     items.push({ label: 'Messages',          href: '/messages',        Icon: MessageIcon })
   }
 
