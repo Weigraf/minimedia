@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import Navbar from '@/components/Navbar'
-import { SproutIcon, MushroomIcon, CaterpillarIcon, LeafIcon, AcornIcon, SnailIcon, SunIcon } from '@/components/Icons'
+import { OwlIcon, SproutIcon, MushroomIcon, CaterpillarIcon, LeafIcon, AcornIcon, SnailIcon } from '@/components/Icons'
 
 const PALETTES = [
   { bg: '#FFF3C4', border: '#F0C040', text: '#7A4000' },
@@ -88,7 +88,7 @@ export default function Dashboard() {
           gap: '1rem',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <SunIcon size={48} />
+            <OwlIcon size={52} />
             <div>
               <h1 style={{ fontSize: '1.375rem', fontWeight: 800, color: 'var(--green-forest)', lineHeight: 1.2 }}>
                 {greeting()}, {firstName}! 🌿
