@@ -132,6 +132,12 @@ export default function SignUp() {
           </p>
         )}
       </div>
+
+        <p style={{ textAlign: 'center', marginTop: '1.25rem', fontSize: '13px', color: 'rgba(90,64,48,0.65)' }}>
+          <a href="/about" style={{ color: 'rgba(90,64,48,0.65)', textDecoration: 'none', fontWeight: 600 }}>About</a>
+          {' · '}
+          <a href="/contact" style={{ color: 'rgba(90,64,48,0.65)', textDecoration: 'none', fontWeight: 600 }}>Contact</a>
+        </p>
       </div>
     </div>
   )
