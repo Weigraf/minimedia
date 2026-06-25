@@ -71,6 +71,7 @@ export default function Navbar({ profile }) {
     return localStorage.getItem('tt-sidebar') !== 'closed'
   })
   const [theme, setTheme] = useState(null)
+  const [viewAs, setViewAsState] = useState(null)
   const router = useRouter()
 
   useEffect(() => {
@@ -103,6 +104,20 @@ export default function Navbar({ profile }) {
     setTheme(initial)
     if (saved) document.documentElement.dataset.theme = saved
   }, [])
+
+  useEffect(() => {
+    const saved = localStorage.getItem('tt-view-as')
+    if (saved) { try { setViewAsState(JSON.parse(saved)) } catch {} }
+  }, [])
+
+  function setViewAs(data) {
+    localStorage.setItem('tt-view-as', JSON.stringify(data))
+    setViewAsState(data)
+  }
+  function clearViewAs() {
+    localStorage.removeItem('tt-view-as')
+    setViewAsState(null)
+  }
 
   function toggleTheme() {
     const next = theme === 'dark' ? 'light' : 'dark'
@@ -217,7 +232,10 @@ export default function Navbar({ profile }) {
     router.push('/login')
   }
 
-  const items = profile ? navItems(profile.role, isClassroomAdmin, unreadCount) : []
+  const isAdmin = profile?.role === 'admin'
+  const effectiveRole = (viewAs && isAdmin) ? viewAs.role : profile?.role
+  const effectiveIsCA = (viewAs && isAdmin) ? viewAs.isClassroomAdmin : isClassroomAdmin
+  const items = profile ? navItems(effectiveRole, effectiveIsCA, viewAs ? 0 : unreadCount) : []
   const firstName = profile?.full_name?.split(' ')[0] ?? ''
 
   return (
@@ -305,6 +323,34 @@ export default function Navbar({ profile }) {
             )
           })}
         </nav>
+
+        {/* View As selector — admins only */}
+        {isAdmin && (
+          <div style={{
+            padding: '0.75rem 1.25rem',
+            borderTop: '1px solid var(--card-border)',
+            background: viewAs ? 'rgba(201,59,106,0.08)' : 'var(--surface)',
+            flexShrink: 0,
+          }}>
+            <div style={{ fontSize: '0.6875rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '5px' }}>
+              View As
+            </div>
+            <select
+              value={viewAs?.key || ''}
+              onChange={e => {
+                const v = e.target.value
+                if (!v) clearViewAs()
+                else if (v === 'parent') setViewAs({ key: 'parent', role: 'parent', isClassroomAdmin: false, label: 'Parent' })
+                else if (v === 'teacher') setViewAs({ key: 'teacher', role: 'parent', isClassroomAdmin: true, label: 'Teacher' })
+              }}
+              style={{ width: '100%', borderRadius: '50px', fontSize: '0.8125rem', padding: '6px 12px', fontFamily: 'var(--font)', fontWeight: 600 }}
+            >
+              <option value="">My View (Admin)</option>
+              <option value="parent">Parent</option>
+              <option value="teacher">Teacher</option>
+            </select>
+          </div>
+        )}
 
         {/* Drawer footer */}
         {profile && (
@@ -406,8 +452,8 @@ export default function Navbar({ profile }) {
               </span>
             </a>
 
-            <span className={`badge badge-${profile.role}`} style={{ flexShrink: 0 }}>
-              {profile.role === 'classroom_admin' ? 'C.Admin' : profile.role}
+            <span className={`badge badge-${viewAs ? viewAs.role : profile.role}`} style={{ flexShrink: 0 }}>
+              {viewAs ? viewAs.label : (profile.role === 'classroom_admin' ? 'C.Admin' : profile.role)}
             </span>
 
             {theme && (
@@ -445,6 +491,32 @@ export default function Navbar({ profile }) {
           </div>
         )}
       </nav>
+      {/* View As floating banner */}
+      {viewAs && (
+        <div style={{
+          position: 'fixed', bottom: '1.25rem', left: '50%', transform: 'translateX(-50%)',
+          background: '#C93B6A', color: '#fff',
+          borderRadius: '50px', padding: '9px 20px 9px 16px',
+          display: 'flex', alignItems: 'center', gap: '12px',
+          zIndex: 200, boxShadow: '0 4px 20px rgba(201,59,106,0.4)',
+          fontSize: '0.875rem', fontWeight: 700, whiteSpace: 'nowrap',
+          pointerEvents: 'all',
+        }}>
+          <span style={{ opacity: 0.85, fontSize: '0.8125rem' }}>Viewing as</span>
+          <span style={{ background: 'rgba(255,255,255,0.2)', borderRadius: '50px', padding: '2px 10px' }}>{viewAs.label}</span>
+          <button
+            onClick={clearViewAs}
+            style={{
+              background: 'rgba(255,255,255,0.2)', border: '1.5px solid rgba(255,255,255,0.5)',
+              borderRadius: '50px', color: '#fff', cursor: 'pointer',
+              fontSize: '0.8125rem', fontWeight: 700, padding: '3px 12px',
+              fontFamily: 'var(--font)', lineHeight: 1.4,
+            }}
+          >
+            Exit
+          </button>
+        </div>
+      )}
     </>
   )
 }
