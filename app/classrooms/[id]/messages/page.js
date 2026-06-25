@@ -60,6 +60,7 @@ export default function ClassroomMessages() {
       }
 
       await fetchMessages(session.access_token)
+      await markAsRead(supabase, session.user.id)
     }
     load()
   }, [id])
@@ -72,6 +73,15 @@ export default function ClassroomMessages() {
       const { messages } = await res.json()
       setMessages(messages || [])
     }
+  }
+
+  async function markAsRead(supabase, userId) {
+    await supabase
+      .from('messages')
+      .update({ read_at: new Date().toISOString() })
+      .eq('classroom_id', id)
+      .eq('recipient_id', userId)
+      .is('read_at', null)
   }
 
   async function handleSend(e) {
@@ -104,6 +114,7 @@ export default function ClassroomMessages() {
     if (fileRef.current) fileRef.current.value = ''
     setSending(false)
     await fetchMessages(session.access_token)
+    await markAsRead(supabase, session.user.id)
   }
 
   function formatTime(ts) {
