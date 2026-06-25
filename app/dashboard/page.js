@@ -77,8 +77,8 @@ export default function Dashboard() {
 
         {/* Greeting header */}
         <div style={{
-          background: 'linear-gradient(135deg, var(--yellow-glow) 0%, var(--green-whisper) 100%)',
-          border: '1.5px solid var(--amber-honey)',
+          background: 'linear-gradient(135deg, #FFF9CC 0%, #D8EEFF 100%)',
+          border: '1.5px solid #A8D8F0',
           borderRadius: '20px',
           padding: '1.5rem 1.75rem',
           marginBottom: '1.75rem',

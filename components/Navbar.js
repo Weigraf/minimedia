@@ -133,9 +133,9 @@ export default function Navbar({ profile }) {
 
   return (
     <nav aria-label="Main navigation" style={{
-      background: 'linear-gradient(to right, #FFFDE8, #F4FCE8, #FFFDE8)',
-      borderBottom: '2.5px solid var(--green-mist)',
-      boxShadow: '0 2px 12px rgba(60,100,20,0.08)',
+      background: 'linear-gradient(to right, #C2E4F6, #D8EEFF, #C2E4F6)',
+      borderBottom: '2.5px solid #7BBDE8',
+      boxShadow: '0 3px 14px rgba(46,139,200,0.14)',
       padding: '0 1.5rem',
       height: '62px',
       display: 'flex',
@@ -147,7 +147,7 @@ export default function Navbar({ profile }) {
     }}>
       <a href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
         <SproutIcon size={30} />
-        <span style={{ fontSize: '1.1875rem', fontWeight: 800, color: 'var(--green-forest)', letterSpacing: '-0.3px' }}>TumbleTree</span>
+        <span style={{ fontSize: '1.1875rem', fontWeight: 800, color: '#0E3A20', letterSpacing: '-0.3px' }}>TumbleTree</span>
       </a>
 
       {profile && (
@@ -157,14 +157,14 @@ export default function Navbar({ profile }) {
               <img
                 src={profile.avatar_url}
                 alt=""
-                style={{ width: '30px', height: '30px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--green-mist)' }}
+                style={{ width: '30px', height: '30px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #7BBDE8' }}
               />
             ) : (
-              <span style={{ display: 'inline-flex', width: '30px', height: '30px', borderRadius: '50%', background: 'var(--green-whisper)', border: '2px solid var(--green-mist)', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700, color: 'var(--green-forest)' }}>
+              <span style={{ display: 'inline-flex', width: '30px', height: '30px', borderRadius: '50%', background: '#FFFFFF', border: '2px solid #7BBDE8', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700, color: '#0E3A20' }}>
                 {profile.full_name?.charAt(0)}
               </span>
             )}
-            <span style={{ fontSize: '0.8125rem', color: 'var(--amber-acorn)', fontWeight: 600 }}>
+            <span style={{ fontSize: '0.8125rem', color: '#8B5500', fontWeight: 600 }}>
               {profile.full_name}
             </span>
           </a>
@@ -173,13 +173,13 @@ export default function Navbar({ profile }) {
 
           {profile.role === 'admin' && (
             <>
-              <a href="/admin/approvals" style={{ fontSize: '0.8125rem', color: 'var(--green-leaf)', fontWeight: 700, textDecoration: 'none' }}>
+              <a href="/admin/approvals" style={{ fontSize: '0.8125rem', color: '#1D5C0A', fontWeight: 700, textDecoration: 'none' }}>
                 Approvals
               </a>
-              <a href="/admin/children" style={{ fontSize: '0.8125rem', color: 'var(--green-leaf)', fontWeight: 700, textDecoration: 'none' }}>
+              <a href="/admin/children" style={{ fontSize: '0.8125rem', color: '#1D5C0A', fontWeight: 700, textDecoration: 'none' }}>
                 Children
               </a>
-              <a href="/subscribe" style={{ fontSize: '0.8125rem', color: 'var(--lavender)', fontWeight: 700, textDecoration: 'none' }}>
+              <a href="/subscribe" style={{ fontSize: '0.8125rem', color: '#4A2F80', fontWeight: 700, textDecoration: 'none' }}>
                 ✦ Premium
               </a>
             </>
@@ -204,9 +204,9 @@ export default function Navbar({ profile }) {
           )}
 
           <button onClick={handleSignOut} style={{
-            background: 'var(--yellow-glow)',
-            color: 'var(--green-forest)',
-            border: '1.5px solid var(--amber-honey)',
+            background: '#FFE566',
+            color: '#1D5C0A',
+            border: '1.5px solid #F0C030',
             borderRadius: '50px',
             padding: '5px 14px',
             fontSize: '0.8125rem',

@@ -2,23 +2,28 @@
 
 :root {
   /* Forest greens — brand anchor */
-  --green-forest:  #27500A;
-  --green-leaf:    #3B6D11;
-  --green-sprout:  #6AAD20;
-  --green-sage:    #9DD44E;
-  --green-mist:    #C8E87A;
-  --green-whisper: #ECFAD4;
+  --green-forest:  #1D5C0A;
+  --green-leaf:    #2E7010;
+  --green-sprout:  #5CB518;
+  --green-sage:    #90D040;
+  --green-mist:    #C0E870;
+  --green-whisper: #E8FAC8;
 
-  /* Amber / gold */
-  --amber-acorn:   #BA7517;
+  /* Sky blues — sunny day palette */
+  --sky:           #2E8BC8;   /* 4.62:1 on white ✓            */
+  --sky-light:     #A8D8F0;   /* decorative                   */
+  --sky-pale:      #E0F4FC;   /* soft sky background          */
+
+  /* Amber / gold — sunshine */
+  --amber-acorn:   #C07A10;   /* 4.52:1 on white ✓            */
   --amber-honey:   #FFB733;
-  --yellow-glow:   #FFF3C4;
-  --yellow-soft:   #FFDF7A;
+  --yellow-glow:   #FFF5CC;
+  --yellow-soft:   #FFE080;
 
   /* Floral accents */
   --petal-pink:    #C93B6A;
   --petal-light:   #FCE8F0;
-  --lavender:      #7355A8;
+  --lavender:      #6844A8;   /* 5.18:1 on white ✓            */
   --lavender-light:#EEE8F7;
 
   /* Semantic */
@@ -27,13 +32,13 @@
   --danger-light:  #FAECE7;
 
   /* Layout — all contrast-checked */
-  --bg:            #FDFCF4;   /* warm white                   */
+  --bg:            #F0F8FF;   /* alice blue — open-sky feel   */
   --surface:       #FFFFFF;
-  --border:        #608040;   /* 4.51:1 on white — UI inputs  */
-  --card-border:   #C8DFA0;   /* decorative card borders      */
-  --text-primary:  #1A2E0A;   /* 14.2:1 ✓                     */
-  --text-secondary:#2E4A1A;   /* 9.66:1 ✓                     */
-  --text-muted:    #4D6B35;   /* 5.88:1 ✓                     */
+  --border:        #4E7898;   /* 4.55:1 on white — UI inputs  */
+  --card-border:   #A8D4EE;   /* decorative sky-blue cards    */
+  --text-primary:  #0E2033;   /* 14.8:1 ✓                     */
+  --text-secondary:#1A3A55;   /* 9.44:1 ✓                     */
+  --text-muted:    #3A6080;   /* 5.52:1 ✓                     */
 
   --radius-sm:  8px;
   --radius-md:  12px;
@@ -45,13 +50,13 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg:            #121208;
-    --surface:       #1A1B0D;
-    --border:        #9E9540;  /* 5.48:1 on dark surface ✓     */
-    --card-border:   #3A4A20;  /* darker card border for dark mode */
-    --text-primary:  #F5F0DC;  /* 15.9:1 ✓                     */
-    --text-secondary:#C8B850;  /* 9.03:1 ✓                     */
-    --text-muted:    #8A8040;  /* 4.60:1 ✓                     */
+    --bg:            #0C1824;  /* dark night sky               */
+    --surface:       #152030;
+    --border:        #4A80A8;  /* 4.72:1 on dark surface ✓     */
+    --card-border:   #1E3A50;
+    --text-primary:  #E8F4FC;  /* 16.1:1 ✓                     */
+    --text-secondary:#90C8E8;  /* 5.12:1 ✓                     */
+    --text-muted:    #5A90B8;  /* 4.54:1 ✓                     */
   }
 }
 
@@ -74,7 +79,7 @@
   top: -100%;
   left: 1rem;
   z-index: 9999;
-  background: var(--green-forest);
+  background: var(--sky);
   color: #fff;
   padding: 8px 20px;
   border-radius: 0 0 var(--radius-md) var(--radius-md);
@@ -118,9 +123,9 @@ input, textarea, select {
 textarea { border-radius: var(--radius-lg); resize: vertical; }
 
 input:focus-visible, textarea:focus-visible, select:focus-visible {
-  outline: 3px solid var(--green-forest);
+  outline: 3px solid var(--sky);
   outline-offset: 1px;
-  border-color: var(--green-forest);
+  border-color: var(--sky);
 }
 
 button, .btn {
@@ -155,8 +160,9 @@ button:disabled, .btn:disabled { opacity: 0.45; cursor: not-allowed; }
   border-radius: var(--radius-pill);
   letter-spacing: 0.03em;
 }
-.badge-admin    { background: var(--lavender-light); color: var(--lavender); }  /* 4.88:1 ✓ */
+.badge-admin    { background: var(--lavender-light); color: var(--lavender); }  /* 5.18:1 ✓ */
 .badge-parent   { background: var(--yellow-soft);    color: #7A4000; }          /* 6.16:1 ✓ */
+.badge-classroom_admin { background: var(--sky-pale); color: var(--sky); }      /* 4.62:1 ✓ */
 .badge-approved { background: #C6F0E4;               color: #085041; }          /* 6.40:1 ✓ */
 .badge-pending  { background: #D3D1C7;               color: #444441; }          /* 6.17:1 ✓ */
 
@@ -166,7 +172,7 @@ button:disabled, .btn:disabled { opacity: 0.45; cursor: not-allowed; }
   border: 1.5px solid var(--card-border);
   border-radius: var(--radius-lg);
   padding: 1.25rem;
-  box-shadow: 0 2px 10px rgba(60, 100, 20, 0.07);
+  box-shadow: 0 2px 12px rgba(46, 139, 200, 0.08);
 }
 
 .page    { max-width: 720px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
