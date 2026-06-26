@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter, useParams } from 'next/navigation'
 import Navbar from '@/components/Navbar'
-import { AcornIcon, MushroomIcon, LeafIcon, MessageIcon } from '@/components/Icons'
+import { AcornIcon, MushroomIcon, LeafIcon, MessageIcon, SunIcon, SnailIcon, RaindropIcon } from '@/components/Icons'
 import PageLoader from '@/components/PageLoader'
 
 export default function ClassroomPage() {
@@ -266,8 +266,17 @@ export default function ClassroomPage() {
             <a href={`/classrooms/${id}/directory`} className="btn btn-secondary" style={{ fontSize: '13px' }}>
               <LeafIcon size={16} /> Directory
             </a>
+            <a href={`/classrooms/${id}/calendar`} className="btn btn-secondary" style={{ fontSize: '13px' }}>
+              <SnailIcon size={16} /> Calendar
+            </a>
             {(profile.role === 'admin' || isClassroomAdmin) && (
               <>
+                <a href={`/classrooms/${id}/daily-reports`} className="btn btn-secondary" style={{ fontSize: '13px' }}>
+                  <SunIcon size={16} /> Daily Reports
+                </a>
+                <a href={`/classrooms/${id}/incidents`} className="btn btn-secondary" style={{ fontSize: '13px' }}>
+                  <RaindropIcon size={16} /> Incidents
+                </a>
                 <a href={`/classrooms/${id}/files/upload`} className="btn btn-secondary">
                   <AcornIcon size={18} /> Upload file
                 </a>

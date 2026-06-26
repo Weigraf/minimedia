@@ -26,6 +26,10 @@ export default function ChildDetail() {
   const [saving, setSaving] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [msg, setMsg] = useState('')
+  const [pickups, setPickups] = useState([])
+  const [pickupForm, setPickupForm] = useState({ name: '', relationship: '', phone: '', notes: '' })
+  const [addingPickup, setAddingPickup] = useState(false)
+  const [savingPickup, setSavingPickup] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -71,6 +75,9 @@ export default function ChildDetail() {
 
       const { data: ap } = await supabase.from('profiles').select('id, full_name').eq('role', 'parent').eq('approved', true).order('full_name')
       setAllParents(ap || [])
+
+      const { data: pu } = await supabase.from('authorized_pickups').select('*').eq('child_id', childId).order('created_at')
+      setPickups(pu || [])
     }
     load()
   }, [childId])
@@ -149,6 +156,37 @@ export default function ChildDetail() {
       setInviteMsg(json.error || 'Failed to send invite')
     }
     setInviting(false)
+  }
+
+  async function savePickup(e) {
+    e.preventDefault()
+    if (!pickupForm.name.trim()) return
+    setSavingPickup(true)
+    const supabase = createClient()
+    const { data: { session } } = await supabase.auth.getSession()
+    const { data, error: err } = await supabase
+      .from('authorized_pickups')
+      .insert({
+        child_id: childId,
+        name: pickupForm.name.trim(),
+        relationship: pickupForm.relationship.trim() || null,
+        phone: pickupForm.phone.trim() || null,
+        notes: pickupForm.notes.trim() || null,
+        added_by: session.user.id,
+      })
+      .select().single()
+    if (!err && data) {
+      setPickups(prev => [...prev, data])
+      setPickupForm({ name: '', relationship: '', phone: '', notes: '' })
+      setAddingPickup(false)
+    }
+    setSavingPickup(false)
+  }
+
+  async function removePickup(pickupId) {
+    const supabase = createClient()
+    await supabase.from('authorized_pickups').delete().eq('id', pickupId)
+    setPickups(prev => prev.filter(p => p.id !== pickupId))
   }
 
   if (!child || !profile) return <PageLoader message="Loading…" />
@@ -333,6 +371,95 @@ export default function ChildDetail() {
               </div>
             )}
           </div>
+        </div>
+
+        {/* Authorized Pickups */}
+        <div style={{ marginTop: '1.25rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+            <div className="section-title">Authorized pickups ({pickups.length})</div>
+            <button
+              onClick={() => setAddingPickup(v => !v)}
+              className="btn btn-ghost"
+              style={{ fontSize: '0.8125rem', padding: '5px 12px' }}
+            >
+              {addingPickup ? 'Cancel' : '+ Add person'}
+            </button>
+          </div>
+
+          {addingPickup && (
+            <div className="card" style={{ marginBottom: '10px' }}>
+              <form onSubmit={savePickup} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Name *</label>
+                  <input
+                    value={pickupForm.name}
+                    onChange={e => setPickupForm(f => ({ ...f, name: e.target.value }))}
+                    placeholder="Full name"
+                    required
+                    style={{ width: '100%' }}
+                  />
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Relationship</label>
+                    <input
+                      value={pickupForm.relationship}
+                      onChange={e => setPickupForm(f => ({ ...f, relationship: e.target.value }))}
+                      placeholder="e.g. Grandparent, Aunt"
+                      style={{ width: '100%' }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Phone</label>
+                    <input
+                      value={pickupForm.phone}
+                      onChange={e => setPickupForm(f => ({ ...f, phone: e.target.value }))}
+                      placeholder="(555) 000-0000"
+                      style={{ width: '100%' }}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Notes</label>
+                  <input
+                    value={pickupForm.notes}
+                    onChange={e => setPickupForm(f => ({ ...f, notes: e.target.value }))}
+                    placeholder="Any additional details"
+                    style={{ width: '100%' }}
+                  />
+                </div>
+                <div>
+                  <button type="submit" className="btn btn-primary" disabled={savingPickup || !pickupForm.name.trim()} style={{ fontSize: '0.875rem' }}>
+                    {savingPickup ? 'Saving…' : 'Add pickup person'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
+
+          {pickups.length === 0 && !addingPickup ? (
+            <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', padding: '0.25rem 0' }}>
+              No authorized pickup persons on file. Parents or teachers can add them.
+            </p>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {pickups.map(pu => (
+                <div key={pu.id} className="card" style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 14px' }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.9375rem' }}>{pu.name}</div>
+                    <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: '2px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                      {pu.relationship && <span>{pu.relationship}</span>}
+                      {pu.phone && <span>{pu.phone}</span>}
+                      {pu.notes && <span>· {pu.notes}</span>}
+                    </div>
+                  </div>
+                  <button onClick={() => removePickup(pu.id)} className="btn btn-danger" style={{ fontSize: '0.75rem', padding: '4px 10px', flexShrink: 0 }}>
+                    Remove
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Reports link */}
