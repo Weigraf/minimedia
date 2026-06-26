@@ -130,8 +130,9 @@ export default function IncidentsPage() {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.875rem' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Student *</label>
+                <label htmlFor="incident-child" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Student *</label>
                 <select
+                  id="incident-child"
                   value={form.child_id}
                   onChange={e => setForm(f => ({ ...f, child_id: e.target.value }))}
                   required
@@ -141,8 +142,9 @@ export default function IncidentsPage() {
                 </select>
               </div>
               <div>
-                <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>When *</label>
+                <label htmlFor="incident-when" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>When *</label>
                 <input
+                  id="incident-when"
                   type="datetime-local"
                   value={form.occurred_at}
                   onChange={e => setForm(f => ({ ...f, occurred_at: e.target.value }))}
@@ -153,8 +155,9 @@ export default function IncidentsPage() {
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Location</label>
+              <label htmlFor="incident-location" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Location</label>
               <input
+                id="incident-location"
                 value={form.location}
                 onChange={e => setForm(f => ({ ...f, location: e.target.value }))}
                 placeholder="e.g. playground, classroom, hallway"
@@ -163,8 +166,9 @@ export default function IncidentsPage() {
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>What happened *</label>
+              <label htmlFor="incident-description" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>What happened *</label>
               <textarea
+                id="incident-description"
                 value={form.description}
                 onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
                 placeholder="Describe the incident clearly and factually…"
@@ -175,8 +179,9 @@ export default function IncidentsPage() {
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Action taken *</label>
+              <label htmlFor="incident-action" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Action taken *</label>
               <textarea
+                id="incident-action"
                 value={form.action_taken}
                 onChange={e => setForm(f => ({ ...f, action_taken: e.target.value }))}
                 placeholder="How was the incident addressed? First aid given? Who was informed?"
@@ -240,13 +245,13 @@ export default function IncidentsPage() {
                     </div>
                   </div>
                   {confirmDelete === inc.id ? (
-                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexShrink: 0 }}>
+                    <div style={{ display: 'flex', gap: '4px', alignItems: 'center', flexShrink: 0 }}>
                       <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Delete?</span>
-                      <button onClick={() => deleteIncident(inc.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, color: 'var(--danger)', padding: 0, fontFamily: 'var(--font)' }}>Yes</button>
-                      <button onClick={() => setConfirmDelete(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.75rem', color: 'var(--text-muted)', padding: 0, fontFamily: 'var(--font)' }}>No</button>
+                      <button onClick={() => deleteIncident(inc.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, color: 'var(--danger)', padding: '10px 8px', fontFamily: 'var(--font)', minHeight: '44px' }}>Yes</button>
+                      <button onClick={() => setConfirmDelete(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.75rem', color: 'var(--text-muted)', padding: '10px 8px', fontFamily: 'var(--font)', minHeight: '44px' }}>No</button>
                     </div>
                   ) : (
-                    <button onClick={() => setConfirmDelete(inc.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.75rem', color: 'var(--text-muted)', padding: 0, fontFamily: 'var(--font)', flexShrink: 0 }}>
+                    <button onClick={() => setConfirmDelete(inc.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.75rem', color: 'var(--text-muted)', padding: '10px 8px', fontFamily: 'var(--font)', flexShrink: 0, minHeight: '44px' }}>
                       Delete
                     </button>
                   )}

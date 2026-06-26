@@ -173,12 +173,12 @@ export default function ProfilePage() {
 
           <div style={{ marginTop: '1.5rem', textAlign: 'left', borderTop: '0.5px solid var(--border)', paddingTop: '1.25rem' }}>
             <div className="form-group">
-              <label>Full name</label>
-              <input value={profile.full_name} disabled style={{ opacity: 0.6, cursor: 'not-allowed' }} />
+              <label htmlFor="profile-name">Full name</label>
+              <input id="profile-name" value={profile.full_name} disabled style={{ opacity: 0.6, cursor: 'not-allowed' }} />
             </div>
             <div className="form-group">
-              <label>Role</label>
-              <input value={profile.role} disabled style={{ opacity: 0.6, cursor: 'not-allowed', textTransform: 'capitalize' }} />
+              <label htmlFor="profile-role">Role</label>
+              <input id="profile-role" value={profile.role} disabled style={{ opacity: 0.6, cursor: 'not-allowed', textTransform: 'capitalize' }} />
             </div>
           </div>
 

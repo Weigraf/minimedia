@@ -152,11 +152,11 @@ export default function CalendarPage() {
 
         {/* Month nav */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
-          <button onClick={prevMonth} className="btn btn-ghost" style={{ fontSize: '1rem', padding: '6px 14px' }}>←</button>
+          <button onClick={prevMonth} className="btn btn-ghost" aria-label="Previous month" style={{ fontSize: '1rem', padding: '6px 14px' }}>←</button>
           <span style={{ fontWeight: 800, fontSize: '1.0625rem', color: 'var(--green-forest)', minWidth: '160px', textAlign: 'center' }}>
             {monthLabel(viewDate)}
           </span>
-          <button onClick={nextMonth} className="btn btn-ghost" style={{ fontSize: '1rem', padding: '6px 14px' }}>→</button>
+          <button onClick={nextMonth} className="btn btn-ghost" aria-label="Next month" style={{ fontSize: '1rem', padding: '6px 14px' }}>→</button>
           {isTeacher && (
             <button onClick={() => setShowForm(v => !v)} className="btn btn-primary" style={{ marginLeft: 'auto', fontSize: '0.875rem' }}>
               {showForm ? 'Cancel' : '+ Add event'}
@@ -170,8 +170,9 @@ export default function CalendarPage() {
             <div className="section-title" style={{ marginBottom: '1rem' }}>New event</div>
             <form onSubmit={createEvent} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Title *</label>
+                <label htmlFor="event-title" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Title *</label>
                 <input
+                  id="event-title"
                   value={form.title}
                   onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
                   placeholder="Field trip, picture day, parent night…"
@@ -180,8 +181,9 @@ export default function CalendarPage() {
                 />
               </div>
               <div>
-                <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Date *</label>
+                <label htmlFor="event-date" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Date *</label>
                 <input
+                  id="event-date"
                   type="date"
                   value={form.event_date}
                   onChange={e => setForm(f => ({ ...f, event_date: e.target.value }))}
@@ -201,8 +203,9 @@ export default function CalendarPage() {
               {!form.all_day && (
                 <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Start time</label>
+                    <label htmlFor="event-start-time" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Start time</label>
                     <input
+                      id="event-start-time"
                       type="time"
                       value={form.start_time}
                       onChange={e => setForm(f => ({ ...f, start_time: e.target.value }))}
@@ -210,8 +213,9 @@ export default function CalendarPage() {
                     />
                   </div>
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>End time</label>
+                    <label htmlFor="event-end-time" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>End time</label>
                     <input
+                      id="event-end-time"
                       type="time"
                       value={form.end_time}
                       onChange={e => setForm(f => ({ ...f, end_time: e.target.value }))}
@@ -221,8 +225,9 @@ export default function CalendarPage() {
                 </div>
               )}
               <div>
-                <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Description (optional)</label>
+                <label htmlFor="event-description" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Description (optional)</label>
                 <textarea
+                  id="event-description"
                   value={form.description}
                   onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
                   placeholder="Details, location, what to bring…"
@@ -272,15 +277,15 @@ export default function CalendarPage() {
                         </div>
                         {isTeacher && (
                           confirmDelete === ev.id ? (
-                            <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexShrink: 0 }}>
+                            <div style={{ display: 'flex', gap: '4px', alignItems: 'center', flexShrink: 0 }}>
                               <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Remove?</span>
-                              <button onClick={() => deleteEvent(ev.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, color: 'var(--danger)', padding: 0, fontFamily: 'var(--font)' }}>Yes</button>
-                              <button onClick={() => setConfirmDelete(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.75rem', color: 'var(--text-muted)', padding: 0, fontFamily: 'var(--font)' }}>No</button>
+                              <button onClick={() => deleteEvent(ev.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, color: 'var(--danger)', padding: '10px 8px', fontFamily: 'var(--font)', minHeight: '44px' }}>Yes</button>
+                              <button onClick={() => setConfirmDelete(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.75rem', color: 'var(--text-muted)', padding: '10px 8px', fontFamily: 'var(--font)', minHeight: '44px' }}>No</button>
                             </div>
                           ) : (
                             <button
                               onClick={() => setConfirmDelete(ev.id)}
-                              style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.75rem', color: 'var(--text-muted)', padding: 0, fontFamily: 'var(--font)', flexShrink: 0 }}
+                              style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.75rem', color: 'var(--text-muted)', padding: '10px 8px', fontFamily: 'var(--font)', flexShrink: 0, minHeight: '44px' }}
                             >
                               Remove
                             </button>

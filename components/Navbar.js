@@ -349,10 +349,11 @@ export default function Navbar({ profile }) {
             background: viewAs ? 'rgba(201,59,106,0.08)' : 'var(--surface)',
             flexShrink: 0,
           }}>
-            <div style={{ fontSize: '0.6875rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '5px' }}>
+            <label htmlFor="view-as-select" style={{ display: 'block', fontSize: '0.6875rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '5px' }}>
               View As
-            </div>
+            </label>
             <select
+              id="view-as-select"
               value={viewAs?.key || ''}
               onChange={e => {
                 const v = e.target.value

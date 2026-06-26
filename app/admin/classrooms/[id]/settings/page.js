@@ -220,12 +220,12 @@ export default function ClassroomSettings() {
           <p className="section-title">Classroom details</p>
           <form onSubmit={handleSaveDetails}>
             <div className="form-group">
-              <label>Classroom name</label>
-              <input value={name} onChange={e => setName(e.target.value)} required />
+              <label htmlFor="classroom-name">Classroom name</label>
+              <input id="classroom-name" value={name} onChange={e => setName(e.target.value)} required />
             </div>
             <div className="form-group">
-              <label>Description</label>
-              <textarea value={description} onChange={e => setDescription(e.target.value)} rows={3} />
+              <label htmlFor="classroom-desc">Description</label>
+              <textarea id="classroom-desc" value={description} onChange={e => setDescription(e.target.value)} rows={3} />
             </div>
             <button type="submit" className="btn btn-primary" disabled={saving}>
               {saving ? 'Saving...' : 'Save details'}
@@ -257,6 +257,7 @@ export default function ClassroomSettings() {
                 <select
                   value={m.role}
                   onChange={e => handleRoleChange(m.id, e.target.value)}
+                  aria-label={`Role for ${m.profiles?.full_name}`}
                   style={{ width: 'auto', padding: '6px 12px', borderRadius: '50px', fontSize: '13px', fontWeight: 600 }}>
                   <option value="parent">Parent</option>
                   <option value="classroom_admin">Classroom admin</option>

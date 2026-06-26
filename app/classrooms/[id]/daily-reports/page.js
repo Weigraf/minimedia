@@ -177,8 +177,9 @@ export default function DailyReportsPage() {
 
         {/* Date selector */}
         <div className="card" style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-          <label style={{ fontWeight: 700, fontSize: '0.9375rem', color: 'var(--text-primary)' }}>Date</label>
+          <label htmlFor="report-date" style={{ fontWeight: 700, fontSize: '0.9375rem', color: 'var(--text-primary)' }}>Date</label>
           <input
+            id="report-date"
             type="date"
             value={selectedDate}
             max={today()}
@@ -297,8 +298,9 @@ export default function DailyReportsPage() {
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
                     {['breakfast', 'lunch', 'snack'].map(meal => (
                       <div key={meal}>
-                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '3px', textTransform: 'capitalize' }}>{meal}</label>
+                        <label htmlFor={`${meal}-${child.id}`} style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '3px', textTransform: 'capitalize' }}>{meal}</label>
                         <select
+                          id={`${meal}-${child.id}`}
                           value={form[meal]}
                           onChange={e => setField(child.id, meal, e.target.value)}
                           style={{ width: '100%', borderRadius: '10px', fontSize: '0.8125rem', padding: '6px 10px', border: '1.5px solid var(--card-border)', background: 'var(--input-bg)', color: 'var(--text-primary)', fontFamily: 'var(--font)' }}
@@ -313,8 +315,9 @@ export default function DailyReportsPage() {
 
                 {/* Nap */}
                 <div style={{ marginBottom: '1rem' }}>
-                  <div style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '6px' }}>Nap (minutes)</div>
+                  <label htmlFor={`nap-${child.id}`} style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '6px' }}>Nap (minutes)</label>
                   <input
+                    id={`nap-${child.id}`}
                     type="number"
                     min="0"
                     max="360"
@@ -327,8 +330,9 @@ export default function DailyReportsPage() {
 
                 {/* Activities */}
                 <div style={{ marginBottom: '1rem' }}>
-                  <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '6px' }}>Activities</label>
+                  <label htmlFor={`activities-${child.id}`} style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '6px' }}>Activities</label>
                   <textarea
+                    id={`activities-${child.id}`}
                     value={form.activities}
                     onChange={e => setField(child.id, 'activities', e.target.value)}
                     placeholder="What did we do today?"
@@ -339,8 +343,9 @@ export default function DailyReportsPage() {
 
                 {/* Notes */}
                 <div style={{ marginBottom: '1rem' }}>
-                  <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '6px' }}>Notes for parents</label>
+                  <label htmlFor={`notes-${child.id}`} style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '6px' }}>Notes for parents</label>
                   <textarea
+                    id={`notes-${child.id}`}
                     value={form.notes}
                     onChange={e => setField(child.id, 'notes', e.target.value)}
                     placeholder="Anything else to share?"
