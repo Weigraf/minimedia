@@ -38,7 +38,7 @@ function navItems(role, isClassroomAdmin, isSchoolAdmin, unreadCount = 0) {
   // ── School Admin ──────────────────────────────────────────────────────────
   if (isSchoolAdmin) {
     items.push({ label: 'My Classrooms', href: '/dashboard',        Icon: LeafIcon })
-    items.push({ label: 'My Teachers',   href: '/school',           Icon: SproutIcon })
+    items.push({ label: 'My School',      href: '/school',           Icon: SproutIcon })
     items.push({ label: 'Messages',      href: '/messages',         Icon: MessageIcon, badge: unreadCount })
     items.push({ label: 'Students',      href: '/admin/students',   Icon: CaterpillarIcon })
     items.push({ label: 'Approvals',     href: '/admin/approvals',  Icon: AcornIcon })
