@@ -162,6 +162,29 @@ export default function Contact() {
           </p>
         </div>
       </div>
+
+      {/* Footer */}
+      <div style={{
+        background: 'var(--surface)',
+        borderTop: '1px solid var(--border)',
+        padding: '1.25rem 1.5rem',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '8px',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <OwlIcon size={24} />
+          <span style={{ fontWeight: 700, fontSize: '0.875rem', color: 'var(--text-secondary)' }}>TumbleTree</span>
+        </div>
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <a href="/about" style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', textDecoration: 'none' }}>About</a>
+          <a href="/contact" style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', textDecoration: 'none' }}>Contact</a>
+          <a href="/privacy" style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', textDecoration: 'none' }}>Privacy</a>
+          <a href="/login" style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', textDecoration: 'none' }}>Sign in</a>
+        </div>
+      </div>
     </div>
   )
 }
