@@ -2,6 +2,11 @@ import { createClient } from '@supabase/supabase-js'
 import { createAdminClient } from '@/lib/supabase-admin'
 import { NextResponse } from 'next/server'
 import { contactLimiter, getClientIP, checkLimit } from '@/lib/rate-limit'
+import { Resend } from 'resend'
+import { esc } from '@/lib/html-escape'
+
+const resend = new Resend(process.env.RESEND_API_KEY)
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.tumble-tree.com'
 
 /*
   Run this SQL in Supabase before using the contact form:
@@ -71,6 +76,30 @@ export async function POST(request) {
   if (error) {
     console.error('[contact] insert error:', error.message)
     return NextResponse.json({ error: 'Failed to submit — please try again.' }, { status: 500 })
+  }
+
+  const adminEmail = process.env.NOTIFY_ADMIN_EMAIL
+  if (adminEmail) {
+    await resend.emails.send({
+      from: process.env.NOTIFY_FROM_EMAIL,
+      to: [adminEmail],
+      subject: subject ? `Contact form: ${subject}` : 'New contact form submission',
+      html: `
+        <div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:24px">
+          <h2 style="color:#27500A;margin-bottom:4px">New contact message</h2>
+          <p style="color:#555;font-size:14px;margin-top:0">
+            From <strong>${esc(name)}</strong> &lt;${esc(email)}&gt;
+            ${subject ? `· <em>${esc(subject)}</em>` : ''}
+          </p>
+          <div style="background:#f5f5f5;border-radius:8px;padding:16px;font-size:15px;color:#222;white-space:pre-wrap">${esc(message)}</div>
+          <a href="${APP_URL}/admin/contact"
+             style="display:inline-block;margin-top:16px;background:#3B6D11;color:#fff;padding:10px 20px;border-radius:20px;text-decoration:none;font-weight:600;font-size:14px">
+            View in Contact Inbox →
+          </a>
+          <p style="color:#aaa;font-size:12px;margin-top:24px">You're receiving this as the TumbleTree admin.</p>
+        </div>
+      `,
+    }).catch(err => console.error('[contact] email error:', err.message))
   }
 
   return NextResponse.json({ ok: true })
