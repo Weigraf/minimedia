@@ -202,6 +202,18 @@ export async function GET(req) {
   const classroomId = searchParams.get('classroom_id')
   if (!classroomId) return NextResponse.json({ error: 'classroom_id required' }, { status: 400 })
 
+  const { data: senderProfile } = await supabase
+    .from('profiles').select('role, approved').eq('id', user.id).single()
+  if (!senderProfile?.approved) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  if (senderProfile.role !== 'admin') {
+    const { data: mem } = await supabase
+      .from('memberships').select('id')
+      .eq('classroom_id', classroomId).eq('profile_id', user.id).eq('approved', true)
+      .maybeSingle()
+    if (!mem) return NextResponse.json({ error: 'Not a member of this classroom' }, { status: 403 })
+  }
+
   const { data: messages, error } = await supabase
     .from('messages')
     .select('*, sender:sender_id(full_name, avatar_url), recipient:recipient_id(full_name)')
