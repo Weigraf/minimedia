@@ -33,6 +33,7 @@ function navItems(role, isClassroomAdmin, isSchoolAdmin, unreadCount = 0) {
   if (role === 'parent' && !isClassroomAdmin && !isSchoolAdmin) {
     items.push({ label: 'My Classrooms', href: '/dashboard',    Icon: LeafIcon })
     items.push({ label: 'My Children',   href: '/my-children',  Icon: CaterpillarIcon })
+    items.push({ label: 'Messages',      href: '/messages',     Icon: MessageIcon, badge: unreadCount })
   }
 
   // ── School Admin ──────────────────────────────────────────────────────────
