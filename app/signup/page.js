@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase'
-import { OwlIcon, SproutIcon, LeafIcon, AcornIcon, MushroomIcon, SnailIcon, SunIcon, CaterpillarIcon, RaindropIcon, SquirrelIcon, ChipmunkIcon, CapybaraIcon } from '@/components/Icons'
+import { OwlIcon, SproutIcon } from '@/components/Icons'
 
 export default function SignUp() {
   const [email, setEmail] = useState('')
@@ -31,70 +31,19 @@ export default function SignUp() {
   return (
     <div style={{
       minHeight: '100vh',
-      position: 'relative',
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-      padding: '1rem',
-      background: 'linear-gradient(135deg, #D8CFF0 0%, #EDE8E0 50%, #CDEAB8 100%)',
-      overflow: 'hidden',
+      padding: '1.5rem',
+      background: '#eef3ea',
     }}>
-
-      {/* ── Decorative background icons ─────────────────────────── */}
-      <span aria-hidden="true" style={{ position: 'absolute', top: '-24px', left: '-24px', opacity: 0.28, transform: 'rotate(-25deg)', pointerEvents: 'none' }}>
-        <LeafIcon size={180} />
-      </span>
-      <span aria-hidden="true" style={{ position: 'absolute', top: '8px', right: '24px', opacity: 0.24, transform: 'rotate(18deg)', pointerEvents: 'none' }}>
-        <AcornIcon size={120} />
-      </span>
-      <span aria-hidden="true" style={{ position: 'absolute', bottom: '24px', left: '16px', opacity: 0.26, transform: 'rotate(8deg)', pointerEvents: 'none' }}>
-        <MushroomIcon size={110} />
-      </span>
-      <span aria-hidden="true" style={{ position: 'absolute', bottom: '16px', right: '-8px', opacity: 0.22, transform: 'rotate(-12deg)', pointerEvents: 'none' }}>
-        <SnailIcon size={150} />
-      </span>
-      <span aria-hidden="true" style={{ position: 'absolute', top: '42%', left: '32px', opacity: 0.20, transform: 'translateY(-50%) rotate(6deg)', pointerEvents: 'none' }}>
-        <SproutIcon size={88} />
-      </span>
-      <span aria-hidden="true" style={{ position: 'absolute', top: '58%', right: '24px', opacity: 0.20, transform: 'translateY(-50%) scaleX(-1)', pointerEvents: 'none' }}>
-        <CaterpillarIcon size={96} />
-      </span>
-      <span aria-hidden="true" style={{ position: 'absolute', top: '22%', left: '13%', opacity: 0.18, transform: 'rotate(40deg)', pointerEvents: 'none' }}>
-        <SunIcon size={64} />
-      </span>
-      <span aria-hidden="true" style={{ position: 'absolute', bottom: '28%', right: '11%', opacity: 0.18, transform: 'rotate(-18deg)', pointerEvents: 'none' }}>
-        <RaindropIcon size={58} />
-      </span>
-      {/* Animals */}
-      <span aria-hidden="true" style={{ position: 'absolute', top: '30%', right: '6%', opacity: 0.26, transform: 'scaleX(-1)', pointerEvents: 'none' }}>
-        <SquirrelIcon size={100} />
-      </span>
-      <span aria-hidden="true" style={{ position: 'absolute', bottom: '18%', left: '8%', opacity: 0.24, transform: 'rotate(5deg)', pointerEvents: 'none' }}>
-        <SquirrelIcon size={80} />
-      </span>
-      <span aria-hidden="true" style={{ position: 'absolute', top: '12%', left: '30%', opacity: 0.22, transform: 'rotate(-8deg)', pointerEvents: 'none' }}>
-        <ChipmunkIcon size={72} />
-      </span>
-      <span aria-hidden="true" style={{ position: 'absolute', bottom: '40%', right: '3%', opacity: 0.20, transform: 'rotate(10deg)', pointerEvents: 'none' }}>
-        <ChipmunkIcon size={64} />
-      </span>
-      <span aria-hidden="true" style={{ position: 'absolute', bottom: '6%', left: '30%', opacity: 0.24, pointerEvents: 'none' }}>
-        <CapybaraIcon size={110} />
-      </span>
-
       {/* ── Content ─────────────────────────────────────────────── */}
-      <div style={{ position: 'relative', zIndex: 1, width: '100%', maxWidth: '420px' }}>
+      <div style={{ width: '100%', maxWidth: '420px' }}>
       <div style={{ marginBottom: '1.75rem', textAlign: 'center' }}>
         <OwlIcon size={72} />
-        <h1 style={{ fontSize: '28px', fontWeight: 800, color: 'var(--green-forest)', marginTop: '8px', letterSpacing: '-0.3px' }}>TumbleTree</h1>
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: 600, color: 'var(--green-forest)', marginTop: '8px' }}>TumbleTree</h1>
         <p style={{ color: 'var(--text-muted)', fontSize: '15px', marginTop: '4px' }}>Request access to your classroom</p>
       </div>
 
-      <div className="card" style={{
-        background: 'rgba(255,255,255,0.92)',
-        backdropFilter: 'blur(14px)',
-        WebkitBackdropFilter: 'blur(14px)',
-        boxShadow: '0 8px 40px rgba(100,60,160,0.13), 0 2px 8px rgba(0,0,0,0.05)',
-        border: '1.5px solid rgba(216,200,232,0.9)',
-      }}>
+      <div className="card">
         {success ? (
           <div style={{ textAlign: 'center', padding: '1rem 0' }}>
             <SproutIcon size={48} />

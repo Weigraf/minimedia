@@ -4,17 +4,17 @@ function PublicNav() {
   return (
     <nav style={{
       position: 'sticky', top: 0, zIndex: 100,
-      background: 'rgba(255,255,255,0.88)',
+      background: 'rgba(255,255,255,0.92)',
       backdropFilter: 'blur(12px)',
       WebkitBackdropFilter: 'blur(12px)',
-      borderBottom: '1px solid rgba(216,200,232,0.6)',
+      borderBottom: '1px solid rgba(220,230,214,0.8)',
       padding: '0 1.5rem',
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       height: '56px',
     }}>
       <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
         <OwlIcon size={32} />
-        <span style={{ fontWeight: 800, fontSize: '1.125rem', color: 'var(--green-forest)', letterSpacing: '-0.2px' }}>TumbleTree</span>
+        <span style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: '1.125rem', color: 'var(--green-forest)' }}>TumbleTree</span>
       </a>
       <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
         <a href="/about" style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-muted)', textDecoration: 'none' }}>About</a>

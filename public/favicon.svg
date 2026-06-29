@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- ear tufts -->
+  <polygon points="19,24 14,4 26,22" fill="#c98a4a"/>
+  <polygon points="45,24 50,4 38,22" fill="#c98a4a"/>
+  <!-- body halo -->
+  <ellipse cx="32" cy="40" rx="28" ry="29" fill="rgba(255,255,255,0.15)"/>
+  <!-- body -->
+  <ellipse cx="32" cy="40" rx="25" ry="26" fill="#d99a55"/>
+  <!-- belly -->
+  <ellipse cx="32" cy="48" rx="15" ry="17" fill="#f3d9b0"/>
+  <!-- left wing -->
+  <ellipse cx="9" cy="42" rx="7" ry="14" fill="#c98a4a" transform="rotate(8 9 32)"/>
+  <!-- right wing -->
+  <ellipse cx="55" cy="42" rx="7" ry="14" fill="#c98a4a" transform="rotate(-8 55 32)"/>
+  <!-- left eye outer ring -->
+  <circle cx="22" cy="32" r="9" fill="#f3d9b0"/>
+  <circle cx="22" cy="32" r="7.5" fill="#fff"/>
+  <circle cx="22" cy="32" r="4" fill="#3a2a1a"/>
+  <circle cx="19.5" cy="29.5" r="1.5" fill="#fff"/>
+  <!-- right eye outer ring -->
+  <circle cx="42" cy="32" r="9" fill="#f3d9b0"/>
+  <circle cx="42" cy="32" r="7.5" fill="#fff"/>
+  <circle cx="42" cy="32" r="4" fill="#3a2a1a"/>
+  <circle cx="39.5" cy="29.5" r="1.5" fill="#fff"/>
+  <!-- beak -->
+  <path d="M28,40 L32,48 L36,40Z" fill="#ff8d4a"/>
+</svg>

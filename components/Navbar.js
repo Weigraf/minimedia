@@ -270,15 +270,15 @@ export default function Navbar({ profile }) {
           zIndex: 50,
           transform: menuOpen ? 'translateX(0)' : 'translateX(-100%)',
           transition: 'transform 0.25s cubic-bezier(0.4,0,0.2,1)',
-          borderRight: '2px solid #A888CC',
+          borderRight: '2px solid var(--border)',
           display: 'flex', flexDirection: 'column',
           overflow: 'hidden',
         }}
       >
         {/* Drawer header */}
         <div style={{
-          background: 'linear-gradient(135deg, #C8B8E0, #D8C8EC)',
-          borderBottom: '2px solid #A888CC',
+          background: 'radial-gradient(circle at 30% 50%, #6fc06d 0%, #3f9446 100%)',
+          borderBottom: '2px solid #3f8c44',
           padding: '0 1.25rem',
           height: '62px',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -286,15 +286,15 @@ export default function Navbar({ profile }) {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <OwlIcon size={28} />
-            <span style={{ fontWeight: 800, fontSize: '1rem', color: '#2A1F0E' }}>TumbleTree</span>
+            <span style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: '1rem', color: '#fff' }}>TumbleTree</span>
           </div>
           <button
             onClick={closeSidebar}
             aria-label="Close navigation menu"
             style={{
-              background: 'rgba(255,255,255,0.5)', border: '1.5px solid #A888CC',
+              background: 'rgba(255,255,255,0.25)', border: '1.5px solid rgba(255,255,255,0.5)',
               borderRadius: '8px', cursor: 'pointer',
-              fontSize: '1.125rem', color: '#2A1F0E',
+              fontSize: '1.125rem', color: '#fff',
               padding: '2px 8px', lineHeight: 1.4,
               fontFamily: 'var(--font)', fontWeight: 700,
             }}
@@ -382,9 +382,9 @@ export default function Navbar({ profile }) {
             flexShrink: 0,
           }}>
             {profile.avatar_url ? (
-              <img src={profile.avatar_url} alt="" style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #A888CC', flexShrink: 0 }} />
+              <img src={profile.avatar_url} alt="" style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--green-mist)', flexShrink: 0 }} />
             ) : (
-              <span style={{ display: 'inline-flex', width: '36px', height: '36px', borderRadius: '50%', background: '#fff', border: '2px solid #A888CC', alignItems: 'center', justifyContent: 'center', fontSize: '0.875rem', fontWeight: 700, color: '#2A1F0E', flexShrink: 0 }}>
+              <span style={{ display: 'inline-flex', width: '36px', height: '36px', borderRadius: '50%', background: '#fff', border: '2px solid var(--green-mist)', alignItems: 'center', justifyContent: 'center', fontSize: '0.875rem', fontWeight: 700, color: '#2f4a2c', flexShrink: 0 }}>
                 {profile.full_name?.charAt(0)}
               </span>
             )}
@@ -400,9 +400,9 @@ export default function Navbar({ profile }) {
 
       {/* ── Top navbar ────────────────────────────────────────────── */}
       <nav aria-label="Main navigation" style={{
-        background: 'linear-gradient(to right, #C8B8E0, #D8C8EC, #C8B8E0)',
-        borderBottom: '2.5px solid #A888CC',
-        boxShadow: '0 3px 14px rgba(100,60,160,0.12)',
+        background: 'radial-gradient(circle at 50% 100%, #6fc06d 0%, #3f9446 60%, #2f7a3c 100%)',
+        borderBottom: '2.5px solid #3f8c44',
+        boxShadow: '0 3px 14px rgba(47,74,44,0.18)',
         padding: '0 1rem',
         height: '62px',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -418,8 +418,8 @@ export default function Navbar({ profile }) {
             aria-expanded={menuOpen}
             aria-controls="nav-drawer"
             style={{
-              background: 'rgba(255,255,255,0.55)',
-              border: '1.5px solid #A888CC',
+              background: 'rgba(255,255,255,0.2)',
+              border: '1.5px solid rgba(255,255,255,0.5)',
               borderRadius: '10px',
               cursor: 'pointer',
               padding: '8px 9px',
@@ -427,17 +427,17 @@ export default function Navbar({ profile }) {
               alignItems: 'center', flexShrink: 0,
             }}
           >
-            <span style={{ display: 'block', width: '18px', height: '2px', background: '#2A1F0E', borderRadius: '2px' }} />
-            <span style={{ display: 'block', width: '18px', height: '2px', background: '#2A1F0E', borderRadius: '2px' }} />
-            <span style={{ display: 'block', width: '18px', height: '2px', background: '#2A1F0E', borderRadius: '2px' }} />
+            <span style={{ display: 'block', width: '18px', height: '2px', background: '#fff', borderRadius: '2px' }} />
+            <span style={{ display: 'block', width: '18px', height: '2px', background: '#fff', borderRadius: '2px' }} />
+            <span style={{ display: 'block', width: '18px', height: '2px', background: '#fff', borderRadius: '2px' }} />
           </button>
           {theme && (
             <button
               onClick={toggleTheme}
               aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
               style={{
-                background: theme === 'dark' ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.6)',
-                border: '1.5px solid #A888CC',
+                background: theme === 'dark' ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.25)',
+                border: '1.5px solid rgba(255,255,255,0.5)',
                 borderRadius: '50px',
                 cursor: 'pointer',
                 padding: '5px 10px',
@@ -446,7 +446,7 @@ export default function Navbar({ profile }) {
               }}
             >
               {theme === 'dark' ? <SunIcon size={18} /> : <MoonIcon size={18} />}
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: theme === 'dark' ? '#F0ECF8' : '#2A1F0E', lineHeight: 1 }}>
+              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#fff', lineHeight: 1 }}>
                 {theme === 'dark' ? 'Light' : 'Dark'}
               </span>
             </button>
@@ -463,7 +463,7 @@ export default function Navbar({ profile }) {
           }}
         >
           <OwlIcon size={32} />
-          <span style={{ fontSize: '1.125rem', fontWeight: 800, color: '#2A1F0E', letterSpacing: '-0.3px', whiteSpace: 'nowrap' }}>
+          <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.125rem', fontWeight: 600, color: '#fff', whiteSpace: 'nowrap' }}>
             TumbleTree
           </span>
         </a>
@@ -483,13 +483,13 @@ export default function Navbar({ profile }) {
 
             <a href="/profile" style={{ display: 'flex', alignItems: 'center', gap: '6px', textDecoration: 'none', flexShrink: 0 }}>
               {profile.avatar_url ? (
-                <img src={profile.avatar_url} alt="" style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #A888CC' }} />
+                <img src={profile.avatar_url} alt="" style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', border: '2px solid rgba(255,255,255,0.6)' }} />
               ) : (
-                <span style={{ display: 'inline-flex', width: '28px', height: '28px', borderRadius: '50%', background: '#fff', border: '2px solid #A888CC', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700, color: '#2A1F0E' }}>
+                <span style={{ display: 'inline-flex', width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)', border: '2px solid rgba(255,255,255,0.6)', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700, color: '#fff' }}>
                   {profile.full_name?.charAt(0)}
                 </span>
               )}
-              <span style={{ fontSize: '0.8125rem', color: '#8B5500', fontWeight: 600, maxWidth: '72px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <span style={{ fontSize: '0.8125rem', color: '#fff', fontWeight: 600, maxWidth: '72px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {firstName}
               </span>
             </a>
@@ -501,8 +501,8 @@ export default function Navbar({ profile }) {
             <button
               onClick={handleSignOut}
               style={{
-                background: '#FFE566', color: '#2A1F0E',
-                border: '1.5px solid #F0C030', borderRadius: '50px',
+                background: 'rgba(255,255,255,0.2)', color: '#fff',
+                border: '1.5px solid rgba(255,255,255,0.5)', borderRadius: '50px',
                 padding: '5px 12px', fontSize: '0.8125rem', fontWeight: 700,
                 cursor: 'pointer', fontFamily: 'var(--font)', flexShrink: 0,
               }}

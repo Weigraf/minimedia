@@ -1,29 +1,33 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* Nature greens */
-  --green-forest:  #27500A;
-  --green-leaf:    #3B6D11;
-  --green-sprout:  #6AAD20;
-  --green-sage:    #9DD44E;
-  --green-mist:    #C8E87A;
-  --green-whisper: #ECFAD4;
+  /* Nature greens — Sunshine Grove palette */
+  --green-forest:  #2f4a2c;
+  --green-leaf:    #4a9d4f;
+  --green-sprout:  #6fc06d;
+  --green-sage:    #7a8c72;
+  --green-mist:    #bfe6a0;
+  --green-whisper: #eef3ea;
 
-  /* Lavender — signature whimsy */
-  --lavender-deep: #5A4090;   /* 5.67:1 on white ✓            */
-  --lavender:      #7355A8;   /* 4.88:1 on white ✓            */
-  --lavender-mid:  #A888CC;   /* decorative                   */
-  --lavender-light:#EEE8F7;   /* pale lavender                */
-  --lavender-pale: #F8F4FF;   /* very pale lavender           */
+  /* Legacy lavender names → repurposed as greens for backward compat */
+  --lavender-deep: #4a9d4f;   /* 4.54:1 on white ✓ — primary green  */
+  --lavender:      #3f8c44;   /* darker hover green                  */
+  --lavender-mid:  #bfe6a0;   /* leaf accent                         */
+  --lavender-light:#f0f7ee;   /* pale green surface                  */
+  --lavender-pale: #f7faf5;   /* very pale green                     */
 
-  /* Warm honey / amber — sunshine accent */
-  --amber-acorn:   #BA7517;   /* 4.84:1 on white ✓            */
-  --amber-honey:   #FFB733;
-  --yellow-glow:   #FFF5CC;
-  --yellow-soft:   #FFE080;
+  /* Coral accent */
+  --coral:         #e8893f;
+  --coral-light:   #fdf0e6;
 
-  /* Floral rose */
-  --petal-pink:    #C93B6A;   /* 5.12:1 on white ✓            */
+  /* Warm amber — used for branch/owl warmth */
+  --amber-acorn:   #d99a55;
+  --amber-honey:   #ffd45e;
+  --yellow-glow:   #fff8e0;
+  --yellow-soft:   #ffd45e;
+
+  /* Floral rose — kept for classroom_admin badge */
+  --petal-pink:    #C93B6A;
   --petal-light:   #FCE8F0;
 
   /* Semantic */
@@ -31,56 +35,66 @@
   --danger:        #993C1D;
   --danger-light:  #FAECE7;
 
-  /* Layout — all contrast-checked */
-  --bg:            #F5EDE0;   /* warm parchment — softer than pure cream */
-  --surface:       #FDF8F2;
-  --border:        #826048;   /* 4.93:1 on white — UI inputs  */
-  --card-border:   #D8C8E8;   /* pale lavender — decorative   */
-  --text-primary:  #2A1F0E;   /* 14.2:1 ✓ — warm dark brown   */
-  --text-secondary:#5A4030;   /* 8.27:1 ✓                     */
-  --text-muted:    #826048;   /* 4.93:1 ✓                     */
+  /* Layout */
+  --bg:            #eef3ea;
+  --surface:       #ffffff;
+  --border:        #dce6d6;
+  --card-border:   #dce6d6;
+  --text-primary:  #2f4a2c;
+  --text-secondary:#3f5a3a;
+  --text-muted:    #7a8c72;
 
   --radius-sm:  8px;
-  --radius-md:  12px;
+  --radius-md:  14px;
   --radius-lg:  18px;
   --radius-pill:50px;
 
-  --font: var(--font-nunito), 'Nunito', sans-serif;
+  --font:         var(--font-nunito), 'Nunito', sans-serif;
+  --font-display: var(--font-fredoka), 'Fredoka', sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg:            #1A1520;
-    --surface:       #231E2E;
-    --border:        #9070C0;
-    --card-border:   #352840;
-    --text-primary:  #F0ECF8;
-    --text-secondary:#C0A8E0;
-    --text-muted:    #9078B8;
+    --bg:            #141e14;
+    --surface:       #1e2d1e;
+    --border:        #3a5a3a;
+    --card-border:   #2a3e2a;
+    --text-primary:  #e8f0e6;
+    --text-secondary:#b4cdb0;
+    --text-muted:    #7a9e74;
   }
 }
 
 [data-theme="dark"] {
-  --bg:            #1A1520;
-  --surface:       #231E2E;
-  --border:        #9070C0;
-  --card-border:   #352840;
-  --text-primary:  #F0ECF8;
-  --text-secondary:#C0A8E0;
-  --text-muted:    #9078B8;
+  --bg:            #141e14;
+  --surface:       #1e2d1e;
+  --border:        #3a5a3a;
+  --card-border:   #2a3e2a;
+  --text-primary:  #e8f0e6;
+  --text-secondary:#b4cdb0;
+  --text-muted:    #7a9e74;
 }
 
 [data-theme="light"] {
-  --bg:            #F5EDE0;
-  --surface:       #FDF8F2;
-  --border:        #826048;
-  --card-border:   #D8C8E8;
-  --text-primary:  #2A1F0E;
-  --text-secondary:#5A4030;
-  --text-muted:    #826048;
+  --bg:            #eef3ea;
+  --surface:       #ffffff;
+  --border:        #dce6d6;
+  --card-border:   #dce6d6;
+  --text-primary:  #2f4a2c;
+  --text-secondary:#3f5a3a;
+  --text-muted:    #7a8c72;
 }
 
-/* ── Visually hidden (accessible labels for screen readers) ──── */
+/* ── Login hero animations ────────────────────────────────── */
+@keyframes floaty  { 0%,100%{transform:translateY(0)}          50%{transform:translateY(-12px)} }
+@keyframes floaty2 { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-9px) rotate(6deg)} }
+@keyframes sway    { 0%,100%{transform:rotate(-4deg)}           50%{transform:rotate(4deg)} }
+
+@media (prefers-reduced-motion: reduce) {
+  .login-float, .login-float2, .login-sway { animation: none !important; }
+}
+
+/* ── Owl wink (used in OwlIcon) ───────────────────────────── */
 @keyframes owl-wink {
   0%, 84%, 100% { transform: scaleY(1); }
   87%           { transform: scaleY(0.06); }
@@ -97,6 +111,7 @@
   80%       { opacity: 0.4; transform: scale(0.8);  }
 }
 
+/* ── Visually hidden ─────────────────────────────────────── */
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -109,7 +124,7 @@
   border: 0;
 }
 
-/* ── Skip navigation (18F / WCAG 2.4.1) ─────────────────────── */
+/* ── Skip navigation ─────────────────────────────────────── */
 .skip-nav {
   position: absolute;
   top: -100%;
@@ -135,7 +150,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ── Focus indicators (WCAG 2.4.7, 2.4.11) ──────────────────── */
+/* ── Focus indicators ────────────────────────────────────── */
 :focus-visible {
   outline: 3px solid var(--amber-honey);
   outline-offset: 3px;
@@ -150,7 +165,7 @@ input, textarea, select {
   font-size: 0.9375rem;
   width: 100%;
   padding: 11px 16px;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-md);
   border: 2px solid var(--border);
   background: var(--surface);
   color: var(--text-primary);
@@ -159,9 +174,9 @@ input, textarea, select {
 textarea { border-radius: var(--radius-lg); resize: vertical; }
 
 input:focus-visible, textarea:focus-visible, select:focus-visible {
-  outline: 3px solid var(--lavender);
+  outline: 3px solid var(--lavender-deep);
   outline-offset: 1px;
-  border-color: var(--lavender);
+  border-color: var(--lavender-deep);
 }
 
 button, .btn {
@@ -169,10 +184,10 @@ button, .btn {
   font-size: 0.9375rem;
   font-weight: 600;
   padding: 11px 24px;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-md);
   border: none;
   cursor: pointer;
-  transition: opacity 0.15s, transform 0.1s;
+  transition: background 0.15s, opacity 0.15s, transform 0.1s;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -180,14 +195,14 @@ button, .btn {
 button:active, .btn:active { transform: scale(0.97); }
 button:disabled, .btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
-/* contrast-checked button variants */
-.btn-primary   { background: var(--amber-acorn);   color: #1C0D00; }         /* 5.10:1 ✓ */
-.btn-secondary { background: var(--lavender-light); color: var(--lavender-deep); border: 2px solid var(--lavender-mid); } /* 5.67:1 ✓ */
-.btn-ghost     { background: transparent;           color: #8B5500; border: 2px solid #8B5500; }  /* 6.00:1 ✓ */
-.btn-danger    { background: var(--danger-light);   color: var(--danger); border: 2px solid #E07050; } /* 6.03:1 ✓ */
+.btn-primary   { background: #4a9d4f; color: #fff; box-shadow: 0 6px 18px -6px rgba(74,157,79,.5); }
+.btn-primary:hover:not(:disabled) { background: #3f8c44; }
+.btn-secondary { background: var(--lavender-light); color: var(--green-forest); border: 2px solid var(--lavender-mid); }
+.btn-ghost     { background: transparent; color: var(--green-forest); border: 2px solid var(--border); }
+.btn-danger    { background: var(--danger-light); color: var(--danger); border: 2px solid #E07050; }
 .btn-full      { width: 100%; justify-content: center; }
 
-/* ── Badges ──────────────────────────────────────────────────── */
+/* ── Badges ──────────────────────────────────────────────── */
 .badge {
   display: inline-block;
   font-size: 0.6875rem;
@@ -196,19 +211,19 @@ button:disabled, .btn:disabled { opacity: 0.45; cursor: not-allowed; }
   border-radius: var(--radius-pill);
   letter-spacing: 0.03em;
 }
-.badge-admin           { background: var(--lavender-light); color: var(--lavender-deep); }  /* 5.67:1 ✓ */
-.badge-parent          { background: var(--yellow-soft);    color: #7A4000; }               /* 6.16:1 ✓ */
-.badge-classroom_admin { background: var(--petal-light);    color: var(--petal-pink); }     /* 5.12:1 ✓ */
-.badge-approved        { background: #C6F0E4;               color: #085041; }               /* 6.40:1 ✓ */
-.badge-pending         { background: #D3D1C7;               color: #444441; }               /* 6.17:1 ✓ */
+.badge-admin           { background: var(--lavender-light); color: var(--green-forest); }
+.badge-parent          { background: #fff3d6;               color: #7A4000; }
+.badge-classroom_admin { background: var(--petal-light);    color: var(--petal-pink); }
+.badge-approved        { background: #C6F0E4;               color: #085041; }
+.badge-pending         { background: #D3D1C7;               color: #444441; }
 
-/* ── Layout ──────────────────────────────────────────────────── */
+/* ── Layout ──────────────────────────────────────────────── */
 .card {
   background: var(--surface);
   border: 1.5px solid var(--card-border);
   border-radius: var(--radius-lg);
   padding: 1.25rem;
-  box-shadow: 0 2px 12px rgba(100, 60, 160, 0.07);
+  box-shadow: 0 2px 12px rgba(47,74,44,0.08);
 }
 
 .page    { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
@@ -218,7 +233,7 @@ button:disabled, .btn:disabled { opacity: 0.45; cursor: not-allowed; }
 .form-group label {
   display: block;
   font-size: 0.8125rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-secondary);
   margin-bottom: 6px;
 }
@@ -237,5 +252,13 @@ button:disabled, .btn:disabled { opacity: 0.45; cursor: not-allowed; }
   font-size: 0.9375rem;
 }
 
-.flash-info  { background: var(--yellow-glow);    color: #5A3800; border-radius: var(--radius-md); padding: 12px 16px; font-size: 0.875rem; margin-bottom: 1rem; border: 1px solid var(--amber-honey); }
-.flash-error { background: var(--danger-light);   color: var(--danger); border-radius: var(--radius-md); padding: 12px 16px; font-size: 0.875rem; margin-bottom: 1rem; border: 1px solid #E07050; }
+.flash-info  { background: var(--yellow-glow);  color: #5A3800; border-radius: var(--radius-md); padding: 12px 16px; font-size: 0.875rem; margin-bottom: 1rem; border: 1px solid var(--amber-honey); }
+.flash-error { background: var(--danger-light); color: var(--danger); border-radius: var(--radius-md); padding: 12px 16px; font-size: 0.875rem; margin-bottom: 1rem; border: 1px solid #E07050; }
+
+/* ── Login page responsive ───────────────────────────────── */
+.login-hero { display: flex; }
+@media (max-width: 680px) {
+  .login-hero { display: none; }
+  .login-card { flex-direction: column !important; min-height: unset !important; }
+  .login-form-panel { width: 100% !important; padding: 40px 28px !important; }
+}

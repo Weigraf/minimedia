@@ -6,21 +6,21 @@ function PublicNav() {
   return (
     <nav style={{
       position: 'sticky', top: 0, zIndex: 100,
-      background: 'rgba(255,255,255,0.88)',
+      background: 'rgba(255,255,255,0.92)',
       backdropFilter: 'blur(12px)',
       WebkitBackdropFilter: 'blur(12px)',
-      borderBottom: '1px solid rgba(216,200,232,0.6)',
+      borderBottom: '1px solid rgba(220,230,214,0.8)',
       padding: '0 1.5rem',
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       height: '56px',
     }}>
       <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
         <OwlIcon size={32} />
-        <span style={{ fontWeight: 800, fontSize: '1.125rem', color: 'var(--green-forest)', letterSpacing: '-0.2px' }}>TumbleTree</span>
+        <span style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: '1.125rem', color: 'var(--green-forest)' }}>TumbleTree</span>
       </a>
       <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
         <a href="/about" style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-muted)', textDecoration: 'none' }}>About</a>
-        <a href="/contact" style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--green-leaf)', textDecoration: 'none' }}>Contact</a>
+        <a href="/contact" style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--green-forest)', textDecoration: 'none' }}>Contact</a>
         <a href="/login" className="btn btn-primary" style={{ fontSize: '0.875rem', padding: '6px 16px' }}>Sign in</a>
       </div>
     </nav>
@@ -58,7 +58,7 @@ export default function Contact() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #D8CFF0 0%, #EDE8E0 50%, #CDEAB8 100%)' }}>
+    <div style={{ minHeight: '100vh', background: '#eef3ea' }}>
       <PublicNav />
 
       <div style={{
@@ -68,7 +68,7 @@ export default function Contact() {
         <div style={{ width: '100%', maxWidth: '500px' }}>
           <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
             <MessageIcon size={56} />
-            <h1 style={{ fontSize: '1.75rem', fontWeight: 900, color: 'var(--green-forest)', marginTop: '0.75rem', marginBottom: '0.375rem', letterSpacing: '-0.3px' }}>
+            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.75rem', fontWeight: 600, color: 'var(--green-forest)', marginTop: '0.75rem', marginBottom: '0.375rem' }}>
               Get in touch
             </h1>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.9375rem', lineHeight: 1.6 }}>
@@ -76,13 +76,7 @@ export default function Contact() {
             </p>
           </div>
 
-          <div className="card" style={{
-            background: 'rgba(255,255,255,0.92)',
-            backdropFilter: 'blur(14px)',
-            WebkitBackdropFilter: 'blur(14px)',
-            boxShadow: '0 8px 40px rgba(100,60,160,0.13), 0 2px 8px rgba(0,0,0,0.05)',
-            border: '1.5px solid rgba(216,200,232,0.9)',
-          }}>
+          <div className="card">
             {done ? (
               <div style={{ textAlign: 'center', padding: '1.5rem 0' }}>
                 <SproutIcon size={56} />
@@ -176,7 +170,7 @@ export default function Contact() {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <OwlIcon size={24} />
-          <span style={{ fontWeight: 700, fontSize: '0.875rem', color: 'var(--text-secondary)' }}>TumbleTree</span>
+          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: '0.9375rem', color: 'var(--text-secondary)' }}>TumbleTree</span>
         </div>
         <div style={{ display: 'flex', gap: '20px' }}>
           <a href="/about" style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', textDecoration: 'none' }}>About</a>

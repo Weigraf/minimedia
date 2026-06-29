@@ -5,20 +5,20 @@ function PublicNav() {
   return (
     <nav style={{
       position: 'sticky', top: 0, zIndex: 100,
-      background: 'rgba(255,255,255,0.88)',
+      background: 'rgba(255,255,255,0.92)',
       backdropFilter: 'blur(12px)',
       WebkitBackdropFilter: 'blur(12px)',
-      borderBottom: '1px solid rgba(216,200,232,0.6)',
+      borderBottom: '1px solid rgba(220,230,214,0.8)',
       padding: '0 1.5rem',
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       height: '56px',
     }}>
       <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
         <OwlIcon size={32} />
-        <span style={{ fontWeight: 800, fontSize: '1.125rem', color: 'var(--green-forest)', letterSpacing: '-0.2px' }}>TumbleTree</span>
+        <span style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: '1.125rem', color: 'var(--green-forest)' }}>TumbleTree</span>
       </a>
       <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-        <a href="/about" style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--green-leaf)', textDecoration: 'none' }}>About</a>
+        <a href="/about" style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--green-forest)', textDecoration: 'none' }}>About</a>
         <a href="/contact" style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-muted)', textDecoration: 'none' }}>Contact</a>
         <a href="/login" className="btn btn-primary" style={{ fontSize: '0.875rem', padding: '6px 16px' }}>Sign in</a>
       </div>
@@ -68,38 +68,32 @@ export default function About() {
 
       {/* Hero */}
       <div style={{
-        background: 'linear-gradient(135deg, #D8CFF0 0%, #EDE8E0 50%, #CDEAB8 100%)',
+        background: 'radial-gradient(circle at 60% 40%, #6fc06d 0%, #3f9446 55%, #2f7a3c 100%)',
         padding: '5rem 1.5rem 4.5rem',
         textAlign: 'center',
         position: 'relative',
         overflow: 'hidden',
       }}>
-        <span aria-hidden="true" style={{ position: 'absolute', top: '-20px', left: '-20px', opacity: 0.14, transform: 'rotate(-20deg)', pointerEvents: 'none' }}>
-          <LeafIcon size={180} />
-        </span>
-        <span aria-hidden="true" style={{ position: 'absolute', bottom: '-10px', right: '-16px', opacity: 0.12, transform: 'rotate(10deg)', pointerEvents: 'none' }}>
-          <AcornIcon size={160} />
-        </span>
-        <span aria-hidden="true" style={{ position: 'absolute', top: '30%', right: '5%', opacity: 0.10, pointerEvents: 'none' }}>
-          <SproutIcon size={80} />
-        </span>
+        <div aria-hidden="true" style={{ position: 'absolute', top: '-40px', right: '-20px', width: '200px', height: '200px', borderRadius: '50%', background: 'rgba(255,255,255,.1)', pointerEvents: 'none' }}/>
+        <div aria-hidden="true" style={{ position: 'absolute', bottom: '-20px', left: '-30px', width: '140px', height: '140px', borderRadius: '50%', background: 'rgba(255,255,255,.08)', pointerEvents: 'none' }}/>
 
         <div style={{ position: 'relative', zIndex: 1 }}>
           <OwlIcon size={88} />
           <h1 style={{
+            fontFamily: 'var(--font-display)',
             fontSize: 'clamp(2rem, 5vw, 3rem)',
-            fontWeight: 900,
-            color: 'var(--green-forest)',
+            fontWeight: 600,
+            color: '#fff',
             marginTop: '1rem',
             marginBottom: '0.75rem',
-            letterSpacing: '-0.5px',
             lineHeight: 1.15,
+            textShadow: '0 2px 12px rgba(0,0,0,.15)',
           }}>
             A private classroom<br />for your child's world.
           </h1>
           <p style={{
             fontSize: '1.0625rem',
-            color: 'var(--text-secondary)',
+            color: 'rgba(255,255,255,0.88)',
             maxWidth: '520px',
             margin: '0 auto 2rem',
             lineHeight: 1.65,
@@ -122,7 +116,7 @@ export default function About() {
         <p style={{ textAlign: 'center', fontSize: '0.8125rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
           What's included
         </p>
-        <h2 style={{ textAlign: 'center', fontSize: '1.625rem', fontWeight: 800, color: 'var(--green-forest)', marginBottom: '2.5rem', letterSpacing: '-0.3px' }}>
+        <h2 style={{ textAlign: 'center', fontFamily: 'var(--font-display)', fontSize: '1.75rem', fontWeight: 600, color: 'var(--green-forest)', marginBottom: '2.5rem' }}>
           Everything your school needs to stay connected
         </h2>
 
@@ -183,7 +177,7 @@ export default function About() {
         padding: '3.5rem 1.5rem',
         textAlign: 'center',
       }}>
-        <h2 style={{ fontSize: '1.625rem', fontWeight: 800, color: '#EAF3DE', marginBottom: '0.75rem', letterSpacing: '-0.3px' }}>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.75rem', fontWeight: 600, color: '#EAF3DE', marginBottom: '0.75rem' }}>
           Ready to bring your school community together?
         </h2>
         <p style={{ color: 'rgba(234,243,222,0.75)', fontSize: '0.9375rem', marginBottom: '1.75rem' }}>
@@ -220,7 +214,7 @@ export default function About() {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <OwlIcon size={24} />
-          <span style={{ fontWeight: 700, fontSize: '0.875rem', color: 'var(--text-secondary)' }}>TumbleTree</span>
+          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: '0.9375rem', color: 'var(--text-secondary)' }}>TumbleTree</span>
         </div>
         <div style={{ display: 'flex', gap: '20px' }}>
           <a href="/about" style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', textDecoration: 'none' }}>About</a>

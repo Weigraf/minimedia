@@ -145,37 +145,32 @@ export function MoonIcon({ size = 48 }) {
 export function OwlIcon({ size = 48 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" fill="none">
-      {/* Wings */}
-      <ellipse cx="12" cy="50" rx="9" ry="13" fill="#A86820" transform="rotate(15 12 50)"/>
-      <ellipse cx="52" cy="50" rx="9" ry="13" fill="#A86820" transform="rotate(-15 52 50)"/>
-      {/* Body */}
-      <ellipse cx="32" cy="52" rx="14" ry="13" fill="#C48530"/>
-      {/* Head */}
-      <circle cx="32" cy="26" r="22" fill="#D4922A"/>
-      {/* Facial disc */}
-      <ellipse cx="32" cy="28" rx="18" ry="16" fill="#E8A848"/>
       {/* Ear tufts */}
-      <ellipse cx="19" cy="7" rx="5" ry="9" fill="#B07020" transform="rotate(-14 19 7)"/>
-      <ellipse cx="45" cy="7" rx="5" ry="9" fill="#B07020" transform="rotate(14 45 7)"/>
-      {/* Left eye (static) */}
-      <circle cx="22" cy="25" r="10" fill="#3B6D11"/>
-      <circle cx="22" cy="25" r="7.5" fill="#FAC775"/>
-      <circle cx="22" cy="25" r="4" fill="#1A0E05"/>
-      <circle cx="20.5" cy="23.5" r="1.5" fill="white"/>
+      <polygon points="19,24 14,4 26,22" fill="#c98a4a"/>
+      <polygon points="45,24 50,4 38,22" fill="#c98a4a"/>
+      {/* Body halo ring */}
+      <ellipse cx="32" cy="40" rx="28" ry="29" fill="rgba(255,255,255,0.13)"/>
+      {/* Body */}
+      <ellipse cx="32" cy="40" rx="25" ry="26" fill="#d99a55"/>
+      {/* Wings */}
+      <ellipse cx="9" cy="42" rx="7" ry="14" fill="#c98a4a" transform="rotate(8 9 32)"/>
+      <ellipse cx="55" cy="42" rx="7" ry="14" fill="#c98a4a" transform="rotate(-8 55 32)"/>
+      {/* Belly */}
+      <ellipse cx="32" cy="48" rx="15" ry="17" fill="#f3d9b0"/>
+      {/* Left eye outer ring */}
+      <circle cx="22" cy="32" r="9" fill="#f3d9b0"/>
+      <circle cx="22" cy="32" r="7.5" fill="#ffffff"/>
+      <circle cx="22" cy="32" r="4" fill="#3a2a1a"/>
+      <circle cx="19.5" cy="29.5" r="1.5" fill="#ffffff"/>
       {/* Right eye (winking) */}
-      <g style={{ transformOrigin: '42px 25px', animation: 'owl-wink 6s ease-in-out infinite' }}>
-        <circle cx="42" cy="25" r="10" fill="#3B6D11"/>
-        <circle cx="42" cy="25" r="7.5" fill="#FAC775"/>
-        <circle cx="42" cy="25" r="4" fill="#1A0E05"/>
-        <circle cx="40.5" cy="23.5" r="1.5" fill="white"/>
+      <g style={{ transformOrigin: '42px 32px', animation: 'owl-wink 6s ease-in-out infinite' }}>
+        <circle cx="42" cy="32" r="9" fill="#f3d9b0"/>
+        <circle cx="42" cy="32" r="7.5" fill="#ffffff"/>
+        <circle cx="42" cy="32" r="4" fill="#3a2a1a"/>
+        <circle cx="39.5" cy="29.5" r="1.5" fill="#ffffff"/>
       </g>
       {/* Beak */}
-      <path d="M28 33 L32 40 L36 33Z" fill="#E07820"/>
-      {/* Belly feather hint */}
-      <ellipse cx="32" cy="52" rx="8" ry="9" fill="#E8A848" opacity="0.55"/>
-      {/* Feet */}
-      <ellipse cx="25" cy="62" rx="5" ry="2.5" fill="#A06820"/>
-      <ellipse cx="39" cy="62" rx="5" ry="2.5" fill="#A06820"/>
+      <path d="M28,40 L32,48 L36,40Z" fill="#ff8d4a"/>
     </svg>
   )
 }
