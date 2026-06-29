@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 
 // Whitelisted MIME types — nothing executable
 const ALLOWED_MIME = new Set([
-  'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml',
+  'image/jpeg', 'image/png', 'image/gif', 'image/webp',
   'application/pdf',
   'application/msword',
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -16,7 +16,7 @@ const ALLOWED_MIME = new Set([
 ])
 
 const ALLOWED_EXT = new Set([
-  'jpg', 'jpeg', 'png', 'gif', 'webp', 'svg',
+  'jpg', 'jpeg', 'png', 'gif', 'webp',
   'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt',
 ])
 

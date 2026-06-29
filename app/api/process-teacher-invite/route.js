@@ -24,7 +24,7 @@ export async function POST(req) {
 
   let processed = 0
   for (const invite of invites) {
-    const role = user.user_metadata?.school_role || 'teacher'
+    const role = invite.role || 'teacher'
 
     await admin.from('school_memberships').upsert({
       school_id: invite.school_id,

@@ -19,9 +19,9 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  const { data: { session } } = await supabase.auth.getSession()
+  const { data: { user } } = await supabase.auth.getUser()
 
-  if (!session) {
+  if (!user) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
@@ -37,5 +37,6 @@ export const config = {
     '/my-children/:path*',
     '/subscribe/:path*',
     '/messages/:path*',
+    '/school/:path*',
   ],
 }
