@@ -301,6 +301,10 @@ export default function Login() {
             <a href="/about" style={{ color: '#a3b09b', textDecoration: 'none' }}>About</a>
             {' · '}
             <a href="/contact" style={{ color: '#a3b09b', textDecoration: 'none' }}>Contact</a>
+            {' · '}
+            <a href="/terms" style={{ color: '#a3b09b', textDecoration: 'none' }}>Terms</a>
+            {' · '}
+            <a href="/privacy" style={{ color: '#a3b09b', textDecoration: 'none' }}>Privacy</a>
           </p>
         </div>
       </div>
