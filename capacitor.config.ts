@@ -16,12 +16,12 @@ const config: CapacitorConfig = {
     },
     SplashScreen: {
       launchShowDuration: 1500,
-      backgroundColor: '#27500A',
+      backgroundColor: '#2f7a3c',
       showSpinner: false,
     },
     StatusBar: {
       style: 'DARK',
-      backgroundColor: '#27500A',
+      backgroundColor: '#2f7a3c',
     },
   },
 }
