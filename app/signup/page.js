@@ -49,7 +49,7 @@ export default function SignUp() {
             <SproutIcon size={48} />
             <h2 style={{ fontSize: '18px', fontWeight: 700, margin: '12px 0 8px' }}>Check your email</h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '14px', lineHeight: 1.6 }}>
-              Confirm your email address, then wait for an admin to approve your account before logging in.
+              Confirm your email address, then wait for an admin to approve your account before logging in. Someone will reach out within 24 hours.
             </p>
             <a href="/login" className="btn btn-secondary" style={{ display: 'inline-flex', marginTop: '1.25rem' }}>
               Back to sign in

@@ -84,7 +84,7 @@ export default function Contact() {
                   Message sent!
                 </h2>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.9375rem', lineHeight: 1.6 }}>
-                  Thanks for reaching out — we'll get back to you at <strong>{email}</strong> soon.
+                  Thanks for reaching out — someone will get back to you at <strong>{email}</strong> within 24 hours.
                 </p>
                 <a href="/" className="btn btn-secondary" style={{ display: 'inline-flex', marginTop: '1.25rem' }}>
                   Back to sign in
