@@ -125,7 +125,12 @@ export default function ChildDetail() {
 
   async function assignParent(parentId) {
     const supabase = createClient()
-    await supabase.from('family_members').upsert({ child_id: childId, profile_id: parentId })
+    const { data: { session } } = await supabase.auth.getSession()
+    await fetch('/api/students/link-parent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+      body: JSON.stringify({ child_id: childId, profile_id: parentId }),
+    })
     const par = allParents.find(p => p.id === parentId)
     if (par) setParents(prev => [...prev, { profile_id: par.id, profiles: { full_name: par.full_name, avatar_url: null } }])
   }
