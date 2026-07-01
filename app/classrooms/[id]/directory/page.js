@@ -9,14 +9,14 @@ import PageLoader from '@/components/PageLoader'
 // SVG connector that draws a stem + horizontal branch + drop lines to each parent slot
 function Connector({ count }) {
   if (count === 0) return null
-  const h = 32
-  const mid = 16
+  const h = 44
+  const mid = 22
   const centers = Array.from({ length: count }, (_, i) => 100 * (i + 0.5) / count)
 
   if (count === 1) {
     return (
-      <svg width="100%" height={h} viewBox={`0 0 100 ${h}`} preserveAspectRatio="none" aria-hidden="true">
-        <line x1="50" y1="0" x2="50" y2={h} stroke="var(--green-mist)" strokeWidth="2.5" strokeLinecap="round" />
+      <svg width="24" height={h} viewBox={`0 0 24 ${h}`} style={{ display: 'block', margin: '0 auto' }} aria-hidden="true">
+        <line x1="12" y1="0" x2="12" y2={h} stroke="var(--green-mist)" strokeWidth="2.5" strokeLinecap="round" />
       </svg>
     )
   }
@@ -32,19 +32,19 @@ function Connector({ count }) {
   )
 }
 
-function ParentAvatar({ name, avatarUrl, size = 34 }) {
+function ParentAvatar({ name, avatarUrl, size = 40 }) {
   if (avatarUrl) {
     return (
       <img src={avatarUrl} alt="" style={{
         width: size, height: size, borderRadius: '50%',
-        objectFit: 'cover', border: '2px solid var(--green-mist)', flexShrink: 0,
+        objectFit: 'cover', border: '2.5px solid var(--green-mist)', flexShrink: 0,
       }} />
     )
   }
   return (
     <span style={{
       display: 'inline-flex', width: size, height: size, borderRadius: '50%',
-      background: 'var(--lavender-light)', border: '2px solid var(--green-mist)',
+      background: 'var(--lavender-light)', border: '2.5px solid var(--green-mist)',
       alignItems: 'center', justifyContent: 'center',
       fontSize: size * 0.38 + 'px', fontWeight: 800, color: 'var(--green-forest)',
       flexShrink: 0,
@@ -60,49 +60,59 @@ function FamilyUnit({ child, isSelected, onSelect, clickable, isTeacher, myChild
     .filter(Boolean) ?? []
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
+    // Outer bubble — gives each family its own contained "island"
+    <div style={{
+      background: 'var(--surface)',
+      border: '1.5px solid var(--border)',
+      borderRadius: '22px',
+      padding: '1.25rem 1rem 1rem',
+      boxShadow: '0 2px 12px -4px rgba(47,74,44,.08)',
+      display: 'flex', flexDirection: 'column', alignItems: 'stretch',
+    }}>
 
       {/* Child node */}
       <button
         onClick={() => clickable && onSelect(child.id)}
         style={{
-          display: 'flex', alignItems: 'center', gap: '10px',
-          padding: '12px 14px', textAlign: 'left', width: '100%',
-          background: isSelected ? 'var(--yellow-glow)' : 'var(--surface)',
-          border: isSelected ? '2px solid var(--amber-honey)' : '2px solid var(--amber-honey)',
-          borderRadius: '14px',
+          display: 'flex', alignItems: 'center', gap: '12px',
+          padding: '14px 16px', textAlign: 'left', width: '100%',
+          background: isSelected ? 'var(--yellow-glow)' : '#fffbf4',
+          border: `2.5px solid ${isSelected ? 'var(--amber-acorn)' : 'var(--amber-honey)'}`,
+          borderRadius: '16px',
           cursor: clickable ? 'pointer' : 'default',
-          transition: 'background 0.15s, box-shadow 0.15s',
-          boxShadow: isSelected ? '0 4px 14px -4px rgba(217,154,85,.45)' : '0 2px 8px -4px rgba(0,0,0,.08)',
+          transition: 'background 0.15s, border-color 0.15s, box-shadow 0.15s',
+          boxShadow: isSelected
+            ? '0 6px 18px -6px rgba(217,154,85,.5)'
+            : '0 2px 10px -4px rgba(217,154,85,.25)',
           fontFamily: 'var(--font)',
         }}
         aria-pressed={isSelected}
       >
         <span style={{
-          display: 'inline-flex', width: '38px', height: '38px', borderRadius: '10px', flexShrink: 0,
+          display: 'inline-flex', width: '46px', height: '46px', borderRadius: '13px', flexShrink: 0,
           background: isSelected ? 'var(--amber-honey)' : 'var(--yellow-glow)',
-          border: '2px solid var(--amber-honey)',
+          border: '2.5px solid var(--amber-honey)',
           alignItems: 'center', justifyContent: 'center',
-          fontSize: '1rem', fontWeight: 800, color: 'var(--amber-acorn)',
+          fontSize: '1.125rem', fontWeight: 800, color: 'var(--amber-acorn)',
         }}>
           {child.name?.charAt(0)}
         </span>
         <div style={{ minWidth: 0, flex: 1 }}>
-          <div style={{ fontWeight: 700, fontSize: '0.9rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: 'var(--text-primary)' }}>
+          <div style={{ fontWeight: 700, fontSize: '0.9375rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: 'var(--text-primary)' }}>
             {child.name}
           </div>
           {isTeacher && (
-            <div style={{ display: 'flex', gap: '4px', marginTop: '3px', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '4px', marginTop: '4px', flexWrap: 'wrap' }}>
               {child.medications && (
-                <span style={{ fontSize: '0.6rem', background: 'var(--lavender-light)', borderRadius: '50px', padding: '1px 6px', color: 'var(--green-forest)', fontWeight: 700, border: '1px solid var(--green-mist)' }}>Rx</span>
+                <span style={{ fontSize: '0.6875rem', background: 'var(--lavender-light)', borderRadius: '50px', padding: '2px 8px', color: 'var(--green-forest)', fontWeight: 700, border: '1px solid var(--green-mist)' }}>Rx</span>
               )}
               {child.allergies && (
-                <span style={{ fontSize: '0.6rem', background: '#FFF3CD', border: '1px solid var(--amber-honey)', borderRadius: '50px', padding: '1px 6px', color: 'var(--amber-acorn)', fontWeight: 700 }}>Allergy</span>
+                <span style={{ fontSize: '0.6875rem', background: '#FFF3CD', border: '1px solid var(--amber-honey)', borderRadius: '50px', padding: '2px 8px', color: 'var(--amber-acorn)', fontWeight: 700 }}>Allergy</span>
               )}
             </div>
           )}
           {!isTeacher && myChildIds.has(child.id) && (
-            <div style={{ fontSize: '0.6875rem', color: 'var(--green-leaf)', fontWeight: 700, marginTop: '2px' }}>View reports →</div>
+            <div style={{ fontSize: '0.75rem', color: 'var(--green-leaf)', fontWeight: 700, marginTop: '3px' }}>View reports →</div>
           )}
         </div>
       </button>
@@ -112,20 +122,20 @@ function FamilyUnit({ child, isSelected, onSelect, clickable, isTeacher, myChild
 
       {/* Parent nodes */}
       {familyParents.length > 0 && (
-        <div style={{ display: 'flex', gap: '6px' }}>
+        <div style={{ display: 'flex', gap: '8px' }}>
           {familyParents.map(parent => (
             <div key={parent.id} style={{
               flex: 1,
-              display: 'flex', alignItems: 'center', gap: '7px',
-              padding: '8px 10px',
-              background: 'var(--surface)',
+              display: 'flex', flexDirection: 'column', alignItems: 'center',
+              gap: '6px', padding: '12px 8px',
+              background: 'var(--lavender-light)',
               border: '1.5px solid var(--border)',
-              borderRadius: '12px',
-              minWidth: 0,
+              borderRadius: '14px',
+              minWidth: 0, textAlign: 'center',
             }}>
-              <ParentAvatar name={parent.full_name} avatarUrl={parent.avatar_url} size={30} />
-              <div style={{ minWidth: 0, overflow: 'hidden' }}>
-                <div style={{ fontWeight: 600, fontSize: '0.8rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: 'var(--text-primary)' }}>
+              <ParentAvatar name={parent.full_name} avatarUrl={parent.avatar_url} size={40} />
+              <div style={{ minWidth: 0, width: '100%' }}>
+                <div style={{ fontWeight: 600, fontSize: '0.8125rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: 'var(--text-primary)' }}>
                   {parent.full_name}
                 </div>
                 <div style={{ fontSize: '0.6875rem', color: 'var(--text-muted)', marginTop: '1px' }}>Parent</div>
@@ -137,8 +147,9 @@ function FamilyUnit({ child, isSelected, onSelect, clickable, isTeacher, myChild
 
       {familyParents.length === 0 && (
         <div style={{
-          padding: '7px 10px', border: '1.5px dashed var(--border)', borderRadius: '12px',
-          fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center',
+          padding: '12px', border: '1.5px dashed var(--border)', borderRadius: '14px',
+          fontSize: '0.8125rem', color: 'var(--text-muted)', textAlign: 'center',
+          lineHeight: 1.4,
         }}>
           No family linked yet
         </div>
@@ -301,7 +312,7 @@ export default function ClassroomDirectory() {
             <p style={{ marginTop: '0.75rem' }}>No students in this classroom yet.</p>
           </div>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))', gap: '1.25rem', alignItems: 'start' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '1.75rem', alignItems: 'start' }}>
             {students.map(child => {
               const clickable = isTeacher || myChildIds.has(child.id)
               return (
